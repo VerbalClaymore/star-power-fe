@@ -29,12 +29,12 @@
   --surface-variant: hsl(285, 30%, 97%);
   
   /* Category Colors - Updated to match specification */
-  --entertainment: hsl(262, 83%, 58%); /* Purple #8B5CF6 */
-  --celebrity: hsl(329, 86%, 70%); /* Pink/Rose #EC4899 */
-  --lifestyle: hsl(158, 64%, 52%); /* Green #10B981 */
-  --world: hsl(217, 91%, 60%); /* Blue #3B82F6 */
-  --tech: hsl(24, 95%, 53%); /* Orange #F97316 */
-  --top: hsl(45, 93%, 47%); /* Gold/Yellow #EAB308 */
+  --entertainment: 262 83% 58%; /* Purple #8B5CF6 */
+  --celebrity: 329 86% 70%; /* Pink/Rose #EC4899 */
+  --lifestyle: 158 64% 52%; /* Green #10B981 */
+  --world: 217 91% 60%; /* Blue #3B82F6 */
+  --tech: 24 95% 53%; /* Orange #F97316 */
+  --top: 45 93% 47%; /* Gold/Yellow #EAB308 */
   
   /* Planet Colors */
   --mercury: hsl(210, 100%, 50%);
@@ -128,13 +128,8 @@
   .planet-sun { background-color: hsl(var(--sun)); }
   .planet-pluto { background-color: hsl(var(--pluto)); }
   
-  /* Category colors */
-  .category-entertainment { color: hsl(var(--entertainment)); border-color: hsl(var(--entertainment)); background-color: hsl(var(--entertainment)); }
-  .category-music { color: hsl(var(--music)); border-color: hsl(var(--music)); background-color: hsl(var(--music)); }
-  .category-celebrity { color: hsl(var(--celebrity)); border-color: hsl(var(--celebrity)); background-color: hsl(var(--celebrity)); }
-  .category-lifestyle { color: hsl(var(--lifestyle)); border-color: hsl(var(--lifestyle)); background-color: hsl(var(--lifestyle)); }
-  .category-world { color: hsl(var(--world)); border-color: hsl(var(--world)); background-color: hsl(var(--world)); }
-  .category-tech { color: hsl(var(--tech)); border-color: hsl(var(--tech)); background-color: hsl(var(--tech)); }
+  /* Additional category utility classes */
+  .category-top { color: hsl(var(--top)); border-color: hsl(var(--top)); }
 }
 
 /* Mobile app container */

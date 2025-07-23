@@ -70,14 +70,14 @@ export class MemStorage implements IStorage {
   }
 
   private seedData() {
-    // Seed categories
+    // Seed categories - Updated to match color specification
     const categoryData = [
-      { name: "Top", slug: "top", color: "hsl(267, 45%, 51%)", icon: "star" },
-      { name: "Entertainment", slug: "entertainment", color: "hsl(35, 91%, 48%)", icon: "film" },
-      { name: "Celebrity", slug: "celebrity", color: "hsl(0, 84%, 60%)", icon: "users" },
-      { name: "Lifestyle", slug: "lifestyle", color: "hsl(325, 78%, 56%)", icon: "heart" },
-      { name: "World", slug: "world", color: "hsl(158, 64%, 52%)", icon: "globe" },
-      { name: "Tech", slug: "tech", color: "hsl(195, 91%, 42%)", icon: "cpu" },
+      { name: "Top", slug: "top", color: "hsl(45, 93%, 47%)", icon: "star" },
+      { name: "Entertainment", slug: "entertainment", color: "hsl(262, 83%, 58%)", icon: "film" },
+      { name: "Celebrity", slug: "celebrity", color: "hsl(329, 86%, 70%)", icon: "users" },
+      { name: "Lifestyle", slug: "lifestyle", color: "hsl(158, 64%, 52%)", icon: "heart" },
+      { name: "World", slug: "world", color: "hsl(217, 91%, 60%)", icon: "globe" },
+      { name: "Tech", slug: "tech", color: "hsl(24, 95%, 53%)", icon: "cpu" },
     ];
 
     categoryData.forEach(cat => {
@@ -305,6 +305,9 @@ export class MemStorage implements IStorage {
       id, 
       publishedAt: new Date(), 
       ...insertArticle,
+      likeCount: insertArticle.likeCount ?? 0,
+      shareCount: insertArticle.shareCount ?? 0,
+      bookmarkCount: insertArticle.bookmarkCount ?? 0,
       astroGlyphs: insertArticle.astroGlyphs as { planet: string; color: string; symbol?: string; }[]
     };
     this.articles.set(id, article);
