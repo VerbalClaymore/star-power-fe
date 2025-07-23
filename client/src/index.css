@@ -84,6 +84,31 @@
     scrollbar-width: none;
   }
   
+  /* Category Background Classes */
+  .category-entertainment {
+    background-color: hsl(var(--entertainment));
+  }
+  
+  .category-music {
+    background-color: hsl(var(--music));
+  }
+  
+  .category-celebrity {
+    background-color: hsl(var(--celebrity));
+  }
+  
+  .category-lifestyle {
+    background-color: hsl(var(--lifestyle));
+  }
+  
+  .category-world {
+    background-color: hsl(var(--world));
+  }
+  
+  .category-tech {
+    background-color: hsl(var(--tech));
+  }
+  
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
   }

@@ -61,10 +61,10 @@ export default function ArticleCard({ article }: ArticleCardProps) {
   };
 
   return (
-    <div className={cn(
-      "bg-white rounded-lg border-l-4 touch-feedback cursor-pointer hover:shadow-lg transition-shadow duration-200",
-      `border-l-[hsl(var(--${article.category.slug}))]`
-    )}>
+    <div 
+      className="bg-white rounded-lg border-l-4 touch-feedback cursor-pointer hover:shadow-lg transition-shadow duration-200"
+      style={{ borderLeftColor: `hsl(var(--${article.category.slug}))` }}
+    >
       <div className="p-4 relative">
         {/* Category Badge Above Title */}
         <div className="mb-2">
