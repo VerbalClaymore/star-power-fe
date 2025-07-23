@@ -28,13 +28,13 @@
   --star-purple: hsl(267, 45%, 51%);
   --surface-variant: hsl(285, 30%, 97%);
   
-  /* Category Colors */
-  --entertainment: hsl(35, 91%, 48%);
-  --music: hsl(0, 84%, 60%);
-  --celebrity: hsl(0, 84%, 60%);
-  --lifestyle: hsl(325, 78%, 56%);
-  --world: hsl(158, 64%, 52%);
-  --tech: hsl(195, 91%, 42%);
+  /* Category Colors - Updated to match specification */
+  --entertainment: hsl(262, 83%, 58%); /* Purple #8B5CF6 */
+  --celebrity: hsl(329, 86%, 70%); /* Pink/Rose #EC4899 */
+  --lifestyle: hsl(158, 64%, 52%); /* Green #10B981 */
+  --world: hsl(217, 91%, 60%); /* Blue #3B82F6 */
+  --tech: hsl(24, 95%, 53%); /* Orange #F97316 */
+  --top: hsl(45, 93%, 47%); /* Gold/Yellow #EAB308 */
   
   /* Planet Colors */
   --mercury: hsl(210, 100%, 50%);
@@ -89,10 +89,6 @@
     background-color: hsl(var(--entertainment));
   }
   
-  .category-music {
-    background-color: hsl(var(--music));
-  }
-  
   .category-celebrity {
     background-color: hsl(var(--celebrity));
   }
@@ -107,6 +103,10 @@
   
   .category-tech {
     background-color: hsl(var(--tech));
+  }
+  
+  .category-top {
+    background-color: hsl(var(--top));
   }
   
   .scrollbar-hide::-webkit-scrollbar {

@@ -1,0 +1,57 @@
+```markdown
+# Color Theme Definition for Categories
+
+## Category Color Assignments
+
+### Entertainment
+- **Primary Color:** Purple (#8B5CF6)
+- **Event Types:** Music, Film, Television, Sports, Gaming, Art, Books
+- **Usage:** Event tags, left borders, actor highlighting for entertainment content
+
+### Celebrity
+- **Primary Color:** Pink/Rose (#EC4899)
+- **Event Types:** Celebrity news, personal life, relationships, social media
+- **Usage:** Event tags, left borders, actor highlighting for celebrity-focused content
+
+### Lifestyle
+- **Primary Color:** Green (#10B981)
+- **Event Types:** Health, Wellness, Fashion, Travel, Food, Fitness
+- **Usage:** Event tags, left borders, actor highlighting for lifestyle content
+
+### World
+- **Primary Color:** Blue (#3B82F6)
+- **Event Types:** Politics, International news, Disasters, Government, Economics
+- **Usage:** Event tags, left borders, actor highlighting for world news
+
+### Technology
+- **Primary Color:** Orange (#F97316)
+- **Event Types:** Tech companies, Science, Research, Internet, Innovation, AI
+- **Usage:** Event tags, left borders, actor highlighting for tech content
+
+### Top (Meta Category)
+- **Primary Color:** Gold/Yellow (#EAB308)
+- **Usage:** For trending/top-rated content across all categories
+
+## Implementation Requirements
+
+### Event Category Pills
+- Use category color as background
+- White text for contrast
+- Proper contrast ratio (4.5:1 minimum)
+- Pills should be clearly readable
+
+### Left Border Matching
+- Left border should use the same color as the Event Category pill
+- Creates visual connection between category and content
+
+### Major Actor Highlighting
+- Actor names (Taylor Swift, Elon Musk) should be colored using their content's category color
+- Maintains visual hierarchy and category association
+
+## Current Issues to Fix
+- Event Category pills currently have white background with white text (invisible)
+- Need to apply the defined category colors to make content scannable
+- Left borders need to inherit the category color theme
+
+This color system will create visual consistency and help users quickly identify content types while maintaining accessibility standards.
+```

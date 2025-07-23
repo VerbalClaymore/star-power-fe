@@ -12,11 +12,11 @@ export default function ArticleCard({ article }: ArticleCardProps) {
   const getCategoryColor = (categorySlug: string) => {
     const colorMap: Record<string, string> = {
       entertainment: "category-entertainment",
-      music: "category-music", 
       celebrity: "category-celebrity",
-      lifestyle: "category-lifestyle",
+      lifestyle: "category-lifestyle", 
       world: "category-world",
       tech: "category-tech",
+      top: "category-top",
     };
     return colorMap[categorySlug] || "category-entertainment";
   };
@@ -35,12 +35,12 @@ export default function ArticleCard({ article }: ArticleCardProps) {
 
   const getCategoryLabel = (categorySlug: string) => {
     const labelMap: Record<string, string> = {
-      entertainment: "HOLLYWOOD",
-      music: "MUSIC",
+      entertainment: "ENTERTAINMENT",
       celebrity: "CELEBRITY", 
       lifestyle: "LIFESTYLE",
       world: "WORLD",
       tech: "TECH",
+      top: "TOP",
     };
     return labelMap[categorySlug] || "NEWS";
   };
