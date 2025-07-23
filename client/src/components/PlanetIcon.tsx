@@ -12,13 +12,13 @@ export default function PlanetIcon({ planet, symbol, color }: PlanetIconProps) {
   };
 
   return (
-    <div className="relative w-6 h-6">
+    <div className="relative w-9 h-9">
       <div 
-        className={cn("w-6 h-6 rounded-full", getPlanetClass(planet))}
+        className={cn("w-9 h-9 rounded-full shadow-sm", getPlanetClass(planet))}
         style={{ backgroundColor: color }}
       />
       {symbol && (
-        <span className="absolute inset-0 flex items-center justify-center text-white text-xs font-bold">
+        <span className="absolute inset-0 flex items-center justify-center text-white text-sm font-extrabold">
           {symbol}
         </span>
       )}

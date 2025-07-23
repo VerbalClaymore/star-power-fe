@@ -1,4 +1,5 @@
-import { Heart, Share, Bookmark } from "lucide-react";
+import { Heart, Bookmark } from "lucide-react";
+import { PiShareNetworkBold } from "react-icons/pi";
 import { cn } from "@/lib/utils";
 import PlanetIcon from "./PlanetIcon";
 import type { ArticleWithDetails } from "@shared/schema";
@@ -23,13 +24,25 @@ export default function ArticleCard({ article }: ArticleCardProps) {
   const getCategoryIcon = (categorySlug: string) => {
     const iconMap: Record<string, string> = {
       entertainment: "🎬",
-      music: "🎵",
+      music: "🎵", 
       celebrity: "⭐",
       lifestyle: "💖",
       world: "🌍",
       tech: "💻",
     };
     return iconMap[categorySlug] || "📰";
+  };
+
+  const getCategoryLabel = (categorySlug: string) => {
+    const labelMap: Record<string, string> = {
+      entertainment: "HOLLYWOOD",
+      music: "MUSIC",
+      celebrity: "CELEBRITY", 
+      lifestyle: "LIFESTYLE",
+      world: "WORLD",
+      tech: "TECH",
+    };
+    return labelMap[categorySlug] || "NEWS";
   };
 
   const displayedHashtags = article.hashtags.slice(0, 2);
@@ -41,7 +54,7 @@ export default function ArticleCard({ article }: ArticleCardProps) {
     let highlightedTitle = title;
     article.actors.forEach(actor => {
       const regex = new RegExp(`(${actor.name})`, 'gi');
-      highlightedTitle = highlightedTitle.replace(regex, `<span class="font-extrabold ${getCategoryColor(article.category.slug)}">${actor.name}</span>`);
+      highlightedTitle = highlightedTitle.replace(regex, `<span class="font-extrabold text-lg" style="color: hsl(var(--${article.category.slug}))">${actor.name}</span>`);
     });
     
     return highlightedTitle;
@@ -56,11 +69,11 @@ export default function ArticleCard({ article }: ArticleCardProps) {
         {/* Category Badge Above Title */}
         <div className="mb-2">
           <span className={cn(
-            "inline-flex items-center px-2 py-1 rounded text-white text-xs font-bold",
+            "inline-flex items-center px-3 py-1.5 rounded-full text-white text-xs font-bold shadow-sm",
             getCategoryColor(article.category.slug)
           )}>
-            <span className="mr-1">{getCategoryIcon(article.category.slug)}</span>
-            {article.category.name.toUpperCase()}
+            <span className="mr-1.5 text-sm">{getCategoryIcon(article.category.slug)}</span>
+            {getCategoryLabel(article.category.slug)}
           </span>
         </div>
         
@@ -119,7 +132,7 @@ export default function ArticleCard({ article }: ArticleCardProps) {
                   {article.likeCount}
                 </span>
                 <span className="flex items-center">
-                  <Share className="w-3 h-3 mr-1" />
+                  <PiShareNetworkBold className="w-3 h-3 mr-1" />
                   {article.shareCount}
                 </span>
                 <span className="flex items-center">
