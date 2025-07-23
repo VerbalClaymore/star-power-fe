@@ -1,0 +1,151 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: hsl(0, 0%, 100%);
+  --foreground: hsl(20, 14.3%, 4.1%);
+  --muted: hsl(60, 4.8%, 95.9%);
+  --muted-foreground: hsl(25, 5.3%, 44.7%);
+  --popover: hsl(0, 0%, 100%);
+  --popover-foreground: hsl(20, 14.3%, 4.1%);
+  --card: hsl(0, 0%, 100%);
+  --card-foreground: hsl(20, 14.3%, 4.1%);
+  --border: hsl(20, 5.9%, 90%);
+  --input: hsl(20, 5.9%, 90%);
+  --primary: hsl(267, 45%, 51%);
+  --primary-foreground: hsl(0, 0%, 100%);
+  --secondary: hsl(60, 4.8%, 95.9%);
+  --secondary-foreground: hsl(24, 9.8%, 10%);
+  --accent: hsl(60, 4.8%, 95.9%);
+  --accent-foreground: hsl(24, 9.8%, 10%);
+  --destructive: hsl(0, 84.2%, 60.2%);
+  --destructive-foreground: hsl(60, 9.1%, 97.8%);
+  --ring: hsl(20, 14.3%, 4.1%);
+  --radius: 0.5rem;
+  
+  /* Star Power Brand Colors */
+  --star-purple: hsl(267, 45%, 51%);
+  --surface-variant: hsl(285, 30%, 97%);
+  
+  /* Category Colors */
+  --entertainment: hsl(35, 91%, 48%);
+  --music: hsl(0, 84%, 60%);
+  --celebrity: hsl(0, 84%, 60%);
+  --lifestyle: hsl(325, 78%, 56%);
+  --world: hsl(158, 64%, 52%);
+  --tech: hsl(195, 91%, 42%);
+  
+  /* Planet Colors */
+  --mercury: hsl(210, 100%, 50%);
+  --venus: hsl(45, 100%, 50%);
+  --mars: hsl(0, 100%, 50%);
+  --jupiter: hsl(35, 100%, 50%);
+  --saturn: hsl(45, 80%, 40%);
+  --moon: hsl(210, 15%, 40%);
+  --sun: hsl(45, 100%, 60%);
+  --pluto: hsl(260, 70%, 40%);
+}
+
+.dark {
+  --background: hsl(240, 10%, 3.9%);
+  --foreground: hsl(0, 0%, 98%);
+  --muted: hsl(240, 3.7%, 15.9%);
+  --muted-foreground: hsl(240, 5%, 64.9%);
+  --popover: hsl(240, 10%, 3.9%);
+  --popover-foreground: hsl(0, 0%, 98%);
+  --card: hsl(240, 10%, 3.9%);
+  --card-foreground: hsl(0, 0%, 98%);
+  --border: hsl(240, 3.7%, 15.9%);
+  --input: hsl(240, 3.7%, 15.9%);
+  --primary: hsl(267, 45%, 51%);
+  --primary-foreground: hsl(0, 0%, 100%);
+  --secondary: hsl(240, 3.7%, 15.9%);
+  --secondary-foreground: hsl(0, 0%, 98%);
+  --accent: hsl(240, 3.7%, 15.9%);
+  --accent-foreground: hsl(0, 0%, 98%);
+  --destructive: hsl(0, 62.8%, 30.6%);
+  --destructive-foreground: hsl(0, 0%, 98%);
+  --ring: hsl(240, 4.9%, 83.9%);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply font-sans antialiased bg-background text-foreground;
+  }
+  
+  /* Hide scrollbar for horizontal navigation */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* Touch feedback for mobile */
+  .touch-feedback {
+    @apply active:scale-[0.98] transition-transform duration-75;
+  }
+  
+  /* Planet colors */
+  .planet-mercury { background-color: hsl(var(--mercury)); }
+  .planet-venus { background-color: hsl(var(--venus)); }
+  .planet-mars { background-color: hsl(var(--mars)); }
+  .planet-jupiter { background-color: hsl(var(--jupiter)); }
+  .planet-saturn { background-color: hsl(var(--saturn)); }
+  .planet-moon { background-color: hsl(var(--moon)); }
+  .planet-sun { background-color: hsl(var(--sun)); }
+  .planet-pluto { background-color: hsl(var(--pluto)); }
+  
+  /* Category colors */
+  .category-entertainment { color: hsl(var(--entertainment)); border-color: hsl(var(--entertainment)); background-color: hsl(var(--entertainment)); }
+  .category-music { color: hsl(var(--music)); border-color: hsl(var(--music)); background-color: hsl(var(--music)); }
+  .category-celebrity { color: hsl(var(--celebrity)); border-color: hsl(var(--celebrity)); background-color: hsl(var(--celebrity)); }
+  .category-lifestyle { color: hsl(var(--lifestyle)); border-color: hsl(var(--lifestyle)); background-color: hsl(var(--lifestyle)); }
+  .category-world { color: hsl(var(--world)); border-color: hsl(var(--world)); background-color: hsl(var(--world)); }
+  .category-tech { color: hsl(var(--tech)); border-color: hsl(var(--tech)); background-color: hsl(var(--tech)); }
+}
+
+/* Mobile app container */
+.mobile-container {
+  max-width: 428px;
+  margin: 0 auto;
+  background: white;
+  min-height: 100vh;
+  position: relative;
+}
+
+/* Status bar simulation */
+.status-bar {
+  background: hsl(var(--star-purple));
+  color: white;
+  padding: 12px 16px 4px;
+  font-size: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* App header */
+.app-header {
+  background: hsl(var(--star-purple));
+  color: white;
+  padding: 12px 16px;
+}
+
+/* Fade edges for horizontal scroll */
+.scroll-fade-right {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 32px;
+  background: linear-gradient(to left, hsl(var(--star-purple)), transparent);
+  pointer-events: none;
+}
