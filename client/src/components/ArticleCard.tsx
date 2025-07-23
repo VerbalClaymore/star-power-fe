@@ -53,8 +53,21 @@ export default function ArticleCard({ article }: ArticleCardProps) {
     
     let highlightedTitle = title;
     article.actors.forEach(actor => {
+      // Get the appropriate color based on actor and category
+      const getActorColor = (actorName: string, categorySlug: string) => {
+        if (actorName.toLowerCase().includes('taylor swift')) {
+          return 'hsl(329, 86%, 70%)'; // Pink for Taylor Swift
+        }
+        if (actorName.toLowerCase().includes('elon musk')) {
+          return 'hsl(24, 95%, 53%)'; // Orange for Elon Musk
+        }
+        // Default to category color for other actors
+        return `hsl(var(--${categorySlug}))`;
+      };
+      
+      const actorColor = getActorColor(actor.name, article.category.slug);
       const regex = new RegExp(`(${actor.name})`, 'gi');
-      highlightedTitle = highlightedTitle.replace(regex, `<span class="font-extrabold text-lg" style="color: hsl(var(--${article.category.slug}))">${actor.name}</span>`);
+      highlightedTitle = highlightedTitle.replace(regex, `<span class="font-bold" style="color: ${actorColor}">${actor.name}</span>`);
     });
     
     return highlightedTitle;

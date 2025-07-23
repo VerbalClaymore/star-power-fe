@@ -14,6 +14,18 @@ export default function TopNavigation({
   onCategoryChange,
   showStatusBar = true
 }: TopNavigationProps) {
+  const getCategoryColorClass = (categorySlug: string) => {
+    const colorMap: Record<string, string> = {
+      entertainment: "category-entertainment",
+      celebrity: "category-celebrity", 
+      lifestyle: "category-lifestyle",
+      world: "category-world",
+      tech: "category-tech",
+      top: "category-top",
+    };
+    return colorMap[categorySlug] || "category-entertainment";
+  };
+
   return (
     <div className="bg-primary text-white">
       {showStatusBar && (
@@ -36,10 +48,10 @@ export default function TopNavigation({
               key={category.slug}
               onClick={() => onCategoryChange(category.slug)}
               className={cn(
-                "rounded-full px-4 py-2 whitespace-nowrap text-sm transition-all duration-200",
+                "rounded-full px-4 py-2 whitespace-nowrap text-sm font-medium transition-all duration-200",
                 activeCategory === category.slug
-                  ? "bg-white bg-opacity-20 font-medium"
-                  : "opacity-70 hover:bg-white hover:bg-opacity-10"
+                  ? cn("text-white", getCategoryColorClass(category.slug))
+                  : "bg-white bg-opacity-10 opacity-70 hover:bg-opacity-20"
               )}
             >
               {category.name}

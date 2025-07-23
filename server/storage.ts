@@ -308,6 +308,7 @@ export class MemStorage implements IStorage {
       likeCount: insertArticle.likeCount ?? 0,
       shareCount: insertArticle.shareCount ?? 0,
       bookmarkCount: insertArticle.bookmarkCount ?? 0,
+      isCelebrity: insertArticle.isCelebrity ?? false,
       astroGlyphs: insertArticle.astroGlyphs as { planet: string; color: string; symbol?: string; }[]
     };
     this.articles.set(id, article);
