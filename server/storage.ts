@@ -118,7 +118,14 @@ export class MemStorage implements IStorage {
 
     actorData.forEach(actor => {
       const id = this.currentId.actors++;
-      this.actors.set(id, { id, ...actor });
+      this.actors.set(id, { 
+        id, 
+        ...actor,
+        sunSign: actor.sunSign || null,
+        moonSign: actor.moonSign || null,
+        risingSign: actor.risingSign || null,
+        profileImage: actor.profileImage || null
+      });
     });
 
     // Seed articles
@@ -197,7 +204,12 @@ export class MemStorage implements IStorage {
 
     articlesData.forEach(article => {
       const id = this.currentId.articles++;
-      this.articles.set(id, { id, publishedAt: new Date(), ...article });
+      this.articles.set(id, { 
+        id, 
+        publishedAt: new Date(), 
+        ...article,
+        astroGlyphs: article.astroGlyphs as { planet: string; color: string; symbol?: string; }[]
+      });
     });
   }
 
@@ -245,7 +257,14 @@ export class MemStorage implements IStorage {
 
   async createActor(insertActor: InsertActor): Promise<Actor> {
     const id = this.currentId.actors++;
-    const actor: Actor = { id, ...insertActor };
+    const actor: Actor = { 
+      id, 
+      ...insertActor,
+      sunSign: insertActor.sunSign || null,
+      moonSign: insertActor.moonSign || null,
+      risingSign: insertActor.risingSign || null,
+      profileImage: insertActor.profileImage || null
+    };
     this.actors.set(id, actor);
     return actor;
   }
@@ -282,7 +301,12 @@ export class MemStorage implements IStorage {
 
   async createArticle(insertArticle: InsertArticle): Promise<Article> {
     const id = this.currentId.articles++;
-    const article: Article = { id, publishedAt: new Date(), ...insertArticle };
+    const article: Article = { 
+      id, 
+      publishedAt: new Date(), 
+      ...insertArticle,
+      astroGlyphs: insertArticle.astroGlyphs as { planet: string; color: string; symbol?: string; }[]
+    };
     this.articles.set(id, article);
     return article;
   }
@@ -358,14 +382,26 @@ export class MemStorage implements IStorage {
 
   async followActor(insertFollow: InsertUserFollow): Promise<UserFollow> {
     const id = this.currentId.userFollows++;
-    const follow: UserFollow = { id, createdAt: new Date(), ...insertFollow };
+    const follow: UserFollow = { 
+      id, 
+      createdAt: new Date(), 
+      ...insertFollow,
+      hashtag: insertFollow.hashtag || null,
+      actorId: insertFollow.actorId || null
+    };
     this.userFollows.set(id, follow);
     return follow;
   }
 
   async followHashtag(insertFollow: InsertUserFollow): Promise<UserFollow> {
     const id = this.currentId.userFollows++;
-    const follow: UserFollow = { id, createdAt: new Date(), ...insertFollow };
+    const follow: UserFollow = { 
+      id, 
+      createdAt: new Date(), 
+      ...insertFollow,
+      hashtag: insertFollow.hashtag || null,
+      actorId: insertFollow.actorId || null
+    };
     this.userFollows.set(id, follow);
     return follow;
   }

@@ -13,7 +13,18 @@ export default function Home() {
   });
 
   const { data: articles, isLoading: articlesLoading } = useQuery<ArticleWithDetails[]>({
-    queryKey: ["/api/articles", { category: activeCategory }],
+    queryKey: ["/api/articles", activeCategory],
+    queryFn: async () => {
+      const params = new URLSearchParams();
+      if (activeCategory !== "top") {
+        params.append("category", activeCategory);
+      }
+      const response = await fetch(`/api/articles?${params.toString()}`);
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    },
   });
 
   if (categoriesLoading) {

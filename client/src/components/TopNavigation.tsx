@@ -18,11 +18,8 @@ export default function TopNavigation({
     <div className="bg-primary text-white">
       {showStatusBar && (
         <div className="status-bar">
-          <span className="font-medium">9:41</span>
+          <span></span>
           <div className="flex items-center space-x-1">
-            <span>📶</span>
-            <span>📶</span>
-            <span>🔋</span>
           </div>
         </div>
       )}
@@ -49,7 +46,6 @@ export default function TopNavigation({
             </button>
           ))}
         </div>
-        <div className="scroll-fade-right" />
       </div>
     </div>
   );
