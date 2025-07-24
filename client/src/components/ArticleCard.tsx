@@ -1,6 +1,7 @@
 import { Heart, Bookmark } from "lucide-react";
 import { PiShareNetworkBold } from "react-icons/pi";
 import { cn } from "@/lib/utils";
+import { useLocation } from "wouter";
 import PlanetIcon from "./PlanetIcon";
 import type { ArticleWithDetails } from "@shared/schema";
 
@@ -9,6 +10,7 @@ interface ArticleCardProps {
 }
 
 export default function ArticleCard({ article }: ArticleCardProps) {
+  const [, setLocation] = useLocation();
   const getCategoryColor = (categorySlug: string) => {
     const colorMap: Record<string, string> = {
       entertainment: "category-entertainment",
@@ -73,10 +75,20 @@ export default function ArticleCard({ article }: ArticleCardProps) {
     return highlightedTitle;
   };
 
+  const handleCardClick = () => {
+    setLocation(`/article/${article.id}`);
+  };
+
+  const handleReadMoreClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setLocation(`/article/${article.id}`);
+  };
+
   return (
     <div 
       className="bg-white rounded-lg border-l-4 touch-feedback cursor-pointer hover:shadow-lg transition-shadow duration-200"
       style={{ borderLeftColor: `hsl(var(--${article.category.slug}))` }}
+      onClick={handleCardClick}
     >
       <div className="p-4 relative">
         {/* Category Badge Above Title */}
@@ -155,13 +167,16 @@ export default function ArticleCard({ article }: ArticleCardProps) {
               </div>
               
               {/* Clear Call-to-Action */}
-              <span className={cn(
-                "text-xs font-bold px-2 py-1 rounded",
-                getCategoryColor(article.category.slug),
-                "text-white"
-              )}>
+              <button 
+                onClick={handleReadMoreClick}
+                className={cn(
+                  "text-xs font-bold px-2 py-1 rounded transition-opacity hover:opacity-80",
+                  getCategoryColor(article.category.slug),
+                  "text-white"
+                )}
+              >
                 Read More →
-              </span>
+              </button>
             </div>
           </div>
           

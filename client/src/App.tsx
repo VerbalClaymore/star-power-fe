@@ -8,20 +8,28 @@ import Profile from "@/pages/profile";
 import Saved from "@/pages/saved";
 import Search from "@/pages/search";
 import NotFound from "@/pages/not-found";
+import ArticlePage from "@/pages/article";
 import BottomNavigation from "@/components/BottomNavigation";
 
 function Router() {
   return (
-    <div className="mobile-container">
-      <Switch>
-        <Route path="/" component={Home} />
-        <Route path="/profile" component={Profile} />
-        <Route path="/saved" component={Saved} />
-        <Route path="/search" component={Search} />
-        <Route component={NotFound} />
-      </Switch>
-      <BottomNavigation />
-    </div>
+    <Switch>
+      <Route path="/article/:id">
+        <ArticlePage />
+      </Route>
+      <Route>
+        <div className="mobile-container">
+          <Switch>
+            <Route path="/" component={Home} />
+            <Route path="/profile" component={Profile} />
+            <Route path="/saved" component={Saved} />
+            <Route path="/search" component={Search} />
+            <Route component={NotFound} />
+          </Switch>
+          <BottomNavigation />
+        </div>
+      </Route>
+    </Switch>
   );
 }
 
