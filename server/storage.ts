@@ -79,6 +79,7 @@ export class MemStorage implements IStorage {
       { name: "Lifestyle", slug: "lifestyle", color: "hsl(158, 64%, 52%)", icon: "heart" },
       { name: "World", slug: "world", color: "hsl(217, 91%, 60%)", icon: "globe" },
       { name: "Tech", slug: "tech", color: "hsl(24, 95%, 53%)", icon: "cpu" },
+      { name: "Sports", slug: "sports", color: "hsl(120, 60%, 45%)", icon: "trophy" },
     ];
 
     categoryData.forEach(cat => {
@@ -104,6 +105,24 @@ export class MemStorage implements IStorage {
         sunSign: "Cancer",
         moonSign: "Virgo", 
         risingSign: "Leo",
+        profileImage: "https://via.placeholder.com/128"
+      },
+      { 
+        name: "Travis Kelce", 
+        slug: "travis-kelce", 
+        category: "sports",
+        sunSign: "Libra",
+        moonSign: "Aries", 
+        risingSign: "Leo",
+        profileImage: "https://via.placeholder.com/128"
+      },
+      { 
+        name: "Kanye West", 
+        slug: "kanye-west", 
+        category: "music",
+        sunSign: "Gemini",
+        moonSign: "Pisces", 
+        risingSign: "Cancer",
         profileImage: "https://via.placeholder.com/128"
       },
       { 

@@ -34,6 +34,7 @@
   --lifestyle: 158 64% 52%; /* Green #10B981 */
   --world: 217 91% 60%; /* Blue #3B82F6 */
   --tech: 24 95% 53%; /* Orange #F97316 */
+  --sports: 120 60% 45%; /* Green #059669 */
   --top: 45 93% 47%; /* Gold/Yellow #EAB308 */
   
   /* Planet Colors */
@@ -103,6 +104,10 @@
   
   .category-tech {
     background-color: hsl(var(--tech));
+  }
+  
+  .category-sports {
+    background-color: hsl(var(--sports));
   }
   
   .category-top {

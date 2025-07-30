@@ -31,6 +31,7 @@ export default function ArticleCard({ article }: ArticleCardProps) {
       lifestyle: "💖",
       world: "🌍",
       tech: "💻",
+      sports: "🏆",
     };
     return iconMap[categorySlug] || "📰";
   };
@@ -42,6 +43,7 @@ export default function ArticleCard({ article }: ArticleCardProps) {
       lifestyle: "LIFESTYLE",
       world: "WORLD",
       tech: "TECH",
+      sports: "SPORTS",
       top: "TOP",
     };
     return labelMap[categorySlug] || "NEWS";
@@ -62,6 +64,12 @@ export default function ArticleCard({ article }: ArticleCardProps) {
         }
         if (actorName.toLowerCase().includes('elon musk')) {
           return 'hsl(24, 95%, 53%)'; // Orange for Elon Musk
+        }
+        if (actorName.toLowerCase().includes('travis kelce')) {
+          return 'hsl(120, 60%, 45%)'; // Green for Travis Kelce (Sports)
+        }
+        if (actorName.toLowerCase().includes('kanye west')) {
+          return 'hsl(262, 83%, 58%)'; // Purple for Kanye West (Entertainment)
         }
         // Default to category color for other actors
         return `hsl(var(--${categorySlug}))`;
