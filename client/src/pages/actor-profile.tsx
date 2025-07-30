@@ -1,6 +1,6 @@
 import { useParams, useLocation } from "wouter";
 import { useQuery } from "@tanstack/react-query";
-import { ArrowLeft, Calendar, Star, Users, ChevronDown, ChevronUp } from "lucide-react";
+import { ArrowLeft, Calendar, Star, Users, ChevronDown, ChevronUp, Filter } from "lucide-react";
 import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import PlanetIcon from "@/components/PlanetIcon";
@@ -16,6 +16,7 @@ export default function ActorProfilePage() {
   const [storiesSort, setStoriesSort] = useState<SortOption>('reverse-chronological');
   const [storiesFilter, setStoriesFilter] = useState<FilterOption>('all');
   const [selectedRelationship, setSelectedRelationship] = useState<Actor | null>(null);
+  const [showFilterPanel, setShowFilterPanel] = useState(false);
   
   // Section collapse states - default expanded, persisted per profile
   const [sectionStates, setSectionStates] = useState(() => {
@@ -191,6 +192,22 @@ export default function ActorProfilePage() {
     }
   };
 
+  const handleFilterToggle = (relationshipId: number | 'all') => {
+    if (relationshipId === 'all') {
+      setSelectedRelationship(null);
+      setStoriesFilter('all');
+    } else {
+      const relationship = relationships?.find(r => r.id === relationshipId);
+      if (relationship) {
+        setSelectedRelationship(relationship);
+        setStoriesFilter('current-relationship');
+        // Open stories section when relationship is selected
+        setSectionStates((prev: any) => ({ ...prev, stories: true }));
+      }
+    }
+    setShowFilterPanel(false);
+  };
+
   const handleRelationshipSelect = (relationship: Actor) => {
     if (selectedRelationship?.id === relationship.id) {
       // Deselect if same relationship is clicked
@@ -201,7 +218,7 @@ export default function ActorProfilePage() {
       setSelectedRelationship(relationship);
       setStoriesFilter('current-relationship');
       // Open stories section when relationship is selected
-      setSectionStates(prev => ({ ...prev, stories: true }));
+      setSectionStates((prev: any) => ({ ...prev, stories: true }));
     }
   };
 
@@ -479,36 +496,67 @@ export default function ActorProfilePage() {
                       : `${articles?.length || 0} total stories`
                     }
                   </div>
-                  <select
-                    value={storiesSort}
-                    onChange={(e) => setStoriesSort(e.target.value as SortOption)}
-                    className="text-sm border border-gray-300 rounded px-2 py-1 bg-white"
-                  >
-                    <option value="reverse-chronological">Newest First</option>
-                    <option value="chronological">Oldest First</option>
-                    <option value="popularity">Most Popular</option>
-                  </select>
+                  <div className="flex items-center space-x-2">
+                    <button
+                      onClick={() => setShowFilterPanel(!showFilterPanel)}
+                      className={cn(
+                        "flex items-center justify-center w-8 h-8 rounded border transition-colors",
+                        showFilterPanel || selectedRelationship
+                          ? "border-purple-300 bg-purple-50 text-purple-600"
+                          : "border-gray-300 bg-white text-gray-600 hover:bg-gray-50"
+                      )}
+                    >
+                      <Filter className="w-4 h-4" />
+                    </button>
+                    <select
+                      value={storiesSort}
+                      onChange={(e) => setStoriesSort(e.target.value as SortOption)}
+                      className="text-sm border border-gray-300 rounded px-2 py-1 bg-white"
+                    >
+                      <option value="reverse-chronological">Newest First</option>
+                      <option value="chronological">Oldest First</option>
+                      <option value="popularity">Most Popular</option>
+                    </select>
+                  </div>
                 </div>
                 
-                <div className="flex items-center space-x-2">
-                  <span className="text-sm text-gray-600">Filter:</span>
-                  <select
-                    value={storiesFilter}
-                    onChange={(e) => {
-                      const newFilter = e.target.value as FilterOption;
-                      setStoriesFilter(newFilter);
-                      if (newFilter === 'all') {
-                        setSelectedRelationship(null);
-                      }
-                    }}
-                    className="text-sm border border-gray-300 rounded px-2 py-1 bg-white flex-1"
-                  >
-                    <option value="all">All Stories</option>
-                    <option value="current-relationship">
-                      {selectedRelationship ? `With ${selectedRelationship.name}` : 'Current Relationship (none selected)'}
-                    </option>
-                  </select>
-                </div>
+                {/* Filter Panel */}
+                {showFilterPanel && (
+                  <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                    <h4 className="text-sm font-bold text-gray-900 mb-3">Filter Stories</h4>
+                    <div className="space-y-2">
+                      <label className="flex items-center space-x-3">
+                        <input
+                          type="radio"
+                          name="story-filter"
+                          checked={storiesFilter === 'all'}
+                          onChange={() => handleFilterToggle('all')}
+                          className="text-purple-600 focus:ring-purple-500"
+                        />
+                        <span className="text-sm text-gray-700">All Stories</span>
+                      </label>
+                      {relationships && relationships.length > 0 && (
+                        <>
+                          <div className="border-t border-gray-200 pt-2 mt-2">
+                            <p className="text-xs text-gray-500 mb-2">Relationships</p>
+                          </div>
+                          {relationships.map((relationship) => (
+                            <label key={relationship.id} className="flex items-center space-x-3">
+                              <input
+                                type="radio"
+                                name="story-filter"
+                                checked={selectedRelationship?.id === relationship.id}
+                                onChange={() => handleFilterToggle(relationship.id)}
+                                className="text-purple-600 focus:ring-purple-500"
+                              />
+                              <span className="text-sm text-gray-700">With {relationship.name}</span>
+                            </label>
+                          ))}
+                        </>
+                      )}
+                    </div>
+                  </div>
+                )}
               </div>
               
               {articlesLoading ? (

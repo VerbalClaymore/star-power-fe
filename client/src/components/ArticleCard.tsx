@@ -67,7 +67,7 @@ export default function ArticleCard({ article }: ArticleCardProps) {
         return `hsl(var(--${categorySlug}))`;
       };
       
-      const actorColor = getActorColor(actor.name, article.category.slug);
+      const actorColor = getActorColor(actor.name, article.category?.slug || 'top');
       const regex = new RegExp(`(${actor.name})`, 'gi');
       highlightedTitle = highlightedTitle.replace(regex, `<span class="font-bold" style="color: ${actorColor}">${actor.name}</span>`);
     });
@@ -87,7 +87,7 @@ export default function ArticleCard({ article }: ArticleCardProps) {
   return (
     <div 
       className="bg-white rounded-lg border-l-4 touch-feedback cursor-pointer hover:shadow-lg transition-shadow duration-200"
-      style={{ borderLeftColor: `hsl(var(--${article.category.slug}))` }}
+      style={{ borderLeftColor: `hsl(var(--${article.category?.slug || 'top'}))` }}
       onClick={handleCardClick}
     >
       <div className="p-4 relative">
@@ -95,10 +95,10 @@ export default function ArticleCard({ article }: ArticleCardProps) {
         <div className="mb-2">
           <span className={cn(
             "inline-flex items-center px-3 py-1.5 rounded-full text-white text-xs font-bold shadow-sm",
-            getCategoryColor(article.category.slug)
+            getCategoryColor(article.category?.slug || 'top')
           )}>
-            <span className="mr-1.5 text-sm">{getCategoryIcon(article.category.slug)}</span>
-            {getCategoryLabel(article.category.slug)}
+            <span className="mr-1.5 text-sm">{getCategoryIcon(article.category?.slug || 'top')}</span>
+            {getCategoryLabel(article.category?.slug || 'top')}
           </span>
         </div>
         
@@ -171,7 +171,7 @@ export default function ArticleCard({ article }: ArticleCardProps) {
                 onClick={handleReadMoreClick}
                 className={cn(
                   "text-xs font-bold px-2 py-1 rounded transition-opacity hover:opacity-80",
-                  getCategoryColor(article.category.slug),
+                  getCategoryColor(article.category?.slug || 'top'),
                   "text-white"
                 )}
               >

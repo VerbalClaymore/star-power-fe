@@ -200,6 +200,59 @@ export class MemStorage implements IStorage {
         shareCount: 45,
         bookmarkCount: 67,
         isCelebrity: false,
+      },
+      {
+        title: "Taylor Swift and Travis Kelce Share Intimate Moment at Chiefs Game",
+        summary: "The couple was spotted sharing a passionate kiss during halftime, with Mercury conjunct Venus creating perfect conditions for public displays of affection...",
+        content: "Full article content about their relationship would go here...",
+        categoryId: 3, // Celebrity
+        astroAnalysis: "With Venus transiting Swift's 7th house of partnerships and Mercury enhancing communication, this public display represents a significant deepening of their bond. Kelce's Mars placement suggests he's comfortable with public attention on their relationship.",
+        astroGlyphs: [
+          { planet: "venus", color: "hsl(325, 100%, 60%)" },
+          { planet: "mercury", color: "hsl(200, 100%, 50%)" },
+          { planet: "mars", color: "hsl(0, 100%, 50%)" }
+        ],
+        hashtags: ["#TaylorSwift", "#TravisKelce", "#relationship", "#love"],
+        actorIds: [1, 3], // Taylor Swift + Travis Kelce
+        likeCount: 892,
+        shareCount: 234,
+        bookmarkCount: 445,
+        isCelebrity: true,
+      },
+      {
+        title: "Taylor Swift Claps Back at Kanye West's Latest Twitter Rant",
+        summary: "Swift responds to West's controversial tweets with Mars in Aries energy, as their long-standing feud reignites under intense astrological aspects...",
+        content: "Full article content about their ongoing feud would go here...",
+        categoryId: 3, // Celebrity
+        astroAnalysis: "This exchange occurs during a challenging Mars-Pluto square, intensifying power struggles and past grievances. Swift's response shows her evolved Scorpio moon energy, while West's Gemini sun creates scattered communication patterns.",
+        astroGlyphs: [
+          { planet: "mars", color: "hsl(0, 100%, 50%)", symbol: "!" },
+          { planet: "pluto", color: "hsl(260, 70%, 40%)" },
+          { planet: "mercury", color: "hsl(200, 100%, 50%)", symbol: "Rx" }
+        ],
+        hashtags: ["#TaylorSwift", "#KanyeWest", "#feud", "#twitter"],
+        actorIds: [1, 4], // Taylor Swift + Kanye West
+        likeCount: 1247,
+        shareCount: 567,
+        bookmarkCount: 298,
+        isCelebrity: true,
+      },
+      {
+        title: "Kelce Brothers Dominate NFL Under Jupiter's Blessing",
+        summary: "Travis and Jason Kelce both have stellar performances this season, with Jupiter's transit supporting athletic achievement and brotherly bonds...",
+        content: "Full article content about the Kelce brothers would go here...",
+        categoryId: 7, // Sports
+        astroAnalysis: "Jupiter's current position creates favorable aspects for both brothers' natal charts, enhancing their natural athletic abilities and team leadership qualities. Their shared Libra placements promote cooperation and balance.",
+        astroGlyphs: [
+          { planet: "jupiter", color: "hsl(35, 100%, 50%)" },
+          { planet: "mars", color: "hsl(0, 100%, 50%)" }
+        ],
+        hashtags: ["#TravisKelce", "#NFL", "#brothers", "#success"],
+        actorIds: [3], // Travis Kelce
+        likeCount: 445,
+        shareCount: 123,
+        bookmarkCount: 89,
+        isCelebrity: true,
       }
     ];
 
