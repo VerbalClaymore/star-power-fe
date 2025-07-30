@@ -9,6 +9,7 @@ import Saved from "@/pages/saved";
 import Search from "@/pages/search";
 import NotFound from "@/pages/not-found";
 import ArticlePage from "@/pages/article";
+import ActorProfilePage from "@/pages/actor-profile";
 import BottomNavigation from "@/components/BottomNavigation";
 
 function Router() {
@@ -16,6 +17,9 @@ function Router() {
     <Switch>
       <Route path="/article/:id">
         <ArticlePage />
+      </Route>
+      <Route path="/actor/:id/:returnTo?">
+        <ActorProfilePage />
       </Route>
       <Route>
         <div className="mobile-container">

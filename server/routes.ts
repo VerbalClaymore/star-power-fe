@@ -80,11 +80,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Get single actor by slug
-  app.get("/api/actors/:slug", async (req, res) => {
+  // Get single actor by ID or slug
+  app.get("/api/actors/:identifier", async (req, res) => {
     try {
-      const slug = req.params.slug;
-      const actor = await storage.getActorBySlug(slug);
+      const identifier = req.params.identifier;
+      let actor;
+      
+      // Try to parse as ID first, if it fails treat as slug
+      if (/^\d+$/.test(identifier)) {
+        const id = parseInt(identifier);
+        actor = await storage.getActorById(id);
+      } else {
+        actor = await storage.getActorBySlug(identifier);
+      }
       
       if (!actor) {
         return res.status(404).json({ error: "Actor not found" });

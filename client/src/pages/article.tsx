@@ -186,7 +186,11 @@ export default function ArticlePage() {
             <h3 className="text-base font-bold text-gray-900 mb-3">Featured People</h3>
             <div className="grid grid-cols-2 gap-3">
               {article.actors.map((actor) => (
-                <div key={actor.id} className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
+                <button
+                  key={actor.id}
+                  onClick={() => setLocation(`/actor/${actor.id}/${article.id}`)}
+                  className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors text-left"
+                >
                   <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center text-sm font-bold">
                     {actor.name.charAt(0)}
                   </div>
@@ -198,7 +202,7 @@ export default function ArticlePage() {
                       </p>
                     )}
                   </div>
-                </div>
+                </button>
               ))}
             </div>
           </div>

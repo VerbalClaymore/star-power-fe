@@ -49,12 +49,17 @@ The application uses a relational database structure with the following main ent
 4. **Social Features**: Bookmarking, sharing, and engagement tracking
 5. **Search Functionality**: Full-text search across articles, hashtags, and actors
 6. **Mobile Navigation**: Bottom navigation bar with four main sections
+7. **Article Detail View**: Full article display with expanded content and metadata
+8. **Actor Profile Pages**: Comprehensive astrological profiles with vibrational circuits and transits
 
 ### API Endpoints
 - `GET /api/categories` - Retrieve all news categories
 - `GET /api/articles` - Get articles with optional category filtering
 - `GET /api/articles/:id` - Get single article by ID
 - `GET /api/search` - Search articles by query
+- `GET /api/actors` - Get all actors
+- `GET /api/actors/:id` - Get single actor by ID or slug
+- `GET /api/actors/:id/articles` - Get articles featuring specific actor
 - Additional endpoints for user interactions (bookmarks, follows)
 
 ## Data Flow
