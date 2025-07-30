@@ -22,6 +22,7 @@ export interface IStorage {
   getActorById(id: number): Promise<Actor | undefined>;
   getActorBySlug(slug: string): Promise<Actor | undefined>;
   createActor(actor: InsertActor): Promise<Actor>;
+  getActorRelationships(actorId: number): Promise<Actor[]>;
 
   // Article methods
   getArticles(categorySlug?: string, limit?: number, offset?: number): Promise<ArticleWithDetails[]>;
@@ -352,6 +353,33 @@ export class MemStorage implements IStorage {
       const actors = article.actorIds.map(id => this.actors.get(id)!).filter(Boolean);
       return { ...article, category, actors };
     }));
+  }
+
+  async getActorRelationships(actorId: number): Promise<Actor[]> {
+    // Find all articles that include this actor
+    const actorArticles = Array.from(this.articles.values()).filter(article => 
+      article.actorIds.includes(actorId)
+    );
+
+    // Count co-appearances with other actors
+    const coAppearances = new Map<number, number>();
+    actorArticles.forEach(article => {
+      article.actorIds.forEach(id => {
+        if (id !== actorId) {
+          coAppearances.set(id, (coAppearances.get(id) || 0) + 1);
+        }
+      });
+    });
+
+    // Filter to relationships with 2+ co-appearances and return actors
+    const relationshipIds = Array.from(coAppearances.entries())
+      .filter(([, count]) => count >= 2)
+      .map(([id]) => id);
+
+    return relationshipIds
+      .map(id => this.actors.get(id)!)
+      .filter(Boolean)
+      .sort((a, b) => (coAppearances.get(b.id) || 0) - (coAppearances.get(a.id) || 0));
   }
 
   async bookmarkArticle(insertBookmark: InsertUserBookmark): Promise<UserBookmark> {

@@ -8,16 +8,20 @@ import ArticleCard from "@/components/ArticleCard";
 import type { Actor, ArticleWithDetails } from "@shared/schema";
 
 type SortOption = 'chronological' | 'reverse-chronological' | 'popularity';
+type FilterOption = 'all' | 'current-relationship';
 
 export default function ActorProfilePage() {
   const { id, returnTo } = useParams();
   const [, setLocation] = useLocation();
   const [storiesSort, setStoriesSort] = useState<SortOption>('reverse-chronological');
+  const [storiesFilter, setStoriesFilter] = useState<FilterOption>('all');
+  const [selectedRelationship, setSelectedRelationship] = useState<Actor | null>(null);
   
   // Section collapse states - default expanded, persisted per profile
   const [sectionStates, setSectionStates] = useState(() => {
     const saved = localStorage.getItem(`profile-sections-${id}`);
     return saved ? JSON.parse(saved) : {
+      relationships: true,
       vibrationalCircuits: true,
       traditionalAstrology: true,
       currentTransits: true,
@@ -31,7 +35,7 @@ export default function ActorProfilePage() {
   }, [sectionStates, id]);
 
   const toggleSection = (section: string) => {
-    setSectionStates(prev => ({
+    setSectionStates((prev: any) => ({
       ...prev,
       [section]: !prev[section]
     }));
@@ -44,6 +48,11 @@ export default function ActorProfilePage() {
 
   const { data: articles, isLoading: articlesLoading } = useQuery<ArticleWithDetails[]>({
     queryKey: [`/api/actors/${id}/articles`],
+    enabled: !!id,
+  });
+
+  const { data: relationships, isLoading: relationshipsLoading } = useQuery<Actor[]>({
+    queryKey: [`/api/actors/${id}/relationships`],
     enabled: !!id,
   });
 
@@ -149,17 +158,50 @@ export default function ActorProfilePage() {
     };
   };
 
-  const sortArticles = (articles: ArticleWithDetails[], sortBy: SortOption) => {
-    const sorted = [...articles];
+  const filterAndSortArticles = (articles: ArticleWithDetails[], filter: FilterOption, sortBy: SortOption) => {
+    let filtered = [...articles];
+    
+    // Apply filter first
+    switch (filter) {
+      case 'current-relationship':
+        if (selectedRelationship) {
+          filtered = filtered.filter(article => 
+            article.actors.some(actor => actor.id === selectedRelationship.id)
+          );
+        } else {
+          filtered = []; // No relationship selected, return empty
+        }
+        break;
+      case 'all':
+      default:
+        // No filtering, keep all articles
+        break;
+    }
+    
+    // Then apply sorting
     switch (sortBy) {
       case 'chronological':
-        return sorted.sort((a, b) => new Date(a.publishedAt).getTime() - new Date(b.publishedAt).getTime());
+        return filtered.sort((a, b) => new Date(a.publishedAt).getTime() - new Date(b.publishedAt).getTime());
       case 'reverse-chronological':
-        return sorted.sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
+        return filtered.sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
       case 'popularity':
-        return sorted.sort((a, b) => (b.likeCount + b.shareCount + b.bookmarkCount) - (a.likeCount + a.shareCount + a.bookmarkCount));
+        return filtered.sort((a, b) => (b.likeCount + b.shareCount + b.bookmarkCount) - (a.likeCount + a.shareCount + a.bookmarkCount));
       default:
-        return sorted;
+        return filtered;
+    }
+  };
+
+  const handleRelationshipSelect = (relationship: Actor) => {
+    if (selectedRelationship?.id === relationship.id) {
+      // Deselect if same relationship is clicked
+      setSelectedRelationship(null);
+      setStoriesFilter('all');
+    } else {
+      // Select new relationship
+      setSelectedRelationship(relationship);
+      setStoriesFilter('current-relationship');
+      // Open stories section when relationship is selected
+      setSectionStates(prev => ({ ...prev, stories: true }));
     }
   };
 
@@ -174,7 +216,7 @@ export default function ActorProfilePage() {
   const vibrationalCircuits = getVibrationalCircuits();
   const currentTransits = getCurrentTransits();
   const traditionalAstrology = getTraditionalAstrology();
-  const sortedArticles = articles ? sortArticles(articles, storiesSort) : [];
+  const filteredAndSortedArticles = articles ? filterAndSortArticles(articles, storiesFilter, storiesSort) : [];
 
   return (
     <div className="mobile-container bg-white min-h-screen">
@@ -236,6 +278,74 @@ export default function ActorProfilePage() {
               <p className="font-bold text-sm">{actor.risingSign || 'Unknown'}</p>
             </div>
           </div>
+        </div>
+
+        {/* Relationships */}
+        <div className="mb-6">
+          <button
+            onClick={() => toggleSection('relationships')}
+            className="flex items-center justify-between w-full text-left mb-4"
+          >
+            <h3 className="text-lg font-bold text-gray-900">Relationships</h3>
+            {sectionStates.relationships ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
+          </button>
+          {sectionStates.relationships && (
+            <div>
+              {relationshipsLoading ? (
+                <div className="text-center py-4">
+                  <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary mx-auto mb-2"></div>
+                  <p className="text-sm text-gray-500">Loading relationships...</p>
+                </div>
+              ) : relationships && relationships.length > 0 ? (
+                <div className="space-y-3">
+                  {relationships.map((relationship) => (
+                    <button
+                      key={relationship.id}
+                      onClick={() => handleRelationshipSelect(relationship)}
+                      className={cn(
+                        "w-full flex items-center justify-between p-4 rounded-lg border transition-colors text-left",
+                        selectedRelationship?.id === relationship.id
+                          ? "border-purple-300 bg-purple-50"
+                          : "border-gray-200 bg-white hover:bg-gray-50"
+                      )}
+                    >
+                      <div className="flex items-center space-x-3">
+                        <div className="w-12 h-12 bg-gradient-to-br from-purple-400 to-pink-400 rounded-full flex items-center justify-center text-white font-bold">
+                          {relationship.name.charAt(0)}
+                        </div>
+                        <div>
+                          <h4 className="font-bold text-sm">{relationship.name}</h4>
+                          <p className="text-xs text-gray-500">{relationship.category}</p>
+                        </div>
+                      </div>
+                      {selectedRelationship?.id === relationship.id && (
+                        <div className="text-purple-600">
+                          <span className="text-xs font-medium">Selected</span>
+                        </div>
+                      )}
+                    </button>
+                  ))}
+                  
+                  {selectedRelationship && (
+                    <div className="mt-4 p-4 bg-purple-50 rounded-lg border border-purple-200">
+                      <h4 className="font-bold text-sm text-purple-900 mb-2">
+                        Relationship with {selectedRelationship.name}
+                      </h4>
+                      <p className="text-sm text-purple-700">
+                        These two frequently appear together in entertainment news, indicating a significant 
+                        professional or personal connection that generates media attention.
+                      </p>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div className="text-center py-8">
+                  <Users className="w-12 h-12 text-gray-300 mx-auto mb-2" />
+                  <p className="text-gray-500">No relationships found</p>
+                </div>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Vibrational Astrology Circuits */}
@@ -359,21 +469,46 @@ export default function ActorProfilePage() {
           
           {sectionStates.stories && (
             <>
-              {/* Sort Controls */}
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center text-sm text-gray-500">
-                  <Users className="w-4 h-4 mr-1" />
-                  {articles?.length || 0} stories
+              {/* Filter and Sort Controls */}
+              <div className="space-y-3 mb-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center text-sm text-gray-500">
+                    <Users className="w-4 h-4 mr-1" />
+                    {storiesFilter === 'current-relationship' && selectedRelationship 
+                      ? `${filteredAndSortedArticles.length} stories with ${selectedRelationship.name}`
+                      : `${articles?.length || 0} total stories`
+                    }
+                  </div>
+                  <select
+                    value={storiesSort}
+                    onChange={(e) => setStoriesSort(e.target.value as SortOption)}
+                    className="text-sm border border-gray-300 rounded px-2 py-1 bg-white"
+                  >
+                    <option value="reverse-chronological">Newest First</option>
+                    <option value="chronological">Oldest First</option>
+                    <option value="popularity">Most Popular</option>
+                  </select>
                 </div>
-                <select
-                  value={storiesSort}
-                  onChange={(e) => setStoriesSort(e.target.value as SortOption)}
-                  className="text-sm border border-gray-300 rounded px-2 py-1 bg-white"
-                >
-                  <option value="reverse-chronological">Newest First</option>
-                  <option value="chronological">Oldest First</option>
-                  <option value="popularity">Most Popular</option>
-                </select>
+                
+                <div className="flex items-center space-x-2">
+                  <span className="text-sm text-gray-600">Filter:</span>
+                  <select
+                    value={storiesFilter}
+                    onChange={(e) => {
+                      const newFilter = e.target.value as FilterOption;
+                      setStoriesFilter(newFilter);
+                      if (newFilter === 'all') {
+                        setSelectedRelationship(null);
+                      }
+                    }}
+                    className="text-sm border border-gray-300 rounded px-2 py-1 bg-white flex-1"
+                  >
+                    <option value="all">All Stories</option>
+                    <option value="current-relationship">
+                      {selectedRelationship ? `With ${selectedRelationship.name}` : 'Current Relationship (none selected)'}
+                    </option>
+                  </select>
+                </div>
               </div>
               
               {articlesLoading ? (
@@ -381,16 +516,21 @@ export default function ActorProfilePage() {
                   <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary mx-auto mb-2"></div>
                   <p className="text-sm text-gray-500">Loading stories...</p>
                 </div>
-              ) : sortedArticles.length > 0 ? (
+              ) : filteredAndSortedArticles.length > 0 ? (
                 <div className="space-y-4">
-                  {sortedArticles.map((article) => (
+                  {filteredAndSortedArticles.map((article) => (
                     <ArticleCard key={article.id} article={article} />
                   ))}
                 </div>
               ) : (
                 <div className="text-center py-8">
                   <Users className="w-12 h-12 text-gray-300 mx-auto mb-2" />
-                  <p className="text-gray-500">No stories found</p>
+                  <p className="text-gray-500">
+                    {storiesFilter === 'current-relationship' && selectedRelationship
+                      ? `No stories found with ${selectedRelationship.name}`
+                      : 'No stories found'
+                    }
+                  </p>
                 </div>
               )}
             </>

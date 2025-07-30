@@ -115,6 +115,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Get relationships for an actor
+  app.get("/api/actors/:id/relationships", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const relationships = await storage.getActorRelationships(id);
+      res.json(relationships);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch actor relationships" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }
