@@ -50,7 +50,7 @@ The application uses a relational database structure with the following main ent
 5. **Search Functionality**: Full-text search across articles, hashtags, and actors
 6. **Mobile Navigation**: Bottom navigation bar with four main sections
 7. **Article Detail View**: Full article display with expanded content and metadata
-8. **Actor Profile Pages**: Comprehensive astrological profiles with vibrational circuits and transits
+8. **Actor Profile Pages**: Comprehensive astrological profiles with vibrational circuits, traditional astrology houses, current transits, and sortable story listings with collapsible sections
 
 ### API Endpoints
 - `GET /api/categories` - Retrieve all news categories

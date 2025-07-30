@@ -1,14 +1,41 @@
 import { useParams, useLocation } from "wouter";
 import { useQuery } from "@tanstack/react-query";
-import { ArrowLeft, Calendar, Star, Users } from "lucide-react";
+import { ArrowLeft, Calendar, Star, Users, ChevronDown, ChevronUp } from "lucide-react";
+import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import PlanetIcon from "@/components/PlanetIcon";
 import ArticleCard from "@/components/ArticleCard";
 import type { Actor, ArticleWithDetails } from "@shared/schema";
 
+type SortOption = 'chronological' | 'reverse-chronological' | 'popularity';
+
 export default function ActorProfilePage() {
   const { id, returnTo } = useParams();
   const [, setLocation] = useLocation();
+  const [storiesSort, setStoriesSort] = useState<SortOption>('reverse-chronological');
+  
+  // Section collapse states - default expanded, persisted per profile
+  const [sectionStates, setSectionStates] = useState(() => {
+    const saved = localStorage.getItem(`profile-sections-${id}`);
+    return saved ? JSON.parse(saved) : {
+      vibrationalCircuits: true,
+      traditionalAstrology: true,
+      currentTransits: true,
+      stories: true
+    };
+  });
+
+  // Persist section states
+  useEffect(() => {
+    localStorage.setItem(`profile-sections-${id}`, JSON.stringify(sectionStates));
+  }, [sectionStates, id]);
+
+  const toggleSection = (section: string) => {
+    setSectionStates(prev => ({
+      ...prev,
+      [section]: !prev[section]
+    }));
+  };
 
   const { data: actor, isLoading: actorLoading } = useQuery<Actor>({
     queryKey: [`/api/actors/${id}`],
@@ -102,6 +129,40 @@ export default function ActorProfilePage() {
     ];
   };
 
+  const getTraditionalAstrology = () => {
+    // Mock traditional astrology data - in real app this would come from API
+    return {
+      houses: [
+        { number: 1, sign: "Scorpio", planets: ["Mars"], description: "Self, Identity, First Impressions" },
+        { number: 2, sign: "Sagittarius", planets: ["Jupiter"], description: "Money, Values, Possessions" },
+        { number: 3, sign: "Capricorn", planets: [], description: "Communication, Siblings, Short Trips" },
+        { number: 4, sign: "Aquarius", planets: ["Saturn"], description: "Home, Family, Roots" },
+        { number: 5, sign: "Pisces", planets: ["Neptune"], description: "Creativity, Romance, Children" },
+        { number: 6, sign: "Aries", planets: [], description: "Work, Health, Daily Routine" },
+        { number: 7, sign: "Taurus", planets: ["Venus"], description: "Partnerships, Marriage, Open Enemies" },
+        { number: 8, sign: "Gemini", planets: ["Mercury"], description: "Transformation, Shared Resources, Death" },
+        { number: 9, sign: "Cancer", planets: ["Moon"], description: "Philosophy, Higher Learning, Travel" },
+        { number: 10, sign: "Leo", planets: ["Sun"], description: "Career, Reputation, Public Image" },
+        { number: 11, sign: "Virgo", planets: [], description: "Friends, Groups, Hopes & Dreams" },
+        { number: 12, sign: "Libra", planets: ["Pluto"], description: "Subconscious, Hidden Things, Spirituality" }
+      ]
+    };
+  };
+
+  const sortArticles = (articles: ArticleWithDetails[], sortBy: SortOption) => {
+    const sorted = [...articles];
+    switch (sortBy) {
+      case 'chronological':
+        return sorted.sort((a, b) => new Date(a.publishedAt).getTime() - new Date(b.publishedAt).getTime());
+      case 'reverse-chronological':
+        return sorted.sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
+      case 'popularity':
+        return sorted.sort((a, b) => (b.likeCount + b.shareCount + b.bookmarkCount) - (a.likeCount + a.shareCount + a.bookmarkCount));
+      default:
+        return sorted;
+    }
+  };
+
   const handleBack = () => {
     if (returnTo) {
       setLocation(`/article/${returnTo}`);
@@ -112,6 +173,8 @@ export default function ActorProfilePage() {
 
   const vibrationalCircuits = getVibrationalCircuits();
   const currentTransits = getCurrentTransits();
+  const traditionalAstrology = getTraditionalAstrology();
+  const sortedArticles = articles ? sortArticles(articles, storiesSort) : [];
 
   return (
     <div className="mobile-container bg-white min-h-screen">
@@ -177,81 +240,160 @@ export default function ActorProfilePage() {
 
         {/* Vibrational Astrology Circuits */}
         <div className="mb-6">
-          <h3 className="text-lg font-bold text-gray-900 mb-4">Vibrational Astrology Circuits</h3>
-          <div className="space-y-4">
-            {vibrationalCircuits.map((circuit, index) => (
-              <div key={index} className="bg-gray-50 rounded-lg p-4">
-                <div className="flex items-center justify-between mb-2">
-                  <h4 className="font-bold text-sm">{circuit.name}</h4>
-                  <div className="flex space-x-1">
-                    {circuit.planets.map((planet, planetIndex) => (
-                      <PlanetIcon
-                        key={planetIndex}
-                        planet={planet}
-                        color={`hsl(${210 + planetIndex * 30}, 70%, 50%)`}
-                      />
-                    ))}
+          <button
+            onClick={() => toggleSection('vibrationalCircuits')}
+            className="flex items-center justify-between w-full text-left mb-4"
+          >
+            <h3 className="text-lg font-bold text-gray-900">Vibrational Astrology Circuits</h3>
+            {sectionStates.vibrationalCircuits ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
+          </button>
+          {sectionStates.vibrationalCircuits && (
+            <div className="space-y-4">
+              {vibrationalCircuits.map((circuit, index) => (
+                <div key={index} className="bg-gray-50 rounded-lg p-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <h4 className="font-bold text-sm">{circuit.name}</h4>
+                    <div className="flex space-x-1">
+                      {circuit.planets.map((planet, planetIndex) => (
+                        <PlanetIcon
+                          key={planetIndex}
+                          planet={planet}
+                          color={`hsl(${210 + planetIndex * 30}, 70%, 50%)`}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                  <p className="text-xs text-gray-600">{circuit.description}</p>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Traditional Astrology */}
+        <div className="mb-6">
+          <button
+            onClick={() => toggleSection('traditionalAstrology')}
+            className="flex items-center justify-between w-full text-left mb-4"
+          >
+            <h3 className="text-lg font-bold text-gray-900">Traditional Astrology</h3>
+            {sectionStates.traditionalAstrology ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
+          </button>
+          {sectionStates.traditionalAstrology && (
+            <div className="grid grid-cols-1 gap-3">
+              {traditionalAstrology.houses.map((house) => (
+                <div key={house.number} className="bg-gray-50 rounded-lg p-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center space-x-3">
+                      <div className="w-8 h-8 bg-purple-500 text-white rounded-full flex items-center justify-center text-sm font-bold">
+                        {house.number}
+                      </div>
+                      <div>
+                        <h4 className="font-bold text-sm">{house.sign}</h4>
+                        <p className="text-xs text-gray-500">{house.description}</p>
+                      </div>
+                    </div>
+                    <div className="flex space-x-1">
+                      {house.planets.map((planet, planetIndex) => (
+                        <PlanetIcon
+                          key={planetIndex}
+                          planet={planet.toLowerCase()}
+                          color={`hsl(${260 + planetIndex * 25}, 60%, 50%)`}
+                        />
+                      ))}
+                      {house.planets.length === 0 && (
+                        <span className="text-xs text-gray-400 px-2 py-1">Empty</span>
+                      )}
+                    </div>
                   </div>
                 </div>
-                <p className="text-xs text-gray-600">{circuit.description}</p>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Current Planetary Transits */}
         <div className="mb-8">
-          <h3 className="text-lg font-bold text-gray-900 mb-4">Current Planetary Transits</h3>
-          <div className="space-y-3">
-            {currentTransits.map((transit, index) => (
-              <div key={index} className="border border-gray-200 rounded-lg p-4">
-                <div className="flex items-center justify-between mb-2">
-                  <h4 className="font-bold text-sm">{transit.transit}</h4>
-                  <span className={cn(
-                    "px-2 py-1 rounded-full text-xs font-medium",
-                    transit.intensity === 'high' && "bg-red-100 text-red-800",
-                    transit.intensity === 'medium' && "bg-yellow-100 text-yellow-800", 
-                    transit.intensity === 'low' && "bg-green-100 text-green-800"
-                  )}>
-                    {transit.intensity} intensity
-                  </span>
+          <button
+            onClick={() => toggleSection('currentTransits')}
+            className="flex items-center justify-between w-full text-left mb-4"
+          >
+            <h3 className="text-lg font-bold text-gray-900">Current Planetary Transits</h3>
+            {sectionStates.currentTransits ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
+          </button>
+          {sectionStates.currentTransits && (
+            <div className="space-y-3">
+              {currentTransits.map((transit, index) => (
+                <div key={index} className="border border-gray-200 rounded-lg p-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <h4 className="font-bold text-sm">{transit.transit}</h4>
+                    <span className={cn(
+                      "px-2 py-1 rounded-full text-xs font-medium",
+                      transit.intensity === 'high' && "bg-red-100 text-red-800",
+                      transit.intensity === 'medium' && "bg-yellow-100 text-yellow-800", 
+                      transit.intensity === 'low' && "bg-green-100 text-green-800"
+                    )}>
+                      {transit.intensity} intensity
+                    </span>
+                  </div>
+                  <p className="text-sm text-gray-700 mb-1">{transit.effect}</p>
+                  <div className="flex items-center text-xs text-gray-500">
+                    <Calendar className="w-3 h-3 mr-1" />
+                    {transit.duration}
+                  </div>
                 </div>
-                <p className="text-sm text-gray-700 mb-1">{transit.effect}</p>
-                <div className="flex items-center text-xs text-gray-500">
-                  <Calendar className="w-3 h-3 mr-1" />
-                  {transit.duration}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Related Articles */}
-        <div>
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-bold text-gray-900">Recent Stories</h3>
-            <div className="flex items-center text-sm text-gray-500">
-              <Users className="w-4 h-4 mr-1" />
-              {articles?.length || 0} articles
-            </div>
-          </div>
-          
-          {articlesLoading ? (
-            <div className="text-center py-8">
-              <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary mx-auto mb-2"></div>
-              <p className="text-sm text-gray-500">Loading stories...</p>
-            </div>
-          ) : articles && articles.length > 0 ? (
-            <div className="space-y-4">
-              {articles.map((article) => (
-                <ArticleCard key={article.id} article={article} />
               ))}
             </div>
-          ) : (
-            <div className="text-center py-8">
-              <Users className="w-12 h-12 text-gray-300 mx-auto mb-2" />
-              <p className="text-gray-500">No recent stories found</p>
-            </div>
+          )}
+        </div>
+
+        {/* Stories */}
+        <div>
+          <button
+            onClick={() => toggleSection('stories')}
+            className="flex items-center justify-between w-full text-left mb-4"
+          >
+            <h3 className="text-lg font-bold text-gray-900">Stories</h3>
+            {sectionStates.stories ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
+          </button>
+          
+          {sectionStates.stories && (
+            <>
+              {/* Sort Controls */}
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center text-sm text-gray-500">
+                  <Users className="w-4 h-4 mr-1" />
+                  {articles?.length || 0} stories
+                </div>
+                <select
+                  value={storiesSort}
+                  onChange={(e) => setStoriesSort(e.target.value as SortOption)}
+                  className="text-sm border border-gray-300 rounded px-2 py-1 bg-white"
+                >
+                  <option value="reverse-chronological">Newest First</option>
+                  <option value="chronological">Oldest First</option>
+                  <option value="popularity">Most Popular</option>
+                </select>
+              </div>
+              
+              {articlesLoading ? (
+                <div className="text-center py-8">
+                  <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary mx-auto mb-2"></div>
+                  <p className="text-sm text-gray-500">Loading stories...</p>
+                </div>
+              ) : sortedArticles.length > 0 ? (
+                <div className="space-y-4">
+                  {sortedArticles.map((article) => (
+                    <ArticleCard key={article.id} article={article} />
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-8">
+                  <Users className="w-12 h-12 text-gray-300 mx-auto mb-2" />
+                  <p className="text-gray-500">No stories found</p>
+                </div>
+              )}
+            </>
           )}
         </div>
       </div>
