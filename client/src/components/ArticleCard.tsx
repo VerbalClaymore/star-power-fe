@@ -112,17 +112,29 @@ export default function ArticleCard({ article }: ArticleCardProps) {
         
         {/* Article Content */}
         <div className="flex">
-          <div className="flex-1 pr-3">
+          {/* Article Image */}
+          <div className="w-20 h-20 rounded-lg overflow-hidden bg-gray-200 mr-3 flex-shrink-0">
+            {article.actors.length > 0 && article.actors[0].profileImage ? (
+              <img 
+                src={article.actors[0].profileImage} 
+                alt={article.actors[0].name}
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center text-gray-400 font-bold text-xl">
+                {article.actors.length > 0 ? article.actors[0].name.charAt(0) : "📰"}
+              </div>
+            )}
+          </div>
+          
+          <div className="flex-1">
             <h3 
-              className="font-bold text-base leading-tight mb-2"
+              className="font-bold text-base leading-tight mb-3"
               dangerouslySetInnerHTML={{ __html: highlightCelebrityNames(article.title) }}
             />
-            <p className="text-sm text-gray-600 mb-3">
-              {article.summary}
-            </p>
             
             {/* Metadata Tags - Single Row Only */}
-            <div className="flex flex-wrap gap-1 mb-3 overflow-hidden" style={{ maxHeight: '1.5rem' }}>
+            <div className="flex flex-wrap gap-1 mb-2 overflow-hidden" style={{ maxHeight: '1.5rem' }}>
               {displayedHashtags.map((tag, index) => (
                 <span
                   key={index}
@@ -137,25 +149,6 @@ export default function ArticleCard({ article }: ArticleCardProps) {
                 </span>
               )}
             </div>
-            
-            {/* Actors Section */}
-            {article.actors.length > 0 && (
-              <div className="flex items-center space-x-2 mb-3">
-                {article.actors.slice(0, 3).map((actor, index) => (
-                  <div key={actor.id} className="flex items-center">
-                    <div className="w-6 h-6 bg-gray-300 rounded-full flex items-center justify-center text-xs font-bold">
-                      {actor.name.charAt(0)}
-                    </div>
-                    {index < 2 && index < article.actors.length - 1 && (
-                      <span className="ml-1 text-xs text-gray-500">{actor.name.split(' ')[0]}</span>
-                    )}
-                  </div>
-                ))}
-                {article.actors.length > 3 && (
-                  <span className="text-xs text-gray-500">+{article.actors.length - 3} more</span>
-                )}
-              </div>
-            )}
             
             {/* Social Stats and Read More */}
             <div className="flex items-center justify-between">
@@ -188,17 +181,18 @@ export default function ArticleCard({ article }: ArticleCardProps) {
             </div>
           </div>
           
-          {/* Vertical Planet Icons - Right Aligned */}
-          <div className="flex flex-col items-end space-y-1 pl-2">
-            {article.astroGlyphs.map((glyph, index) => (
-              <PlanetIcon
-                key={index}
-                planet={glyph.planet}
-                symbol={glyph.symbol}
-                color={glyph.color}
-              />
-            ))}
-          </div>
+        </div>
+        
+        {/* Vertical Planet Icons - Right Aligned */}
+        <div className="flex flex-col items-end space-y-1 ml-2">
+          {article.astroGlyphs.map((glyph, index) => (
+            <PlanetIcon
+              key={index}
+              planet={glyph.planet}
+              symbol={glyph.symbol}
+              color={glyph.color}
+            />
+          ))}
         </div>
       </div>
     </div>

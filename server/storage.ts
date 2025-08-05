@@ -443,9 +443,9 @@ export class MemStorage implements IStorage {
       });
     });
 
-    // Filter to relationships with 2+ co-appearances and return actors
+    // Filter to relationships with 1+ co-appearances and return actors
     const relationshipIds = Array.from(coAppearances.entries())
-      .filter(([, count]) => count >= 2)
+      .filter(([, count]) => count >= 1)
       .map(([id]) => id);
 
     return relationshipIds
