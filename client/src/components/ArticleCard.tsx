@@ -99,8 +99,8 @@ export default function ArticleCard({ article }: ArticleCardProps) {
       onClick={handleCardClick}
     >
       <div className="p-4 relative">
-        {/* Category Badge Above Title */}
-        <div className="mb-2">
+        {/* Category Badge and Planet Glyphs Row */}
+        <div className="flex items-center justify-between mb-2">
           <span className={cn(
             "inline-flex items-center px-3 py-1.5 rounded-full text-white text-xs font-bold shadow-sm",
             getCategoryColor(article.category?.slug || 'top')
@@ -108,12 +108,24 @@ export default function ArticleCard({ article }: ArticleCardProps) {
             <span className="mr-1.5 text-sm">{getCategoryIcon(article.category?.slug || 'top')}</span>
             {getCategoryLabel(article.category?.slug || 'top')}
           </span>
+          
+          {/* Horizontal Planet Icons */}
+          <div className="flex items-center space-x-1">
+            {article.astroGlyphs.map((glyph, index) => (
+              <PlanetIcon
+                key={index}
+                planet={glyph.planet}
+                symbol={glyph.symbol}
+                color={glyph.color}
+              />
+            ))}
+          </div>
         </div>
         
         {/* Article Content */}
         <div className="flex">
-          {/* Article Image */}
-          <div className="w-20 h-20 rounded-lg overflow-hidden bg-gray-200 mr-3 flex-shrink-0">
+          {/* Article Image - Larger Size */}
+          <div className="w-24 h-24 rounded-lg overflow-hidden bg-gray-200 mr-4 flex-shrink-0">
             {article.actors.length > 0 && article.actors[0].profileImage ? (
               <img 
                 src={article.actors[0].profileImage} 
@@ -122,7 +134,7 @@ export default function ArticleCard({ article }: ArticleCardProps) {
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center bg-gray-100 text-gray-400">
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
+                <svg width="36" height="36" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
                 </svg>
               </div>
@@ -131,7 +143,7 @@ export default function ArticleCard({ article }: ArticleCardProps) {
           
           <div className="flex-1">
             <h3 
-              className="font-bold text-base leading-tight mb-3"
+              className="font-bold text-base leading-tight mb-2"
               dangerouslySetInnerHTML={{ __html: highlightCelebrityNames(article.title) }}
             />
             
@@ -183,18 +195,6 @@ export default function ArticleCard({ article }: ArticleCardProps) {
             </div>
           </div>
           
-        </div>
-        
-        {/* Vertical Planet Icons - Right Aligned */}
-        <div className="flex flex-col items-end space-y-1 ml-2">
-          {article.astroGlyphs.map((glyph, index) => (
-            <PlanetIcon
-              key={index}
-              planet={glyph.planet}
-              symbol={glyph.symbol}
-              color={glyph.color}
-            />
-          ))}
         </div>
       </div>
     </div>
