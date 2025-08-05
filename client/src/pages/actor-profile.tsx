@@ -237,8 +237,9 @@ export default function ActorProfilePage() {
 
   return (
     <div className="mobile-container bg-white min-h-screen">
-      {/* Header */}
-      <div className="sticky top-0 bg-white border-b border-gray-200 z-10">
+      {/* Header with category accent */}
+      <div className="sticky top-0 bg-white border-b-4 z-10" 
+           style={{ borderBottomColor: 'hsl(329, 86%, 70%)' }}>
         <div className="flex items-center justify-between p-4">
           <button
             onClick={handleBack}
@@ -247,7 +248,10 @@ export default function ActorProfilePage() {
             <ArrowLeft className="w-5 h-5" />
           </button>
           
-          <h1 className="text-lg font-bold">Astrological Profile</h1>
+          <div className="flex items-center">
+            <span className="mr-2 text-lg">⭐</span>
+            <h1 className="text-lg font-bold">Astrological Profile</h1>
+          </div>
           
           <div className="w-10 h-10"></div> {/* Spacer for center alignment */}
         </div>
@@ -348,10 +352,16 @@ export default function ActorProfilePage() {
                       <h4 className="font-bold text-sm text-purple-900 mb-2">
                         Relationship with {selectedRelationship.name}
                       </h4>
-                      <p className="text-sm text-purple-700">
+                      <p className="text-sm text-purple-700 mb-3">
                         These two frequently appear together in entertainment news, indicating a significant 
                         professional or personal connection that generates media attention.
                       </p>
+                      <button
+                        onClick={() => setLocation(`/actor/${selectedRelationship.id}`)}
+                        className="text-sm font-bold text-purple-600 hover:text-purple-800 transition-colors"
+                      >
+                        View {selectedRelationship.name}'s Profile →
+                      </button>
                     </div>
                   )}
                 </div>

@@ -121,8 +121,10 @@ export default function ArticleCard({ article }: ArticleCardProps) {
                 className="w-full h-full object-cover"
               />
             ) : (
-              <div className="w-full h-full flex items-center justify-center text-gray-400 font-bold text-xl">
-                {article.actors.length > 0 ? article.actors[0].name.charAt(0) : "📰"}
+              <div className="w-full h-full flex items-center justify-center bg-gray-100 text-gray-400">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                </svg>
               </div>
             )}
           </div>

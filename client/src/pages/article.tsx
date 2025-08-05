@@ -108,7 +108,8 @@ export default function ArticlePage() {
   return (
     <div className="mobile-container bg-white min-h-screen">
       {/* Header with Back Button and Actions */}
-      <div className="sticky top-0 bg-white border-b border-gray-200 z-10">
+      <div className="sticky top-0 bg-white border-b-4 z-10" 
+           style={{ borderBottomColor: getCategoryColor(article.category?.slug || 'top') }}>
         <div className="flex items-center justify-between p-4">
           <button
             onClick={() => setLocation('/')}
