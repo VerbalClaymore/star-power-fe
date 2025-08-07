@@ -1,0 +1,53 @@
+# Bottom Nav
+## Offset 
+The bottom nav seems to shift when I go from Celeb Profile to Home. They may be slightly off.
+
+Article Detail View
+This also doesn't have the bottom nav available. It should be added here as well.
+
+# Houses
+Change the subtitle from House X to a brief summary of what the house represents: 
+
+| 1   | Self                  |
+| --- | --------------------- |
+| 2   | Wealth                |
+| 3   | Siblings and Routines |
+| 4   | Family and Home       |
+| 5   | Creation and Joy      |
+| 6   | Service               |
+| 7   | Others                |
+| 8   | Wealth of Others      |
+| 9   | The Quest             |
+| 10  | Career                |
+| 11  | Network               |
+| 12  | Hidden Enemies        |
+
+
+
+There is a lot of white space here. Remove the "Mercury 8" or "Sun 15". We're really just showing the contents of the houses, not the specific degree. Note that there may be multiple planets in the same house.
+
+# Stars
+You should list the fields left to right with equal emphasis. The zodiac sign should be  on the same row. Preferred format: {Planet Icon, Planet Name, Planet Zodiac Sign, Planet Degree}
+
+This should reduce the verticality of the tab so that we can see all planets without scrolling.
+
+# Vibes
+* Let's recreate the different vibrations as spindowns
+	* Each Vibration has a Roman NUmeral in the chart below
+	* When expanded, it shows one or more circuits of planets, and a brief one line description of what it means.
+* Note that some vibrations will be empty, that is a case we need to handle
+
+
+| Number | Title                               | Description                                                                                                                                |     |
+| ------ | ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ | --- |
+| 1      | Create a title from the description | Represents things working together, focused on the self                                                                                    |     |
+| 2      | Create a title from the description | Governs **polarity** and is entirely focused on **relating to things outside of oneself**                                                  |     |
+| 3      | Create a title from the description | Characterized by a **harmonious and pleasant** flow of experience and energy; it is active                                                 |     |
+| 4      | Create a title from the description | Represents **motivation and drive**                                                                                                        |     |
+| 5      | Create a title from the description | It is about **interaction with and exploration of the world without an agenda**. Play.                                                     |     |
+| 6      | Create a title from the description | Indicates a **harmonious flow** relating to shared characteristics and similarities                                                        |     |
+| 8      | Create a title from the description | It provides a picture of your **fundamental "go out and take action energy"** and the basic energy driving you to take action in your life |     |
+| 9      | Create a title from the description | Relates to your **ideal social group**                                                                                                     |     |
+| 10     | Create a title from the description | Understanding the world beyond the self                                                                                                    |     |
+| 11     | Create a title from the description | A primary tool for understanding complex relationships                                                                                     |     |
+| 12     | Create a title from the description | Combines the need to act with the need to ensure others are happy with your actions                                                        |     |

@@ -4,6 +4,7 @@ import { ArrowLeft, Heart, Bookmark, Share2 } from "lucide-react";
 import { PiShareNetworkBold } from "react-icons/pi";
 import { cn } from "@/lib/utils";
 import PlanetIcon from "@/components/PlanetIcon";
+import BottomNavigation from "@/components/BottomNavigation";
 import type { ArticleWithDetails } from "@shared/schema";
 
 export default function ArticlePage() {
@@ -248,7 +249,7 @@ export default function ArticlePage() {
         </div>
 
         {/* Publication Date */}
-        <div className="text-center mt-6 pt-6 border-t border-gray-200">
+        <div className="text-center mt-6 pt-6 border-t border-gray-200 mb-20">
           <p className="text-sm text-gray-500">
             Published {new Date(article.publishedAt).toLocaleDateString('en-US', {
               weekday: 'long',
@@ -259,6 +260,9 @@ export default function ArticlePage() {
           </p>
         </div>
       </div>
+
+      {/* Bottom Navigation */}
+      <BottomNavigation />
     </div>
   );
 }

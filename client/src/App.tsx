@@ -16,7 +16,9 @@ function Router() {
   return (
     <Switch>
       <Route path="/article/:id">
-        <ArticlePage />
+        <div className="mobile-container">
+          <ArticlePage />
+        </div>
       </Route>
       <Route path="/actor/:id/:returnTo?">
         <ActorProfilePage />

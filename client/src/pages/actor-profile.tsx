@@ -1,6 +1,6 @@
 import { useParams, useLocation } from "wouter";
 import { useQuery } from "@tanstack/react-query";
-import { ArrowLeft, Star } from "lucide-react";
+import { ArrowLeft, Star, ChevronDown, ChevronUp } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import BottomNavigation from "@/components/BottomNavigation";
@@ -13,6 +13,7 @@ export default function ActorProfilePage() {
   const [, setLocation] = useLocation();
   const [activeTab, setActiveTab] = useState<TabOption>('relationships');
   const [selectedRelationship, setSelectedRelationship] = useState<Actor | null>(null);
+  const [expandedVibrations, setExpandedVibrations] = useState<Set<number>>(new Set());
 
   const { data: actor, isLoading: actorLoading } = useQuery<Actor>({
     queryKey: [`/api/actors/${id}`],
@@ -220,50 +221,131 @@ export default function ActorProfilePage() {
         );
 
       case 'vibes':
-        const vibrationalCircuits = [
+        const vibrations = [
           {
-            name: "Personal Expression",
-            planets: ["sun", "mercury", "venus"],
-            description: "Core identity and creative expression"
+            number: 1,
+            title: "Inner Unity",
+            description: "Represents things working together, focused on the self",
+            planets: ["sun", "mercury"]
           },
           {
-            name: "Emotional Foundation",
-            planets: ["moon", "venus"],
-            description: "Emotional patterns and relationships"
+            number: 2,
+            title: "External Connection", 
+            description: "Governs polarity and is entirely focused on relating to things outside of oneself",
+            planets: ["venus", "mars"]
           },
           {
-            name: "Drive & Ambition",
-            planets: ["mars", "jupiter", "saturn"],
-            description: "Action, growth, and life structure"
+            number: 3,
+            title: "Pleasant Flow",
+            description: "Characterized by a harmonious and pleasant flow of experience and energy; it is active",
+            planets: ["jupiter"]
           },
           {
-            name: "Higher Consciousness",
-            planets: ["jupiter", "pluto"],
-            description: "Spiritual growth and transformation"
+            number: 4,
+            title: "Drive & Motivation",
+            description: "Represents motivation and drive",
+            planets: ["mars", "saturn"]
+          },
+          {
+            number: 5,
+            title: "Exploration & Play",
+            description: "It is about interaction with and exploration of the world without an agenda. Play.",
+            planets: ["mercury", "venus"]
+          },
+          {
+            number: 6,
+            title: "Shared Harmony",
+            description: "Indicates a harmonious flow relating to shared characteristics and similarities",
+            planets: ["venus", "jupiter"]
+          },
+          {
+            number: 8,
+            title: "Action Energy",
+            description: "It provides a picture of your fundamental 'go out and take action energy' and the basic energy driving you to take action in your life",
+            planets: ["mars", "pluto"]
+          },
+          {
+            number: 9,
+            title: "Ideal Community",
+            description: "Relates to your ideal social group",
+            planets: ["jupiter", "uranus"]
+          },
+          {
+            number: 10,
+            title: "Beyond Self",
+            description: "Understanding the world beyond the self",
+            planets: ["saturn", "neptune"]
+          },
+          {
+            number: 11,
+            title: "Complex Relations",
+            description: "A primary tool for understanding complex relationships",
+            planets: ["uranus", "neptune"]
+          },
+          {
+            number: 12,
+            title: "Balanced Action",
+            description: "Combines the need to act with the need to ensure others are happy with your actions",
+            planets: ["neptune", "pluto"]
           }
         ];
+
+        const toggleVibration = (number: number) => {
+          setExpandedVibrations(prev => {
+            const newSet = new Set(prev);
+            if (newSet.has(number)) {
+              newSet.delete(number);
+            } else {
+              newSet.add(number);
+            }
+            return newSet;
+          });
+        };
+
+        const romanNumerals = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII"];
         
         return (
-          <div className="space-y-4">
-            {vibrationalCircuits.map((circuit, index) => (
-              <div key={index} className="bg-gray-50 rounded-lg p-4">
-                <div className="flex items-center justify-between mb-2">
-                  <h4 className="font-bold text-sm">{circuit.name}</h4>
-                  <div className="flex space-x-1">
-                    {circuit.planets.map((planet, planetIndex) => (
-                      <div
-                        key={planetIndex}
-                        className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold text-white"
-                        style={{ backgroundColor: getPlanetColor(planet) }}
-                      >
-                        {planet === 'mercury' ? '☿' : planet === 'venus' ? '♀' : planet === 'mars' ? '♂' : 
-                         planet === 'jupiter' ? '♃' : planet === 'saturn' ? '♄' : planet === 'sun' ? '☉' :
-                         planet === 'moon' ? '☽' : planet === 'pluto' ? '♇' : '●'}
-                      </div>
-                    ))}
+          <div className="space-y-2">
+            {vibrations.map((vibration) => (
+              <div key={vibration.number} className="border border-gray-200 rounded-lg">
+                <button
+                  onClick={() => toggleVibration(vibration.number)}
+                  className="w-full p-3 text-left flex items-center justify-between hover:bg-gray-50"
+                >
+                  <div className="flex items-center space-x-3">
+                    <div className="w-8 h-8 bg-purple-500 text-white rounded-full flex items-center justify-center text-sm font-bold">
+                      {romanNumerals[vibration.number - 1]}
+                    </div>
+                    <h4 className="font-bold text-sm">{vibration.title}</h4>
                   </div>
-                </div>
-                <p className="text-xs text-gray-600">{circuit.description}</p>
+                  {expandedVibrations.has(vibration.number) ? 
+                    <ChevronUp className="w-4 h-4" /> : 
+                    <ChevronDown className="w-4 h-4" />
+                  }
+                </button>
+                
+                {expandedVibrations.has(vibration.number) && (
+                  <div className="px-3 pb-3 border-t border-gray-100">
+                    <p className="text-xs text-gray-600 mb-2 mt-2">{vibration.description}</p>
+                    <div className="flex items-center space-x-2">
+                      <span className="text-xs text-gray-500">Planets:</span>
+                      <div className="flex space-x-1">
+                        {vibration.planets.map((planet, planetIndex) => (
+                          <div
+                            key={planetIndex}
+                            className="w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold text-white"
+                            style={{ backgroundColor: getPlanetColor(planet) }}
+                          >
+                            {planet === 'mercury' ? '☿' : planet === 'venus' ? '♀' : planet === 'mars' ? '♂' : 
+                             planet === 'jupiter' ? '♃' : planet === 'saturn' ? '♄' : planet === 'sun' ? '☉' :
+                             planet === 'moon' ? '☽' : planet === 'uranus' ? '♅' : planet === 'neptune' ? '♆' :
+                             planet === 'pluto' ? '♇' : '●'}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
             ))}
           </div>
@@ -271,12 +353,12 @@ export default function ActorProfilePage() {
 
       case 'stars':
         return (
-          <div className="space-y-3">
+          <div className="space-y-2">
             {planets.map((planet) => (
-              <div key={planet} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                <div className="flex items-center space-x-3">
+              <div key={planet} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                <div className="flex items-center space-x-3 flex-1">
                   <div
-                    className="w-8 h-8 rounded-full flex items-center justify-center text-white font-bold"
+                    className="w-6 h-6 rounded-full flex items-center justify-center text-white font-bold text-xs"
                     style={{ backgroundColor: getPlanetColor(planet) }}
                   >
                     {planet === 'mercury' ? '☿' : planet === 'venus' ? '♀' : planet === 'mars' ? '♂' : 
@@ -284,12 +366,8 @@ export default function ActorProfilePage() {
                      planet === 'moon' ? '☽' : planet === 'uranus' ? '♅' : planet === 'neptune' ? '♆' :
                      planet === 'pluto' ? '♇' : '●'}
                   </div>
-                  <div>
-                    <h4 className="font-bold text-sm capitalize">{planet}</h4>
-                    <p className="text-xs text-gray-500">{getZodiacSign(planet)}</p>
-                  </div>
-                </div>
-                <div className="text-right">
+                  <h4 className="font-bold text-sm capitalize flex-1">{planet}</h4>
+                  <p className="text-sm font-medium flex-1">{getZodiacSign(planet)}</p>
                   <p className="text-sm font-bold">{getPlanetDegree(planet)}</p>
                 </div>
               </div>
@@ -298,28 +376,34 @@ export default function ActorProfilePage() {
         );
 
       case 'houses':
+        const houseNames = [
+          "Self", "Wealth", "Siblings and Routines", "Family and Home", 
+          "Creation and Joy", "Service", "Others", "Wealth of Others",
+          "The Quest", "Career", "Network", "Hidden Enemies"
+        ];
+        
         return (
-          <div className="space-y-3">
+          <div className="space-y-2">
             {Array.from({length: 12}, (_, i) => i + 1).map((houseNum) => {
               const housePlanets = getHousePlanets(houseNum);
               const houseSign = getHouseSign(houseNum);
               return (
-                <div key={houseNum} className="p-4 bg-gray-50 rounded-lg">
-                  <div className="flex items-center justify-between mb-2">
+                <div key={houseNum} className="p-3 bg-gray-50 rounded-lg">
+                  <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-3">
-                      <div className="w-8 h-8 bg-purple-500 text-white rounded-full flex items-center justify-center text-sm font-bold">
+                      <div className="w-6 h-6 bg-purple-500 text-white rounded-full flex items-center justify-center text-xs font-bold">
                         {houseNum}
                       </div>
                       <div>
                         <h4 className="font-bold text-sm">{houseSign}</h4>
-                        <p className="text-xs text-gray-500">House {houseNum}</p>
+                        <p className="text-xs text-gray-500">{houseNames[houseNum - 1]}</p>
                       </div>
                     </div>
                     <div className="flex space-x-1">
                       {housePlanets.length > 0 ? housePlanets.map((planet, planetIndex) => (
                         <div
                           key={planetIndex}
-                          className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold text-white"
+                          className="w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold text-white"
                           style={{ backgroundColor: getPlanetColor(planet) }}
                         >
                           {planet === 'mercury' ? '☿' : planet === 'venus' ? '♀' : planet === 'mars' ? '♂' : 
@@ -328,15 +412,10 @@ export default function ActorProfilePage() {
                            planet === 'pluto' ? '♇' : '●'}
                         </div>
                       )) : (
-                        <span className="text-xs text-gray-400 px-2 py-1">Empty</span>
+                        <span className="text-xs text-gray-400 px-1">Empty</span>
                       )}
                     </div>
                   </div>
-                  {housePlanets.length > 0 && (
-                    <div className="text-xs text-gray-600">
-                      {housePlanets.map(planet => `${planet.charAt(0).toUpperCase() + planet.slice(1)} ${getPlanetDegree(planet)}`).join(', ')}
-                    </div>
-                  )}
                 </div>
               );
             })}
