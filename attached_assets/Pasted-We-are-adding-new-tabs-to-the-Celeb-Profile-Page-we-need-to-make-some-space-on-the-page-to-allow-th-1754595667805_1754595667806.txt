@@ -1,0 +1,44 @@
+We are adding new tabs to the Celeb Profile Page, we need to make some space on the page to allow this. 
+
+# Compress Header
+Presently we show the Celeb Name, Celeb Image, and category in a topmost card. 
+We also have Astrological Blueprint with Sun Moon and Rising signs. This could be compressed. Remove the "Astrological Blueprint" text and make the Sun/Moon/Rising part of a single card with the Celeb Name/Image/Category at the top
+
+# New: Tabs
+We're  going to move out each of the following subsections into their own tabs. The tabs should appear directly under the compressed header that we established above. 
+
+## FORMAT: Current Section Name --> New Tab Name
+Relationships  --> Relationships
+* Just move this section over to that tab for now, no other changes.
+
+Vibrational Astrology Circuits --> Vibes
+* Just move this section over to that tab for now, no other changes.
+Traditional Astrology --> Stars
+* A Stars tab which indicates star positions. 
+* I expect 10 rows (one for each planet)
+* It should list the Zodiac Sign and Degree of each of the major bodies: Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto
+Traditional Astrology --> Houses
+* A Houses tab which indicates star positions.
+* I expect 12 rows (one for each house), where the first row's Zodiac sign is the Rising Sign of the chart
+	* On each row, list the Zodiac sign, any Planets it contains, and the degree of the planet
+* It should depict which planet is in which zodiac sign
+* I expect 12 rows, where the first row's Zodiac sign is the Rising Sign of the chart
+	* On each row, list the Zodiac sign, any Planets it contains, and the degree of the planet
+
+Current Planetary Transits --> Transits
+* Just move this section over to that tab for now, no other changes.
+
+# Planet Iconography Consistency
+Let's establish consistent colors / icons for the planets: 
+* Mercury: Tan
+* Venus: Yellowish White
+* Mars: Rust
+* Jupiter: Banded Red / Yellow / White 
+* Saturn: Blue with a ring
+* Uranus: Pale Blue with a Ring
+* Neptune: Pale greenish Blue
+* Pluto: Purple
+
+Note that we will convert these into images once we bring on an artist so it may be useful to make them images now. 
+# Bottom Nav
+It also seems like we lost the Bottom Nav on the Celeb Profile page (Home,Profile,Saved,Search). We should bring that back to maintain consistency.
