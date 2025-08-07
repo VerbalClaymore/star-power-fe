@@ -21,7 +21,9 @@ function Router() {
         </div>
       </Route>
       <Route path="/actor/:id/:returnTo?">
-        <ActorProfilePage />
+        <div className="mobile-container">
+          <ActorProfilePage />
+        </div>
       </Route>
       <Route>
         <div className="mobile-container">

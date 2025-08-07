@@ -4,16 +4,18 @@ import { ArrowLeft, Star, ChevronDown, ChevronUp } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import BottomNavigation from "@/components/BottomNavigation";
+import HorizontalTimeline from "@/components/HorizontalTimeline";
 import type { Actor, ArticleWithDetails } from "@shared/schema";
 
-type TabOption = 'relationships' | 'vibes' | 'stars' | 'houses' | 'transits';
+type TabOption = 'overview' | 'vibes' | 'stars' | 'houses' | 'transits';
 
 export default function ActorProfilePage() {
   const { id, returnTo } = useParams();
   const [, setLocation] = useLocation();
-  const [activeTab, setActiveTab] = useState<TabOption>('relationships');
+  const [activeTab, setActiveTab] = useState<TabOption>('overview');
   const [selectedRelationship, setSelectedRelationship] = useState<Actor | null>(null);
   const [expandedVibrations, setExpandedVibrations] = useState<Set<number>>(new Set());
+  const [selectedYear, setSelectedYear] = useState<number>(new Date().getFullYear());
 
   const { data: actor, isLoading: actorLoading } = useQuery<Actor>({
     queryKey: [`/api/actors/${id}`],
@@ -143,7 +145,7 @@ export default function ActorProfilePage() {
   };
 
   const tabs = [
-    { id: 'relationships', label: 'Relationships' },
+    { id: 'overview', label: 'Overview' },
     { id: 'vibes', label: 'Vibes' },
     { id: 'stars', label: 'Stars' },
     { id: 'houses', label: 'Houses' },
@@ -152,71 +154,125 @@ export default function ActorProfilePage() {
 
   const planets = ['sun', 'moon', 'mercury', 'venus', 'mars', 'jupiter', 'saturn', 'uranus', 'neptune', 'pluto'];
 
+  // Generate timeline years (current year ± 5 years)
+  const currentYear = new Date().getFullYear();
+  const timelineItems = Array.from({ length: 11 }, (_, i) => {
+    const year = currentYear - 5 + i;
+    return {
+      id: year.toString(),
+      label: year.toString(),
+      year: year
+    };
+  });
+
+  // Mock function to get articles by year
+  const getArticlesByYear = (year: number) => {
+    // In real app, this would query actual data
+    return [
+      {
+        id: '1',
+        title: `${actor?.name || 'Celebrity'} makes headlines in ${year}`,
+        date: new Date(year, 5, 15),
+        summary: `Major entertainment news story from ${year} featuring ${actor?.name || 'this celebrity'}.`,
+        imageUrl: undefined
+      },
+      {
+        id: '2',
+        title: `${year} Awards Season buzz`,
+        date: new Date(year, 2, 20),
+        summary: `Award nominations and industry recognition in ${year}.`,
+        imageUrl: undefined
+      }
+    ];
+  };
+
+  const handleYearChange = (year: number) => {
+    setSelectedYear(year);
+  };
+
   const renderTabContent = () => {
     switch (activeTab) {
-      case 'relationships':
+      case 'overview':
         return (
-          <div>
-            {relationshipsLoading ? (
-              <div className="text-center py-4">
-                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary mx-auto mb-2"></div>
-                <p className="text-sm text-gray-500">Loading relationships...</p>
-              </div>
-            ) : relationships && relationships.length > 0 ? (
-              <div className="space-y-3">
-                {relationships.map((relationship) => (
-                  <button
-                    key={relationship.id}
-                    onClick={() => setSelectedRelationship(relationship.id === selectedRelationship?.id ? null : relationship)}
-                    className="w-full p-4 bg-white border border-gray-200 rounded-lg hover:shadow-md transition-shadow text-left"
-                  >
-                    <div className="flex items-center justify-between">
+          <div className="space-y-6">
+            {/* Summary Section */}
+            <div className="bg-gray-50 rounded-lg p-4">
+              <h4 className="font-bold text-sm mb-2">About {actor?.name}</h4>
+              <p className="text-sm text-gray-700 leading-relaxed">
+                {actor?.name} is a prominent figure in {actor?.category?.toLowerCase() || 'entertainment'}, 
+                known for their significant influence in the industry. With their {actor?.sunSign} sun sign, 
+                {actor?.moonSign && ` ${actor.moonSign} moon,`} 
+                {actor?.risingSign && ` and ${actor.risingSign} rising,`} 
+                they bring a unique astrological profile to their public persona.
+              </p>
+            </div>
+
+            {/* Relationships Section */}
+            <div>
+              <h4 className="font-bold text-sm mb-3">Key Relationships</h4>
+              {relationshipsLoading ? (
+                <div className="text-center py-4">
+                  <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary mx-auto mb-2"></div>
+                  <p className="text-sm text-gray-500">Loading relationships...</p>
+                </div>
+              ) : relationships && relationships.length > 0 ? (
+                <div className="space-y-2">
+                  {relationships.slice(0, 3).map((relationship) => (
+                    <button
+                      key={relationship.id}
+                      onClick={() => setLocation(`/actor/${relationship.id}`)}
+                      className="w-full p-3 bg-white border border-gray-200 rounded-lg hover:shadow-md transition-shadow text-left"
+                    >
                       <div className="flex items-center space-x-3">
-                        <div className="w-10 h-10 bg-purple-400 rounded-full flex items-center justify-center text-white font-bold">
+                        <div className="w-8 h-8 bg-purple-400 rounded-full flex items-center justify-center text-white font-bold text-sm">
                           {relationship.name.charAt(0)}
                         </div>
-                        <div>
-                          <h4 className="font-bold text-sm">{relationship.name}</h4>
+                        <div className="flex-1">
+                          <h5 className="font-medium text-sm">{relationship.name}</h5>
                           <p className="text-xs text-gray-500">{relationship.category}</p>
                         </div>
+                        <span className="text-xs text-purple-600">View →</span>
                       </div>
-                      {selectedRelationship?.id === relationship.id && (
-                        <div className="text-purple-600">
-                          <span className="text-xs font-medium">Selected</span>
-                        </div>
-                      )}
-                    </div>
-                    {selectedRelationship?.id === relationship.id && (
-                      <div className="mt-4 p-4 bg-purple-50 rounded-lg border border-purple-200">
-                        <h4 className="font-bold text-sm text-purple-900 mb-2">
-                          Relationship with {selectedRelationship.name}
-                        </h4>
-                        <p className="text-sm text-purple-700 mb-3">
-                          These two frequently appear together in entertainment news, indicating a significant 
-                          professional or personal connection that generates media attention.
-                        </p>
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setLocation(`/actor/${selectedRelationship.id}`);
-                          }}
-                          className="text-sm font-bold text-purple-600 hover:text-purple-800 transition-colors"
-                        >
-                          View {selectedRelationship.name}'s Profile →
-                        </button>
-                      </div>
-                    )}
-                  </button>
-                ))}
-              </div>
-            ) : (
-              <div className="text-center py-8">
-                <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center mx-auto mb-2">
-                  👥
+                    </button>
+                  ))}
                 </div>
-                <p className="text-gray-500">No relationships found</p>
+              ) : (
+                <div className="text-center py-6">
+                  <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center mx-auto mb-2">
+                    👥
+                  </div>
+                  <p className="text-sm text-gray-500">No relationships found</p>
+                </div>
+              )}
+            </div>
+
+            {/* Timeline Section */}
+            <div>
+              <h4 className="font-bold text-sm mb-3">Timeline</h4>
+              <div className="bg-white border border-gray-200 rounded-lg">
+                <HorizontalTimeline
+                  initialYear={currentYear}
+                  items={timelineItems}
+                  onFocusChange={handleYearChange}
+                />
+                
+                {/* Articles for selected year */}
+                <div className="p-4 border-t border-gray-100">
+                  <h5 className="font-medium text-sm mb-3">News from {selectedYear}</h5>
+                  <div className="space-y-3">
+                    {getArticlesByYear(selectedYear).map((article) => (
+                      <div key={article.id} className="p-3 bg-gray-50 rounded-lg">
+                        <h6 className="font-medium text-sm mb-1">{article.title}</h6>
+                        <p className="text-xs text-gray-600 mb-2">{article.summary}</p>
+                        <p className="text-xs text-gray-400">
+                          {article.date.toLocaleDateString('en-US', { month: 'long', day: 'numeric' })}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
-            )}
+            </div>
           </div>
         );
 
@@ -472,7 +528,7 @@ export default function ActorProfilePage() {
   };
 
   return (
-    <div className="mobile-container bg-white min-h-screen pb-20">
+    <div className="bg-white min-h-screen pb-20">
       {/* Header with category accent */}
       <div className="sticky top-0 bg-white border-b-4 z-10" 
            style={{ borderBottomColor: 'hsl(329, 86%, 70%)' }}>
