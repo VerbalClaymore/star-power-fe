@@ -94,7 +94,7 @@ export default function ArticleCard({ article }: ArticleCardProps) {
 
   return (
     <div 
-      className="bg-white rounded-lg border-l-4 touch-feedback cursor-pointer hover:shadow-lg transition-shadow duration-200"
+      className="bg-white dark:bg-gray-800 rounded-lg border-l-4 touch-feedback cursor-pointer hover:shadow-lg transition-shadow duration-200"
       style={{ borderLeftColor: `hsl(var(--${article.category?.slug || 'top'}))` }}
       onClick={handleCardClick}
     >
@@ -143,7 +143,7 @@ export default function ArticleCard({ article }: ArticleCardProps) {
           
           <div className="flex-1">
             <h3 
-              className="font-bold text-base leading-tight mb-2"
+              className="font-bold text-base leading-tight mb-2 text-gray-900 dark:text-white"
               dangerouslySetInnerHTML={{ __html: highlightCelebrityNames(article.title) }}
             />
             
@@ -152,13 +152,13 @@ export default function ArticleCard({ article }: ArticleCardProps) {
               {displayedHashtags.map((tag, index) => (
                 <span
                   key={index}
-                  className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded whitespace-nowrap"
+                  className="text-xs bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-2 py-1 rounded whitespace-nowrap"
                 >
                   {tag}
                 </span>
               ))}
               {remainingCount > 0 && (
-                <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded whitespace-nowrap">
+                <span className="text-xs bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-2 py-1 rounded whitespace-nowrap">
                   +{remainingCount} more
                 </span>
               )}
@@ -166,7 +166,7 @@ export default function ArticleCard({ article }: ArticleCardProps) {
             
             {/* Social Stats and Read More */}
             <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-4 text-xs text-gray-500">
+              <div className="flex items-center space-x-4 text-xs text-gray-500 dark:text-gray-400">
                 <span className="flex items-center">
                   <Heart className="w-3 h-3 mr-1" />
                   {article.likeCount}

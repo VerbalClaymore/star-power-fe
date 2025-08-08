@@ -250,11 +250,11 @@ export default function ActorProfilePage() {
                   {/* Relationships/Ships */}
                   {actor?.id === 1 && ( // Only show for Taylor Swift
                     <div>
-                      <h5 className="text-sm font-medium text-gray-600 mb-2">Celebrity Ships</h5>
+                      <h5 className="text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">Relationships</h5>
                       <div className="space-y-2">
                         <button
                           onClick={() => setLocation(`/ship/1`)}
-                          className="flex items-center space-x-3 p-3 bg-gradient-to-r from-pink-50 to-purple-50 rounded-lg hover:from-pink-100 hover:to-purple-100 transition-colors text-left w-full"
+                          className="flex items-center space-x-3 p-3 bg-gradient-to-r from-pink-50 to-purple-50 dark:from-pink-900/20 dark:to-purple-900/20 rounded-lg hover:from-pink-100 hover:to-purple-100 dark:hover:from-pink-800/30 dark:hover:to-purple-800/30 transition-colors text-left w-full"
                           data-testid="button-relationship-tayvis"
                         >
                           {/* Overlapping avatars */}
@@ -267,7 +267,7 @@ export default function ActorProfilePage() {
                             </div>
                           </div>
                           <div className="flex-1">
-                            <p className="font-medium text-sm">Tayvis</p>
+                            <p className="font-medium text-sm text-gray-900 dark:text-white">Tayvis</p>
                             <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
                               confirmed
                             </span>

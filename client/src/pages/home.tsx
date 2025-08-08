@@ -63,7 +63,7 @@ export default function Home() {
         {articlesLoading ? (
           <div className="space-y-4 p-4">
             {[...Array(3)].map((_, i) => (
-              <div key={i} className="bg-white rounded-lg p-4 border-l-4 border-gray-200">
+              <div key={i} className="bg-white dark:bg-gray-800 rounded-lg p-4 border-l-4 border-gray-200">
                 <Skeleton className="h-4 w-20 mb-2" />
                 <Skeleton className="h-6 w-full mb-2" />
                 <Skeleton className="h-4 w-3/4 mb-3" />
