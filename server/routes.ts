@@ -60,10 +60,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Get articles by hashtag
-  app.get("/api/hashtag/:hashtag", async (req, res) => {
+  app.get("/api/hashtags/:hashtag", async (req, res) => {
     try {
       const hashtag = req.params.hashtag;
-      const articles = await storage.getArticlesByHashtag(hashtag);
+      const articles = await storage.getArticlesByHashtag(`#${hashtag}`);
       res.json(articles);
     } catch (error) {
       res.status(500).json({ error: "Failed to fetch articles by hashtag" });

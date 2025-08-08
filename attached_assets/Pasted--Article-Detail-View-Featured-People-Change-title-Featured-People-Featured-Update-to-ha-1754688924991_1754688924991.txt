@@ -1,0 +1,51 @@
+# Article Detail View
+## Featured People
+Change title: "Featured People" --> "Featured"
+Update to have two subsections:
+* Celebrities
+* Relationships
+	* Note: All relationships should be displayed as a combination of the two icons of the entities slightly overlapping
+Interacting with any Celebrity goes to their Celeb Profile Page
+Interacting with any Relationship goes to their Relationship Profile Page
+
+
+
+# Celeb Profile
+
+## Header 
+Change title "Astrology Profile" to "Celeb Profile"
+
+## Key Relationships
+Change "Key Relationships" --> "Featured"
+Update to have two subsections:
+* Celebrities
+* Relationships
+	* Note: All relationships should be displayed as a combination of the two icons of the entities slightly overlapping
+Interacting with any Celebrity goes to their Celeb Profile Page
+Interacting with any Relationship goes to their Relationship Profile Page
+
+# Relationship Profile
+## Context
+We are introducing a new structure: Relationships. This represents a relationship between two celebrities. i.e. Ben Affleck + Jennifer Lopez is the "Bennifer" ship, or Taylor Swift and Travis Kelce are the... Tayvis ship. It reuses a lot of the structure from Celebrities, but treats the relationship as a singular entity.
+
+Behavior
+
+Create Ship Profile with "Ship Profile" as the title
+
+# Metatag List View
+**Behavior**
+When the user taps on any metatag, display a variant of the List View where all articles containing that metatag are displayed. 
+It should still be sorted newest to oldest by default.
+
+# Dark Mode and Dark Mode Toggle
+We need a Dark Mode. I should be able to toggle it from the List View page. Put it on the upper right there. Make an icon that changes from a sun to a moon. 
+
+# Asset List
+I'd like to take a pass at proper images for all of the placeholdered art. I need this formatted or organized in some way that makes sense for when I have Canva try to create assets for us. Maybe a spreadsheet will be the best format here.
+
+# Misc.
+## Back Button Behavior
+When the user hits the back button, it should return to the previously viewed page. Currently the back button sometimes returns to the "Home" (List View) page. This is incorrect.
+
+Timeline
+This is a mobile first app, but I'm developing on PC. The timelines are hard to debug here; I'm not sure if this because all the articles are from 2025 or because I can't tap-drag the timeline on a PC? For Travis, Taylor, and Kanye create dummy articles from 2024 and 2023, that will make it easier to test.

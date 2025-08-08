@@ -141,7 +141,7 @@ export default function ActorProfilePage() {
     if (returnTo) {
       setLocation(`/article/${returnTo}`);
     } else {
-      setLocation('/');
+      window.history.back();
     }
   };
 
@@ -155,52 +155,40 @@ export default function ActorProfilePage() {
 
   const planets = ['sun', 'moon', 'mercury', 'venus', 'mars', 'jupiter', 'saturn', 'uranus', 'neptune', 'pluto'];
 
-  // Generate timeline years (current year ± 5 years)
+  // Get articles by year for this actor
+  const { data: actorArticles } = useQuery({
+    queryKey: ['/api/actors', actor?.id, 'articles'],
+    enabled: !!actor?.id,
+  });
+
+  // Generate timeline years based on actual article data
   const currentYear = new Date().getFullYear();
-  const timelineItems = Array.from({ length: 11 }, (_, i) => {
-    const year = currentYear - 5 + i;
-    return {
+  const availableYears = actorArticles ? 
+    [...new Set(actorArticles.map((article: any) => new Date(article.publishedAt).getFullYear()))]
+      .sort((a, b) => b - a) : [currentYear];
+  
+  const timelineItems = availableYears.length > 0 ? 
+    availableYears.map(year => ({
       id: year.toString(),
       label: year.toString(),
       year: year
-    };
-  });
+    })) : 
+    Array.from({ length: 5 }, (_, i) => {
+      const year = currentYear - i;
+      return {
+        id: year.toString(),
+        label: year.toString(),
+        year: year
+      };
+    });
 
-  // Mock function to get articles by year
   const getArticlesByYear = (year: number) => {
-    // In real app, this would query actual data
-    return [
-      {
-        id: 1,
-        title: `${actor?.name || 'Celebrity'} makes headlines in ${year}`,
-        publishedAt: new Date(year, 5, 15).toISOString(),
-        summary: `Major entertainment news story from ${year} featuring ${actor?.name || 'this celebrity'}.`,
-        content: `Full article content about ${actor?.name || 'this celebrity'} from ${year}.`,
-        isCelebrity: true,
-        category: { id: 1, name: 'Celebrity', slug: 'celebrity', color: 'hsl(329, 86%, 70%)' },
-        actors: actor ? [actor] : [],
-        hashtags: [`#${actor?.name?.replace(' ', '') || 'Celebrity'}`, `#${year}News`],
-        astroGlyphs: [{ planet: 'venus', symbol: '♀', color: '#F5F5DC' }],
-        likeCount: 24,
-        shareCount: 8,
-        bookmarkCount: 12
-      },
-      {
-        id: 2,
-        title: `${year} Awards Season buzz`,
-        publishedAt: new Date(year, 2, 20).toISOString(),
-        summary: `Award nominations and industry recognition in ${year}.`,
-        content: `Complete coverage of ${year} awards season.`,
-        isCelebrity: true,
-        category: { id: 1, name: 'Entertainment', slug: 'entertainment', color: 'hsl(262, 83%, 58%)' },
-        actors: actor ? [actor] : [],
-        hashtags: [`#Awards${year}`, '#RedCarpet'],
-        astroGlyphs: [{ planet: 'jupiter', symbol: '♃', color: '#FF4500' }],
-        likeCount: 18,
-        shareCount: 5,
-        bookmarkCount: 9
-      }
-    ];
+    if (!actorArticles) return [];
+    
+    return actorArticles.filter((article: any) => {
+      const articleYear = new Date(article.publishedAt).getFullYear();
+      return articleYear === year;
+    });
   };
 
   const handleYearChange = (year: number) => {
@@ -226,32 +214,68 @@ export default function ActorProfilePage() {
 
             {/* Relationships Section */}
             <div>
-              <h4 className="font-bold text-sm mb-3">Key Relationships</h4>
+              <h4 className="font-bold text-sm mb-3">Featured</h4>
               {relationshipsLoading ? (
                 <div className="text-center py-4">
                   <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary mx-auto mb-2"></div>
                   <p className="text-sm text-gray-500">Loading relationships...</p>
                 </div>
               ) : relationships && relationships.length > 0 ? (
-                <div className="space-y-2">
-                  {relationships.slice(0, 3).map((relationship) => (
-                    <button
-                      key={relationship.id}
-                      onClick={() => setLocation(`/actor/${relationship.id}`)}
-                      className="w-full p-3 bg-white border border-gray-200 rounded-lg hover:shadow-md transition-shadow text-left"
-                    >
-                      <div className="flex items-center space-x-3">
-                        <div className="w-8 h-8 bg-purple-400 rounded-full flex items-center justify-center text-white font-bold text-sm">
-                          {relationship.name.charAt(0)}
-                        </div>
-                        <div className="flex-1">
-                          <h5 className="font-medium text-sm">{relationship.name}</h5>
-                          <p className="text-xs text-gray-500">{relationship.category}</p>
-                        </div>
-                        <span className="text-xs text-purple-600">View →</span>
+                <div className="space-y-4">
+                  {/* Celebrities */}
+                  <div>
+                    <h5 className="text-sm font-medium text-gray-600 mb-2">Celebrities</h5>
+                    <div className="space-y-2">
+                      {relationships.slice(0, 2).map((relationship) => (
+                        <button
+                          key={relationship.id}
+                          onClick={() => setLocation(`/actor/${relationship.id}`)}
+                          className="w-full p-3 bg-white border border-gray-200 rounded-lg hover:shadow-md transition-shadow text-left"
+                          data-testid={`button-celebrity-${relationship.id}`}
+                        >
+                          <div className="flex items-center space-x-3">
+                            <div className="w-8 h-8 bg-gradient-to-br from-purple-400 to-pink-400 rounded-full flex items-center justify-center text-white font-bold text-sm">
+                              {relationship.name.charAt(0)}
+                            </div>
+                            <div className="flex-1">
+                              <p className="font-medium text-sm">{relationship.name}</p>
+                              <p className="text-xs text-gray-500">♈ {relationship.sunSign || 'Unknown'}</p>
+                            </div>
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Relationships/Ships */}
+                  {actor?.id === 1 && ( // Only show for Taylor Swift
+                    <div>
+                      <h5 className="text-sm font-medium text-gray-600 mb-2">Celebrity Ships</h5>
+                      <div className="space-y-2">
+                        <button
+                          onClick={() => setLocation(`/ship/1`)}
+                          className="flex items-center space-x-3 p-3 bg-gradient-to-r from-pink-50 to-purple-50 rounded-lg hover:from-pink-100 hover:to-purple-100 transition-colors text-left w-full"
+                          data-testid="button-relationship-tayvis"
+                        >
+                          {/* Overlapping avatars */}
+                          <div className="relative flex items-center">
+                            <div className="w-8 h-8 bg-gradient-to-br from-purple-400 to-pink-400 rounded-full flex items-center justify-center text-xs font-bold text-white">
+                              T
+                            </div>
+                            <div className="w-8 h-8 bg-gradient-to-br from-blue-400 to-purple-400 rounded-full flex items-center justify-center text-xs font-bold text-white -ml-2 border-2 border-white">
+                              K
+                            </div>
+                          </div>
+                          <div className="flex-1">
+                            <p className="font-medium text-sm">Tayvis</p>
+                            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                              confirmed
+                            </span>
+                          </div>
+                        </button>
                       </div>
-                    </button>
-                  ))}
+                    </div>
+                  )}
                 </div>
               ) : (
                 <div className="text-center py-6">
@@ -268,7 +292,7 @@ export default function ActorProfilePage() {
               <h4 className="font-bold text-sm mb-3">Timeline</h4>
               <div className="bg-white border border-gray-200 rounded-lg">
                 <HorizontalTimeline
-                  initialYear={currentYear}
+                  initialYear={availableYears[0] || currentYear}
                   items={timelineItems}
                   onFocusChange={handleYearChange}
                 />
@@ -801,9 +825,9 @@ export default function ActorProfilePage() {
   };
 
   return (
-    <div className="bg-white min-h-screen pb-20">
+    <div className="bg-white dark:bg-gray-900 min-h-screen pb-20">
       {/* Header with category accent */}
-      <div className="sticky top-0 bg-white border-b-4 z-10" 
+      <div className="sticky top-0 bg-white dark:bg-gray-900 border-b-4 z-10" 
            style={{ borderBottomColor: 'hsl(329, 86%, 70%)' }}>
         <div className="flex items-center justify-between p-4">
           <button
@@ -815,7 +839,7 @@ export default function ActorProfilePage() {
           
           <div className="flex items-center">
             <span className="mr-2 text-lg">⭐</span>
-            <h1 className="text-lg font-bold">Astrological Profile</h1>
+            <h1 className="text-lg font-bold dark:text-white">Celeb Profile</h1>
           </div>
           
           <div className="w-10 h-10"></div> {/* Spacer for center alignment */}

@@ -68,6 +68,10 @@
   --destructive: hsl(0, 62.8%, 30.6%);
   --destructive-foreground: hsl(0, 0%, 98%);
   --ring: hsl(240, 4.9%, 83.9%);
+  
+  /* Star Power Brand Colors - Dark Mode */
+  --star-purple: hsl(267, 45%, 60%);
+  --surface-variant: hsl(240, 5%, 6%);
 }
 
 @layer base {

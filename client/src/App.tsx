@@ -3,6 +3,7 @@ import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { ThemeProvider } from "@/contexts/ThemeContext";
 import Home from "@/pages/home";
 import Profile from "@/pages/profile";
 import Saved from "@/pages/saved";
@@ -10,6 +11,8 @@ import Search from "@/pages/search";
 import NotFound from "@/pages/not-found";
 import ArticlePage from "@/pages/article";
 import ActorProfilePage from "@/pages/actor-profile";
+import ShipProfilePage from "@/pages/ship-profile";
+import HashtagPage from "@/pages/hashtag";
 import BottomNavigation from "@/components/BottomNavigation";
 
 function Router() {
@@ -23,6 +26,16 @@ function Router() {
       <Route path="/actor/:id/:returnTo?">
         <div className="mobile-container">
           <ActorProfilePage />
+        </div>
+      </Route>
+      <Route path="/ship/:id">
+        <div className="mobile-container">
+          <ShipProfilePage />
+        </div>
+      </Route>
+      <Route path="/hashtag/:hashtag">
+        <div className="mobile-container">
+          <HashtagPage />
         </div>
       </Route>
       <Route>
@@ -44,10 +57,12 @@ function Router() {
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster />
-        <Router />
-      </TooltipProvider>
+      <ThemeProvider>
+        <TooltipProvider>
+          <Toaster />
+          <Router />
+        </TooltipProvider>
+      </ThemeProvider>
     </QueryClientProvider>
   );
 }

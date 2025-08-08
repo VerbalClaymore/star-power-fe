@@ -59,7 +59,7 @@ export default function Home() {
         onCategoryChange={setActiveCategory}
       />
       
-      <div className="flex-1 pb-20 bg-[hsl(var(--surface-variant))] min-h-screen">
+      <div className="flex-1 pb-20 bg-[hsl(var(--surface-variant))] dark:bg-gray-900 min-h-screen">
         {articlesLoading ? (
           <div className="space-y-4 p-4">
             {[...Array(3)].map((_, i) => (

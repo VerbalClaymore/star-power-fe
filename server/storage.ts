@@ -272,6 +272,80 @@ export class MemStorage implements IStorage {
         shareCount: 123,
         bookmarkCount: 89,
         isCelebrity: true,
+      },
+      
+      // Historical articles for timeline testing
+      {
+        title: "Taylor Swift Wins Album of the Year - 2024 Grammy Triumph",
+        summary: "Swift makes history with her fourth Album of the Year win during powerful astrological transits...",
+        content: "Full article content from 2024...",
+        categoryId: 3, // Celebrity
+        astroAnalysis: "This Grammy win occurred during a significant Jupiter return, amplifying Swift's artistic achievements and public recognition.",
+        astroGlyphs: [
+          { planet: "jupiter", color: "hsl(35, 100%, 50%)" },
+          { planet: "sun", color: "hsl(45, 100%, 60%)" }
+        ],
+        hashtags: ["#TaylorSwift", "#Grammys2024", "#Jupiter"],
+        actorIds: [1],
+        likeCount: 1247,
+        shareCount: 567,
+        bookmarkCount: 892,
+        isCelebrity: true,
+        publishedAt: new Date('2024-02-15')
+      },
+      {
+        title: "Travis Kelce Leads Chiefs to Victory - Historic 2024 Season",
+        summary: "Kelce's stellar performance during Mars in Leo creates powerful momentum for championship run...",
+        content: "Full article content from 2024...",
+        categoryId: 7, // Sports
+        astroAnalysis: "Mars transiting Leo in Kelce's 5th house of creativity and performance amplified his natural athletic abilities.",
+        astroGlyphs: [
+          { planet: "mars", color: "hsl(0, 100%, 50%)" },
+          { planet: "jupiter", color: "hsl(35, 100%, 50%)" }
+        ],
+        hashtags: ["#TravisKelce", "#Chiefs", "#Mars"],
+        actorIds: [3],
+        likeCount: 892,
+        shareCount: 234,
+        bookmarkCount: 445,
+        isCelebrity: true,
+        publishedAt: new Date('2024-12-10')
+      },
+      {
+        title: "Kanye West's 2023 Creative Renaissance Under Neptune Transit",
+        summary: "West's artistic vision transforms during profound Neptune aspects, creating groundbreaking new work...",
+        content: "Full article content from 2023...",
+        categoryId: 3, // Celebrity
+        astroAnalysis: "Neptune's influence on West's creative sector brought both inspiration and confusion, ultimately leading to innovative artistic expression.",
+        astroGlyphs: [
+          { planet: "neptune", color: "hsl(200, 70%, 50%)" },
+          { planet: "venus", color: "hsl(325, 100%, 60%)" }
+        ],
+        hashtags: ["#KanyeWest", "#Neptune", "#creativity"],
+        actorIds: [4],
+        likeCount: 634,
+        shareCount: 198,
+        bookmarkCount: 267,
+        isCelebrity: true,
+        publishedAt: new Date('2023-08-22')
+      },
+      {
+        title: "Taylor Swift's 2023 Eras Tour Launch - Saturn Return Success",
+        summary: "Swift begins her most ambitious tour during powerful Saturn return, demonstrating mastery and maturity...",
+        content: "Full article content from 2023...",
+        categoryId: 3, // Celebrity
+        astroAnalysis: "Swift's Saturn return at age 33 coincided with this tour launch, representing her mastery of her craft and business acumen.",
+        astroGlyphs: [
+          { planet: "saturn", color: "hsl(45, 80%, 40%)" },
+          { planet: "venus", color: "hsl(325, 100%, 60%)" }
+        ],
+        hashtags: ["#TaylorSwift", "#ErasTour", "#Saturn"],
+        actorIds: [1],
+        likeCount: 2134,
+        shareCount: 892,
+        bookmarkCount: 1456,
+        isCelebrity: true,
+        publishedAt: new Date('2023-03-17')
       }
     ];
 
@@ -279,7 +353,7 @@ export class MemStorage implements IStorage {
       const id = this.currentId.articles++;
       this.articles.set(id, { 
         id, 
-        publishedAt: new Date(), 
+        publishedAt: (article as any).publishedAt || new Date(), 
         ...article,
         astroGlyphs: article.astroGlyphs as { planet: string; color: string; symbol?: string; }[]
       });

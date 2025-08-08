@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils";
+import ThemeToggle from "@/components/ThemeToggle";
 import type { Category } from "@shared/schema";
 
 interface TopNavigationProps {
@@ -36,9 +37,14 @@ export default function TopNavigation({
         </div>
       )}
       
-      <div className="app-header">
-        <h1 className="text-xl font-bold">Star Power</h1>
-        <p className="text-xs text-purple-200">Astrological News Reader</p>
+      <div className="app-header relative">
+        <div className="flex justify-between items-center">
+          <div>
+            <h1 className="text-xl font-bold">Star Power</h1>
+            <p className="text-xs text-purple-200">Astrological News Reader</p>
+          </div>
+          <ThemeToggle />
+        </div>
       </div>
       
       <div className="relative">
