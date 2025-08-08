@@ -28,6 +28,33 @@ export default function ActorProfilePage() {
     enabled: !!id,
   });
 
+  // Get articles by year for this actor
+  const { data: actorArticles } = useQuery({
+    queryKey: ['/api/actors', actor?.id, 'articles'],
+    enabled: !!actor?.id,
+  });
+
+  // Generate timeline years based on actual article data
+  const currentYear = new Date().getFullYear();
+  const availableYears = actorArticles ? 
+    [...new Set((actorArticles as any[]).map((article: any) => new Date(article.publishedAt).getFullYear()))]
+      .sort((a, b) => b - a) : [currentYear];
+  
+  const timelineItems = availableYears.length > 0 ? 
+    availableYears.map(year => ({
+      id: year.toString(),
+      label: year.toString(),
+      year: year
+    })) : 
+    Array.from({ length: 5 }, (_, i) => {
+      const year = currentYear - i;
+      return {
+        id: year.toString(),
+        label: year.toString(),
+        year: year
+      };
+    });
+
   if (actorLoading) {
     return (
       <div className="mobile-container">
@@ -155,37 +182,10 @@ export default function ActorProfilePage() {
 
   const planets = ['sun', 'moon', 'mercury', 'venus', 'mars', 'jupiter', 'saturn', 'uranus', 'neptune', 'pluto'];
 
-  // Get articles by year for this actor
-  const { data: actorArticles } = useQuery({
-    queryKey: ['/api/actors', actor?.id, 'articles'],
-    enabled: !!actor?.id,
-  });
-
-  // Generate timeline years based on actual article data
-  const currentYear = new Date().getFullYear();
-  const availableYears = actorArticles ? 
-    [...new Set(actorArticles.map((article: any) => new Date(article.publishedAt).getFullYear()))]
-      .sort((a, b) => b - a) : [currentYear];
-  
-  const timelineItems = availableYears.length > 0 ? 
-    availableYears.map(year => ({
-      id: year.toString(),
-      label: year.toString(),
-      year: year
-    })) : 
-    Array.from({ length: 5 }, (_, i) => {
-      const year = currentYear - i;
-      return {
-        id: year.toString(),
-        label: year.toString(),
-        year: year
-      };
-    });
-
   const getArticlesByYear = (year: number) => {
     if (!actorArticles) return [];
     
-    return actorArticles.filter((article: any) => {
+    return (actorArticles as any[]).filter((article: any) => {
       const articleYear = new Date(article.publishedAt).getFullYear();
       return articleYear === year;
     });
@@ -301,7 +301,7 @@ export default function ActorProfilePage() {
                 <div className="p-4 border-t border-gray-100">
                   <h5 className="font-medium text-sm mb-3">News from {selectedYear}</h5>
                   <div className="space-y-3">
-                    {getArticlesByYear(selectedYear).map((article) => (
+                    {getArticlesByYear(selectedYear).map((article: any) => (
                       <div 
                         key={article.id} 
                         className="bg-white rounded-lg border-l-4 touch-feedback cursor-pointer hover:shadow-md transition-shadow duration-200 p-3"
@@ -318,7 +318,7 @@ export default function ActorProfilePage() {
                           </span>
                           
                           <div className="flex items-center space-x-1">
-                            {article.astroGlyphs.map((glyph, index) => (
+                            {article.astroGlyphs.map((glyph: any, index: number) => (
                               <div
                                 key={index}
                                 className="w-4 h-4 rounded-full flex items-center justify-center text-xs font-bold text-white"
@@ -354,7 +354,7 @@ export default function ActorProfilePage() {
                             
                             {/* Hashtags - Limited */}
                             <div className="flex gap-1 mb-2 overflow-hidden" style={{ maxHeight: '1.25rem' }}>
-                              {article.hashtags.slice(0, 2).map((tag, index) => (
+                              {article.hashtags.slice(0, 2).map((tag: string, index: number) => (
                                 <span
                                   key={index}
                                   className="text-xs bg-gray-100 text-gray-700 px-1.5 py-0.5 rounded whitespace-nowrap"
