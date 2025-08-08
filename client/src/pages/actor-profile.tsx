@@ -15,6 +15,7 @@ export default function ActorProfilePage() {
   const [activeTab, setActiveTab] = useState<TabOption>('overview');
   const [selectedRelationship, setSelectedRelationship] = useState<Actor | null>(null);
   const [expandedVibrations, setExpandedVibrations] = useState<Set<number>>(new Set());
+  const [selectedCircuits, setSelectedCircuits] = useState<Map<number, number>>(new Map());
   const [selectedYear, setSelectedYear] = useState<number>(new Date().getFullYear());
 
   const { data: actor, isLoading: actorLoading } = useQuery<Actor>({
@@ -281,68 +282,178 @@ export default function ActorProfilePage() {
           {
             number: 1,
             title: "Inner Unity",
-            description: "Represents things working together, focused on the self",
-            planets: ["sun", "mercury"]
+            circuits: [
+              {
+                id: 0,
+                planets: ["sun", "mercury"],
+                description: "Represents harmony between core identity and communication, creating clear self-expression and authentic messaging."
+              },
+              {
+                id: 1,
+                planets: ["moon", "venus"],
+                description: "Combines emotional awareness with relationship harmony, fostering inner peace and loving connections."
+              }
+            ]
           },
           {
             number: 2,
-            title: "External Connection", 
-            description: "Governs polarity and is entirely focused on relating to things outside of oneself",
-            planets: ["venus", "mars"]
+            title: "External Connection",
+            circuits: [
+              {
+                id: 0,
+                planets: ["venus", "mars"],
+                description: "The classic attraction circuit - balances desire with action, creating magnetic appeal and relationship dynamics."
+              },
+              {
+                id: 1,
+                planets: ["jupiter", "saturn"],
+                description: "Expansion meets structure - enables growth while maintaining boundaries in partnerships."
+              },
+              {
+                id: 2,
+                planets: ["mercury", "neptune"],
+                description: "Communication flows through intuitive channels, enabling deep understanding and psychic connection."
+              }
+            ]
           },
           {
             number: 3,
             title: "Pleasant Flow",
-            description: "Characterized by a harmonious and pleasant flow of experience and energy; it is active",
-            planets: ["jupiter"]
+            circuits: [
+              {
+                id: 0,
+                planets: ["jupiter", "venus"],
+                description: "The harmony and abundance circuit - brings joy, creativity, and positive social connections."
+              }
+            ]
           },
           {
             number: 4,
             title: "Drive & Motivation",
-            description: "Represents motivation and drive",
-            planets: ["mars", "saturn"]
+            circuits: [
+              {
+                id: 0,
+                planets: ["mars", "saturn"],
+                description: "Disciplined action - channels raw drive through structured effort for lasting achievement."
+              },
+              {
+                id: 1,
+                planets: ["sun", "pluto"],
+                description: "Transformational power - core identity backed by intense regenerative force."
+              }
+            ]
           },
           {
             number: 5,
             title: "Exploration & Play",
-            description: "It is about interaction with and exploration of the world without an agenda. Play.",
-            planets: ["mercury", "venus"]
+            circuits: [
+              {
+                id: 0,
+                planets: ["mercury", "venus"],
+                description: "Playful communication and artistic expression - finds joy in learning and creative exchange."
+              },
+              {
+                id: 1,
+                planets: ["jupiter", "uranus"],
+                description: "Adventure and innovation - seeks new experiences and revolutionary insights."
+              },
+              {
+                id: 2,
+                planets: ["moon", "neptune"],
+                description: "Imaginative exploration - discovers through dreams, intuition, and emotional depth."
+              }
+            ]
           },
           {
             number: 6,
             title: "Shared Harmony",
-            description: "Indicates a harmonious flow relating to shared characteristics and similarities",
-            planets: ["venus", "jupiter"]
+            circuits: [
+              {
+                id: 0,
+                planets: ["venus", "jupiter"],
+                description: "Social grace and generosity - creates beautiful relationships and shared abundance."
+              }
+            ]
+          },
+          {
+            number: 7,
+            title: "Deep Analysis",
+            circuits: []
           },
           {
             number: 8,
             title: "Action Energy",
-            description: "It provides a picture of your fundamental 'go out and take action energy' and the basic energy driving you to take action in your life",
-            planets: ["mars", "pluto"]
+            circuits: [
+              {
+                id: 0,
+                planets: ["mars", "pluto"],
+                description: "Intense transformational action - raw power channeled toward complete regeneration."
+              },
+              {
+                id: 1,
+                planets: ["sun", "saturn"],
+                description: "Authoritative leadership - personal power expressed through disciplined responsibility."
+              }
+            ]
           },
           {
             number: 9,
             title: "Ideal Community",
-            description: "Relates to your ideal social group",
-            planets: ["jupiter", "uranus"]
+            circuits: [
+              {
+                id: 0,
+                planets: ["jupiter", "uranus"],
+                description: "Revolutionary expansion - seeks progressive communities that embrace innovation and growth."
+              },
+              {
+                id: 1,
+                planets: ["venus", "neptune"],
+                description: "Compassionate unity - dreams of harmonious communities built on love and understanding."
+              }
+            ]
           },
           {
             number: 10,
             title: "Beyond Self",
-            description: "Understanding the world beyond the self",
-            planets: ["saturn", "neptune"]
+            circuits: [
+              {
+                id: 0,
+                planets: ["saturn", "neptune"],
+                description: "Spiritual discipline - structures dissolve to reveal higher consciousness and universal connection."
+              }
+            ]
           },
           {
             number: 11,
             title: "Complex Relations",
-            description: "A primary tool for understanding complex relationships",
-            planets: ["uranus", "neptune"]
+            circuits: [
+              {
+                id: 0,
+                planets: ["uranus", "neptune"],
+                description: "Innovative intuition - sudden insights merge with spiritual awareness for breakthrough understanding."
+              },
+              {
+                id: 1,
+                planets: ["mercury", "pluto"],
+                description: "Deep communication - transforms thoughts and words with penetrating psychological insight."
+              },
+              {
+                id: 2,
+                planets: ["venus", "saturn"],
+                description: "Committed relationships - love expressed through loyalty, responsibility, and lasting bonds."
+              }
+            ]
           },
           {
             number: 12,
             title: "Balanced Action",
-            description: "Combines the need to act with the need to ensure others are happy with your actions",
-            planets: ["neptune", "pluto"]
+            circuits: [
+              {
+                id: 0,
+                planets: ["neptune", "pluto"],
+                description: "Spiritual transformation - dissolves ego boundaries to access deep regenerative power."
+              }
+            ]
           }
         ];
 
@@ -358,6 +469,22 @@ export default function ActorProfilePage() {
           });
         };
 
+        const selectCircuit = (vibrationNumber: number, circuitId: number) => {
+          setSelectedCircuits(prev => {
+            const newMap = new Map(prev);
+            newMap.set(vibrationNumber, circuitId);
+            return newMap;
+          });
+        };
+
+        const getSelectedDescription = (vibrationNumber: number, circuits: any[]) => {
+          const selectedCircuitId = selectedCircuits.get(vibrationNumber);
+          if (selectedCircuitId !== undefined && circuits[selectedCircuitId]) {
+            return circuits[selectedCircuitId].description;
+          }
+          return circuits.length > 0 ? circuits[0].description : '';
+        };
+
         const romanNumerals = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII"];
         
         return (
@@ -367,12 +494,13 @@ export default function ActorProfilePage() {
                 <button
                   onClick={() => toggleVibration(vibration.number)}
                   className="w-full p-3 text-left flex items-center justify-between hover:bg-gray-50"
+                  data-testid={`button-vibration-${vibration.number}`}
                 >
                   <div className="flex items-center space-x-3">
                     <div className="w-8 h-8 bg-purple-500 text-white rounded-full flex items-center justify-center text-sm font-bold">
                       {romanNumerals[vibration.number - 1]}
                     </div>
-                    <h4 className="font-bold text-sm">{vibration.title}</h4>
+                    <h4 className="font-bold text-sm">({vibration.number}) {vibration.title}</h4>
                   </div>
                   {expandedVibrations.has(vibration.number) ? 
                     <ChevronUp className="w-4 h-4" /> : 
@@ -382,24 +510,61 @@ export default function ActorProfilePage() {
                 
                 {expandedVibrations.has(vibration.number) && (
                   <div className="px-3 pb-3 border-t border-gray-100">
-                    <p className="text-xs text-gray-600 mb-2 mt-2">{vibration.description}</p>
-                    <div className="flex items-center space-x-2">
-                      <span className="text-xs text-gray-500">Planets:</span>
-                      <div className="flex space-x-1">
-                        {vibration.planets.map((planet, planetIndex) => (
-                          <div
-                            key={planetIndex}
-                            className="w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold text-white"
-                            style={{ backgroundColor: getPlanetColor(planet) }}
-                          >
-                            {planet === 'mercury' ? '☿' : planet === 'venus' ? '♀' : planet === 'mars' ? '♂' : 
-                             planet === 'jupiter' ? '♃' : planet === 'saturn' ? '♄' : planet === 'sun' ? '☉' :
-                             planet === 'moon' ? '☽' : planet === 'uranus' ? '♅' : planet === 'neptune' ? '♆' :
-                             planet === 'pluto' ? '♇' : '●'}
-                          </div>
-                        ))}
+                    {vibration.circuits.length > 0 ? (
+                      <>
+                        {/* Circuit Cards */}
+                        <div className="space-y-2 mb-3 mt-3">
+                          {vibration.circuits.map((circuit, circuitIndex) => {
+                            const isSelected = selectedCircuits.get(vibration.number) === circuit.id || 
+                                             (selectedCircuits.get(vibration.number) === undefined && circuitIndex === 0);
+                            return (
+                              <button
+                                key={circuit.id}
+                                onClick={() => selectCircuit(vibration.number, circuit.id)}
+                                className={cn(
+                                  "w-full p-3 rounded-lg border-2 transition-colors text-left",
+                                  isSelected 
+                                    ? "border-purple-500 bg-purple-50" 
+                                    : "border-gray-200 hover:border-gray-300 bg-white"
+                                )}
+                                data-testid={`button-circuit-${vibration.number}-${circuit.id}`}
+                              >
+                                <div className="flex space-x-1 mb-2">
+                                  {circuit.planets.map((planet, planetIndex) => (
+                                    <div
+                                      key={planetIndex}
+                                      className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold text-white"
+                                      style={{ backgroundColor: getPlanetColor(planet) }}
+                                    >
+                                      {planet === 'mercury' ? '☿' : planet === 'venus' ? '♀' : planet === 'mars' ? '♂' : 
+                                       planet === 'jupiter' ? '♃' : planet === 'saturn' ? '♄' : planet === 'sun' ? '☉' :
+                                       planet === 'moon' ? '☽' : planet === 'uranus' ? '♅' : planet === 'neptune' ? '♆' :
+                                       planet === 'pluto' ? '♇' : '●'}
+                                    </div>
+                                  ))}
+                                </div>
+                              </button>
+                            );
+                          })}
+                        </div>
+                        
+                        {/* Dynamic Description */}
+                        <div className="bg-gray-50 rounded-lg p-3">
+                          <p className="text-xs text-gray-600" data-testid={`text-description-${vibration.number}`}>
+                            {getSelectedDescription(vibration.number, vibration.circuits)}
+                          </p>
+                        </div>
+                      </>
+                    ) : (
+                      /* Empty State */
+                      <div className="text-center py-6" data-testid={`empty-state-${vibration.number}`}>
+                        <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                          <span className="text-gray-400 text-xl">∅</span>
+                        </div>
+                        <p className="text-sm text-gray-500 mb-1">No circuits found</p>
+                        <p className="text-xs text-gray-400">This vibration currently has no planetary circuits</p>
                       </div>
-                    </div>
+                    )}
                   </div>
                 )}
               </div>
