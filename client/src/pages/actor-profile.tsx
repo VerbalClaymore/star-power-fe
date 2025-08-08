@@ -371,12 +371,12 @@ export default function ActorProfilePage() {
             circuits: [
               {
                 id: 0,
-                planets: ["sun", "mercury"],
+                planets: ["sun", "mercury", "venus", "mars"],
                 description: "Represents harmony between core identity and communication, creating clear self-expression and authentic messaging."
               },
               {
                 id: 1,
-                planets: ["moon", "venus"],
+                planets: ["moon", "venus", "jupiter"],
                 description: "Combines emotional awareness with relationship harmony, fostering inner peace and loving connections."
               }
             ]
@@ -387,17 +387,17 @@ export default function ActorProfilePage() {
             circuits: [
               {
                 id: 0,
-                planets: ["venus", "mars"],
+                planets: ["venus", "mars", "jupiter", "saturn", "uranus"],
                 description: "The classic attraction circuit - balances desire with action, creating magnetic appeal and relationship dynamics."
               },
               {
                 id: 1,
-                planets: ["jupiter", "saturn"],
+                planets: ["jupiter", "saturn", "neptune"],
                 description: "Expansion meets structure - enables growth while maintaining boundaries in partnerships."
               },
               {
                 id: 2,
-                planets: ["mercury", "neptune"],
+                planets: ["mercury", "neptune", "pluto", "moon", "sun", "venus"],
                 description: "Communication flows through intuitive channels, enabling deep understanding and psychic connection."
               }
             ]
@@ -408,7 +408,7 @@ export default function ActorProfilePage() {
             circuits: [
               {
                 id: 0,
-                planets: ["jupiter", "venus"],
+                planets: ["jupiter", "venus", "sun", "moon", "mercury", "mars", "saturn", "uranus"],
                 description: "The harmony and abundance circuit - brings joy, creativity, and positive social connections."
               }
             ]
@@ -419,12 +419,12 @@ export default function ActorProfilePage() {
             circuits: [
               {
                 id: 0,
-                planets: ["mars", "saturn"],
+                planets: ["mars", "saturn", "pluto"],
                 description: "Disciplined action - channels raw drive through structured effort for lasting achievement."
               },
               {
                 id: 1,
-                planets: ["sun", "pluto"],
+                planets: ["sun", "pluto", "jupiter", "mercury", "venus"],
                 description: "Transformational power - core identity backed by intense regenerative force."
               }
             ]
@@ -435,17 +435,17 @@ export default function ActorProfilePage() {
             circuits: [
               {
                 id: 0,
-                planets: ["mercury", "venus"],
+                planets: ["mercury", "venus", "jupiter", "uranus"],
                 description: "Playful communication and artistic expression - finds joy in learning and creative exchange."
               },
               {
                 id: 1,
-                planets: ["jupiter", "uranus"],
+                planets: ["jupiter", "uranus", "neptune", "mars", "sun"],
                 description: "Adventure and innovation - seeks new experiences and revolutionary insights."
               },
               {
                 id: 2,
-                planets: ["moon", "neptune"],
+                planets: ["moon", "neptune", "venus"],
                 description: "Imaginative exploration - discovers through dreams, intuition, and emotional depth."
               }
             ]
@@ -456,7 +456,7 @@ export default function ActorProfilePage() {
             circuits: [
               {
                 id: 0,
-                planets: ["venus", "jupiter"],
+                planets: ["venus", "jupiter", "moon", "mercury", "sun", "saturn", "neptune", "uranus", "mars", "pluto"],
                 description: "Social grace and generosity - creates beautiful relationships and shared abundance."
               }
             ]
@@ -472,12 +472,12 @@ export default function ActorProfilePage() {
             circuits: [
               {
                 id: 0,
-                planets: ["mars", "pluto"],
+                planets: ["mars", "pluto", "saturn", "sun"],
                 description: "Intense transformational action - raw power channeled toward complete regeneration."
               },
               {
                 id: 1,
-                planets: ["sun", "saturn"],
+                planets: ["sun", "saturn", "jupiter"],
                 description: "Authoritative leadership - personal power expressed through disciplined responsibility."
               }
             ]
@@ -488,12 +488,12 @@ export default function ActorProfilePage() {
             circuits: [
               {
                 id: 0,
-                planets: ["jupiter", "uranus"],
+                planets: ["jupiter", "uranus", "neptune", "venus", "mercury"],
                 description: "Revolutionary expansion - seeks progressive communities that embrace innovation and growth."
               },
               {
                 id: 1,
-                planets: ["venus", "neptune"],
+                planets: ["venus", "neptune", "moon"],
                 description: "Compassionate unity - dreams of harmonious communities built on love and understanding."
               }
             ]
@@ -504,7 +504,7 @@ export default function ActorProfilePage() {
             circuits: [
               {
                 id: 0,
-                planets: ["saturn", "neptune"],
+                planets: ["saturn", "neptune", "pluto", "uranus", "jupiter"],
                 description: "Spiritual discipline - structures dissolve to reveal higher consciousness and universal connection."
               }
             ]
@@ -515,17 +515,17 @@ export default function ActorProfilePage() {
             circuits: [
               {
                 id: 0,
-                planets: ["uranus", "neptune"],
+                planets: ["uranus", "neptune", "pluto"],
                 description: "Innovative intuition - sudden insights merge with spiritual awareness for breakthrough understanding."
               },
               {
                 id: 1,
-                planets: ["mercury", "pluto"],
+                planets: ["mercury", "pluto", "mars", "saturn"],
                 description: "Deep communication - transforms thoughts and words with penetrating psychological insight."
               },
               {
                 id: 2,
-                planets: ["venus", "saturn"],
+                planets: ["venus", "saturn", "jupiter", "moon", "sun", "mercury"],
                 description: "Committed relationships - love expressed through loyalty, responsibility, and lasting bonds."
               }
             ]
@@ -536,7 +536,7 @@ export default function ActorProfilePage() {
             circuits: [
               {
                 id: 0,
-                planets: ["neptune", "pluto"],
+                planets: ["neptune", "pluto", "uranus", "saturn", "jupiter", "mars", "venus", "mercury", "moon"],
                 description: "Spiritual transformation - dissolves ego boundaries to access deep regenerative power."
               }
             ]
@@ -722,8 +722,9 @@ export default function ActorProfilePage() {
                       <div className="w-6 h-6 bg-purple-500 text-white rounded-full flex items-center justify-center text-xs font-bold">
                         {houseNum}
                       </div>
-                      <div>
+                      <div className="flex items-center space-x-2">
                         <h4 className="font-bold text-sm">{houseSign}</h4>
+                        <span className="text-xs text-gray-400">•</span>
                         <p className="text-xs text-gray-500">{houseNames[houseNum - 1]}</p>
                       </div>
                     </div>
