@@ -171,18 +171,34 @@ export default function ActorProfilePage() {
     // In real app, this would query actual data
     return [
       {
-        id: '1',
+        id: 1,
         title: `${actor?.name || 'Celebrity'} makes headlines in ${year}`,
-        date: new Date(year, 5, 15),
+        publishedAt: new Date(year, 5, 15).toISOString(),
         summary: `Major entertainment news story from ${year} featuring ${actor?.name || 'this celebrity'}.`,
-        imageUrl: undefined
+        content: `Full article content about ${actor?.name || 'this celebrity'} from ${year}.`,
+        isCelebrity: true,
+        category: { id: 1, name: 'Celebrity', slug: 'celebrity', color: 'hsl(329, 86%, 70%)' },
+        actors: actor ? [actor] : [],
+        hashtags: [`#${actor?.name?.replace(' ', '') || 'Celebrity'}`, `#${year}News`],
+        astroGlyphs: [{ planet: 'venus', symbol: '♀', color: '#F5F5DC' }],
+        likeCount: 24,
+        shareCount: 8,
+        bookmarkCount: 12
       },
       {
-        id: '2',
+        id: 2,
         title: `${year} Awards Season buzz`,
-        date: new Date(year, 2, 20),
+        publishedAt: new Date(year, 2, 20).toISOString(),
         summary: `Award nominations and industry recognition in ${year}.`,
-        imageUrl: undefined
+        content: `Complete coverage of ${year} awards season.`,
+        isCelebrity: true,
+        category: { id: 1, name: 'Entertainment', slug: 'entertainment', color: 'hsl(262, 83%, 58%)' },
+        actors: actor ? [actor] : [],
+        hashtags: [`#Awards${year}`, '#RedCarpet'],
+        astroGlyphs: [{ planet: 'jupiter', symbol: '♃', color: '#FF4500' }],
+        likeCount: 18,
+        shareCount: 5,
+        bookmarkCount: 9
       }
     ];
   };
@@ -262,12 +278,82 @@ export default function ActorProfilePage() {
                   <h5 className="font-medium text-sm mb-3">News from {selectedYear}</h5>
                   <div className="space-y-3">
                     {getArticlesByYear(selectedYear).map((article) => (
-                      <div key={article.id} className="p-3 bg-gray-50 rounded-lg">
-                        <h6 className="font-medium text-sm mb-1">{article.title}</h6>
-                        <p className="text-xs text-gray-600 mb-2">{article.summary}</p>
-                        <p className="text-xs text-gray-400">
-                          {article.date.toLocaleDateString('en-US', { month: 'long', day: 'numeric' })}
-                        </p>
+                      <div 
+                        key={article.id} 
+                        className="bg-white rounded-lg border-l-4 touch-feedback cursor-pointer hover:shadow-md transition-shadow duration-200 p-3"
+                        style={{ borderLeftColor: article.category?.color || 'hsl(329, 86%, 70%)' }}
+                        onClick={() => setLocation(`/article/${article.id}`)}
+                        data-testid={`article-card-${article.id}`}
+                      >
+                        {/* Category Badge and Planet Glyphs */}
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="inline-flex items-center px-2 py-1 rounded-full text-white text-xs font-bold"
+                                style={{ backgroundColor: article.category?.color || 'hsl(329, 86%, 70%)' }}>
+                            <span className="mr-1 text-xs">⭐</span>
+                            {article.category?.name?.toUpperCase() || 'CELEBRITY'}
+                          </span>
+                          
+                          <div className="flex items-center space-x-1">
+                            {article.astroGlyphs.map((glyph, index) => (
+                              <div
+                                key={index}
+                                className="w-4 h-4 rounded-full flex items-center justify-center text-xs font-bold text-white"
+                                style={{ backgroundColor: glyph.color }}
+                              >
+                                {glyph.symbol}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                        
+                        {/* Article Content - Condensed */}
+                        <div className="flex items-start space-x-3">
+                          {/* Actor Image - Smaller for timeline */}
+                          <div className="w-12 h-12 rounded-lg overflow-hidden bg-gray-200 flex-shrink-0">
+                            {article.actors.length > 0 && article.actors[0].profileImage ? (
+                              <img 
+                                src={article.actors[0].profileImage} 
+                                alt={article.actors[0].name}
+                                className="w-full h-full object-cover"
+                              />
+                            ) : (
+                              <div className="w-full h-full flex items-center justify-center bg-gray-100 text-gray-400">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                  <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                                </svg>
+                              </div>
+                            )}
+                          </div>
+                          
+                          <div className="flex-1 min-w-0">
+                            <h6 className="font-bold text-sm leading-tight mb-1 line-clamp-2">{article.title}</h6>
+                            
+                            {/* Hashtags - Limited */}
+                            <div className="flex gap-1 mb-2 overflow-hidden" style={{ maxHeight: '1.25rem' }}>
+                              {article.hashtags.slice(0, 2).map((tag, index) => (
+                                <span
+                                  key={index}
+                                  className="text-xs bg-gray-100 text-gray-700 px-1.5 py-0.5 rounded whitespace-nowrap"
+                                >
+                                  {tag}
+                                </span>
+                              ))}
+                            </div>
+                            
+                            {/* Social Stats and Date */}
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center space-x-3 text-xs text-gray-500">
+                                <span>{article.likeCount}♥</span>
+                                <span>{article.shareCount}↗</span>
+                                <span>{article.bookmarkCount}📑</span>
+                              </div>
+                              
+                              <span className="text-xs text-gray-400">
+                                {new Date(article.publishedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     ))}
                   </div>
@@ -492,20 +578,38 @@ export default function ActorProfilePage() {
             {vibrations.map((vibration) => (
               <div key={vibration.number} className="border border-gray-200 rounded-lg">
                 <button
-                  onClick={() => toggleVibration(vibration.number)}
-                  className="w-full p-3 text-left flex items-center justify-between hover:bg-gray-50"
+                  onClick={() => vibration.circuits.length > 0 ? toggleVibration(vibration.number) : null}
+                  className={cn(
+                    "w-full p-3 text-left flex items-center justify-between transition-opacity",
+                    vibration.circuits.length > 0 
+                      ? "hover:bg-gray-50 cursor-pointer" 
+                      : "opacity-50 cursor-not-allowed"
+                  )}
                   data-testid={`button-vibration-${vibration.number}`}
                 >
                   <div className="flex items-center space-x-3">
-                    <div className="w-8 h-8 bg-purple-500 text-white rounded-full flex items-center justify-center text-sm font-bold">
+                    <div className={cn(
+                      "w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold",
+                      vibration.circuits.length > 0
+                        ? "bg-purple-500 text-white"
+                        : "bg-gray-300 text-gray-500"
+                    )}>
                       {romanNumerals[vibration.number - 1]}
                     </div>
-                    <h4 className="font-bold text-sm">({vibration.number}) {vibration.title}</h4>
+                    <h4 className={cn(
+                      "text-sm",
+                      vibration.circuits.length > 0
+                        ? "font-bold text-gray-900"
+                        : "font-medium text-gray-400"
+                    )}>
+                      {vibration.title}
+                    </h4>
                   </div>
-                  {expandedVibrations.has(vibration.number) ? 
-                    <ChevronUp className="w-4 h-4" /> : 
-                    <ChevronDown className="w-4 h-4" />
-                  }
+                  {vibration.circuits.length > 0 && (
+                    expandedVibrations.has(vibration.number) ? 
+                      <ChevronUp className="w-4 h-4" /> : 
+                      <ChevronDown className="w-4 h-4" />
+                  )}
                 </button>
                 
                 {expandedVibrations.has(vibration.number) && (
@@ -513,23 +617,26 @@ export default function ActorProfilePage() {
                     {vibration.circuits.length > 0 ? (
                       <>
                         {/* Circuit Cards */}
-                        <div className="space-y-2 mb-3 mt-3">
+                        <div className="flex flex-wrap gap-2 mb-3 mt-3">
                           {vibration.circuits.map((circuit, circuitIndex) => {
                             const isSelected = selectedCircuits.get(vibration.number) === circuit.id || 
                                              (selectedCircuits.get(vibration.number) === undefined && circuitIndex === 0);
+                            // Dynamic width based on planet count - ensure adequate tap target
+                            const cardWidth = Math.max(circuit.planets.length * 28 + 24, 80); // min 80px width
                             return (
                               <button
                                 key={circuit.id}
                                 onClick={() => selectCircuit(vibration.number, circuit.id)}
                                 className={cn(
-                                  "w-full p-3 rounded-lg border-2 transition-colors text-left",
+                                  "p-3 rounded-lg border-2 transition-colors flex-shrink-0",
                                   isSelected 
                                     ? "border-purple-500 bg-purple-50" 
                                     : "border-gray-200 hover:border-gray-300 bg-white"
                                 )}
+                                style={{ minWidth: `${cardWidth}px` }}
                                 data-testid={`button-circuit-${vibration.number}-${circuit.id}`}
                               >
-                                <div className="flex space-x-1 mb-2">
+                                <div className="flex space-x-1 justify-center">
                                   {circuit.planets.map((planet, planetIndex) => (
                                     <div
                                       key={planetIndex}
