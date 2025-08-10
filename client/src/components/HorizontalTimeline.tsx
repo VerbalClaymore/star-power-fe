@@ -77,6 +77,16 @@ export default function HorizontalTimeline({ initialYear, items, onFocusChange }
     }
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'ArrowLeft' && focusedIndex > 0) {
+      e.preventDefault();
+      handleItemClick(focusedIndex - 1);
+    } else if (e.key === 'ArrowRight' && focusedIndex < items.length - 1) {
+      e.preventDefault();
+      handleItemClick(focusedIndex + 1);
+    }
+  };
+
   const handleItemClick = (index: number) => {
     setFocusedIndex(index);
     scrollToIndex(index);
@@ -86,11 +96,13 @@ export default function HorizontalTimeline({ initialYear, items, onFocusChange }
     <div className="w-full">
       <div 
         ref={scrollRef}
-        className="flex overflow-x-auto scrollbar-hide py-4"
+        className="flex overflow-x-auto scrollbar-hide py-4 focus:outline-none"
         style={{ scrollSnapType: 'x mandatory' }}
         onScroll={handleScroll}
+        onKeyDown={handleKeyDown}
+        tabIndex={0}
       >
-        <div className="flex space-x-4 px-4">
+        <div className="flex space-x-4 px-4 min-w-max">
           {items.map((item, index) => {
             const isFocused = index === focusedIndex;
             const isAdjacent = Math.abs(index - focusedIndex) === 1;
@@ -114,12 +126,12 @@ export default function HorizontalTimeline({ initialYear, items, onFocusChange }
                 <div className="text-center">
                   <div className={cn(
                     "text-lg transition-all duration-300",
-                    isFocused ? "font-bold text-purple-600" : "font-normal text-gray-600"
+                    isFocused ? "font-bold text-purple-600 dark:text-purple-400" : "font-normal text-gray-600 dark:text-gray-300"
                   )}>
                     {item.label}
                   </div>
                   {isFocused && (
-                    <div className="w-2 h-2 bg-purple-600 rounded-full mx-auto mt-1 transition-all duration-300" />
+                    <div className="w-2 h-2 bg-purple-600 dark:bg-purple-400 rounded-full mx-auto mt-1 transition-all duration-300" />
                   )}
                 </div>
               </div>

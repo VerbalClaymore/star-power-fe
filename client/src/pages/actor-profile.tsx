@@ -38,22 +38,34 @@ export default function ActorProfilePage() {
   const currentYear = new Date().getFullYear();
   const availableYears = actorArticles ? 
     [...new Set((actorArticles as any[]).map((article: any) => new Date(article.publishedAt).getFullYear()))]
-      .sort((a, b) => b - a) : [currentYear];
+      .sort((a, b) => a - b) : [];
   
-  const timelineItems = availableYears.length > 0 ? 
-    availableYears.map(year => ({
-      id: year.toString(),
-      label: year.toString(),
-      year: year
-    })) : 
-    Array.from({ length: 5 }, (_, i) => {
-      const year = currentYear - i;
-      return {
-        id: year.toString(),
-        label: year.toString(),
-        year: year
-      };
-    });
+  // Create timeline items with a full range from earliest year to current year
+  const timelineItems = (() => {
+    if (availableYears.length > 0) {
+      const minYear = Math.min(...availableYears);
+      const maxYear = Math.max(currentYear, Math.max(...availableYears));
+      
+      return Array.from({ length: maxYear - minYear + 1 }, (_, i) => {
+        const year = minYear + i;
+        return {
+          id: year.toString(),
+          label: year.toString(),
+          year: year
+        };
+      });
+    } else {
+      // Fallback: create a 10-year range centered around current year
+      return Array.from({ length: 10 }, (_, i) => {
+        const year = currentYear - 5 + i;
+        return {
+          id: year.toString(),
+          label: year.toString(),
+          year: year
+        };
+      });
+    }
+  })();
 
   if (actorLoading) {
     return (
@@ -290,21 +302,21 @@ export default function ActorProfilePage() {
             {/* Timeline Section */}
             <div>
               <h4 className="font-bold text-sm mb-3">Timeline</h4>
-              <div className="bg-white border border-gray-200 rounded-lg">
+              <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg">
                 <HorizontalTimeline
-                  initialYear={availableYears[0] || currentYear}
+                  initialYear={availableYears.length > 0 ? Math.max(...availableYears) : currentYear}
                   items={timelineItems}
                   onFocusChange={handleYearChange}
                 />
                 
                 {/* Articles for selected year */}
-                <div className="p-4 border-t border-gray-100">
-                  <h5 className="font-medium text-sm mb-3">News from {selectedYear}</h5>
+                <div className="p-4 border-t border-gray-100 dark:border-gray-700">
+                  <h5 className="font-medium text-sm mb-3 text-gray-900 dark:text-white">News from {selectedYear}</h5>
                   <div className="space-y-3">
                     {getArticlesByYear(selectedYear).map((article: any) => (
                       <div 
                         key={article.id} 
-                        className="bg-white rounded-lg border-l-4 touch-feedback cursor-pointer hover:shadow-md transition-shadow duration-200 p-3"
+                        className="bg-white dark:bg-gray-700 rounded-lg border-l-4 touch-feedback cursor-pointer hover:shadow-md transition-shadow duration-200 p-3"
                         style={{ borderLeftColor: article.category?.color || 'hsl(329, 86%, 70%)' }}
                         onClick={() => setLocation(`/article/${article.id}`)}
                         data-testid={`article-card-${article.id}`}
@@ -350,14 +362,14 @@ export default function ActorProfilePage() {
                           </div>
                           
                           <div className="flex-1 min-w-0">
-                            <h6 className="font-bold text-sm leading-tight mb-1 line-clamp-2">{article.title}</h6>
+                            <h6 className="font-bold text-sm leading-tight mb-1 line-clamp-2 text-gray-900 dark:text-white">{article.title}</h6>
                             
                             {/* Hashtags - Limited */}
                             <div className="flex gap-1 mb-2 overflow-hidden" style={{ maxHeight: '1.25rem' }}>
                               {article.hashtags.slice(0, 2).map((tag: string, index: number) => (
                                 <span
                                   key={index}
-                                  className="text-xs bg-gray-100 text-gray-700 px-1.5 py-0.5 rounded whitespace-nowrap"
+                                  className="text-xs bg-gray-100 dark:bg-gray-600 text-gray-700 dark:text-gray-300 px-1.5 py-0.5 rounded whitespace-nowrap"
                                 >
                                   {tag}
                                 </span>
@@ -366,13 +378,13 @@ export default function ActorProfilePage() {
                             
                             {/* Social Stats and Date */}
                             <div className="flex items-center justify-between">
-                              <div className="flex items-center space-x-3 text-xs text-gray-500">
+                              <div className="flex items-center space-x-3 text-xs text-gray-500 dark:text-gray-400">
                                 <span>{article.likeCount}♥</span>
                                 <span>{article.shareCount}↗</span>
                                 <span>{article.bookmarkCount}📑</span>
                               </div>
                               
-                              <span className="text-xs text-gray-400">
+                              <span className="text-xs text-gray-400 dark:text-gray-500">
                                 {new Date(article.publishedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
                               </span>
                             </div>
