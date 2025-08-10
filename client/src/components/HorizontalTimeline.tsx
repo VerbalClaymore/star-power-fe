@@ -17,6 +17,7 @@ export default function HorizontalTimeline({ initialYear, items, onFocusChange }
   const [focusedIndex, setFocusedIndex] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const ITEM_WIDTH = 80;
 
@@ -46,7 +47,7 @@ export default function HorizontalTimeline({ initialYear, items, onFocusChange }
       
       const scrollLeft = itemLeft - (containerWidth / 2) + (itemWidth / 2);
       container.scrollTo({
-        left: scrollLeft,
+        left: Math.max(0, scrollLeft),
         behavior: 'smooth'
       });
     }
@@ -55,26 +56,32 @@ export default function HorizontalTimeline({ initialYear, items, onFocusChange }
   const handleScroll = () => {
     if (!scrollRef.current) return;
     
-    const container = scrollRef.current;
-    const containerCenter = container.scrollLeft + container.offsetWidth / 2;
-    
-    let closestIndex = 0;
-    let minDistance = Infinity;
-    
-    itemRefs.current.forEach((item, index) => {
-      if (!item) return;
-      const itemCenter = item.offsetLeft + item.offsetWidth / 2;
-      const distance = Math.abs(itemCenter - containerCenter);
+    // Debounce scroll handler to improve performance
+    clearTimeout(scrollTimeoutRef.current);
+    scrollTimeoutRef.current = setTimeout(() => {
+      const container = scrollRef.current;
+      if (!container) return;
       
-      if (distance < minDistance) {
-        minDistance = distance;
-        closestIndex = index;
+      const containerCenter = container.scrollLeft + container.offsetWidth / 2;
+      
+      let closestIndex = 0;
+      let minDistance = Infinity;
+      
+      itemRefs.current.forEach((item, index) => {
+        if (!item) return;
+        const itemCenter = item.offsetLeft + item.offsetWidth / 2;
+        const distance = Math.abs(itemCenter - containerCenter);
+        
+        if (distance < minDistance) {
+          minDistance = distance;
+          closestIndex = index;
+        }
+      });
+      
+      if (closestIndex !== focusedIndex) {
+        setFocusedIndex(closestIndex);
       }
-    });
-    
-    if (closestIndex !== focusedIndex) {
-      setFocusedIndex(closestIndex);
-    }
+    }, 50);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -96,13 +103,16 @@ export default function HorizontalTimeline({ initialYear, items, onFocusChange }
     <div className="w-full">
       <div 
         ref={scrollRef}
-        className="flex overflow-x-auto scrollbar-hide py-4 focus:outline-none"
-        style={{ scrollSnapType: 'x mandatory' }}
+        className="flex overflow-x-auto scrollbar-hide py-4 focus:outline-none select-none cursor-grab active:cursor-grabbing"
+        style={{ 
+          WebkitOverflowScrolling: 'touch',
+          scrollBehavior: 'auto'
+        }}
         onScroll={handleScroll}
         onKeyDown={handleKeyDown}
         tabIndex={0}
       >
-        <div className="flex space-x-4 px-4 min-w-max">
+        <div className="flex space-x-4 px-4 min-w-max select-none">
           {items.map((item, index) => {
             const isFocused = index === focusedIndex;
             const isAdjacent = Math.abs(index - focusedIndex) === 1;
@@ -112,20 +122,21 @@ export default function HorizontalTimeline({ initialYear, items, onFocusChange }
                 key={item.id}
                 ref={(el) => (itemRefs.current[index] = el)}
                 className={cn(
-                  "flex-shrink-0 flex items-center justify-center cursor-pointer transition-all duration-300 ease-out",
+                  "flex-shrink-0 flex items-center justify-center cursor-pointer transition-all duration-300 ease-out select-none",
                   "hover:scale-110"
                 )}
                 style={{ 
                   width: ITEM_WIDTH,
-                  scrollSnapAlign: 'center',
                   transform: `scale(${isFocused ? 1.3 : 1})`,
-                  opacity: isFocused ? 1 : isAdjacent ? 0.6 : 0.3
+                  opacity: isFocused ? 1 : isAdjacent ? 0.6 : 0.3,
+                  userSelect: 'none',
+                  WebkitUserSelect: 'none'
                 }}
                 onClick={() => handleItemClick(index)}
               >
-                <div className="text-center">
+                <div className="text-center select-none">
                   <div className={cn(
-                    "text-lg transition-all duration-300",
+                    "text-lg transition-all duration-300 select-none",
                     isFocused ? "font-bold text-purple-600 dark:text-purple-400" : "font-normal text-gray-600 dark:text-gray-300"
                   )}>
                     {item.label}
