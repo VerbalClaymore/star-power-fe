@@ -37,7 +37,7 @@ export default function ActorProfilePage() {
   // Generate timeline years based on actual article data
   const currentYear = new Date().getFullYear();
   const availableYears = actorArticles ? 
-    [...new Set((actorArticles as any[]).map((article: any) => new Date(article.publishedAt).getFullYear()))]
+    Array.from(new Set((actorArticles as any[]).map((article: any) => new Date(article.publishedAt).getFullYear())))
       .sort((a, b) => a - b) : [];
   
   // Create timeline items with a full range from earliest year to current year
@@ -279,7 +279,7 @@ export default function ActorProfilePage() {
                             </div>
                           </div>
                           <div className="flex-1">
-                            <p className="font-medium text-sm text-gray-900 dark:text-white">Tayvis</p>
+                            <p className="font-medium text-sm text-gray-900 dark:text-gray-300">Tayvis</p>
                             <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
                               confirmed
                             </span>
@@ -311,7 +311,7 @@ export default function ActorProfilePage() {
                 
                 {/* Articles for selected year */}
                 <div className="p-4 border-t border-gray-100 dark:border-gray-700">
-                  <h5 className="font-medium text-sm mb-3 text-gray-900 dark:text-white">News from {selectedYear}</h5>
+                  <h5 className="font-medium text-sm mb-3 text-gray-900 dark:text-gray-300">News from {selectedYear}</h5>
                   <div className="space-y-3">
                     {getArticlesByYear(selectedYear).map((article: any) => (
                       <div 
@@ -635,7 +635,7 @@ export default function ActorProfilePage() {
                     <h4 className={cn(
                       "text-sm",
                       vibration.circuits.length > 0
-                        ? "font-bold text-gray-900"
+                        ? "font-bold text-gray-900 dark:text-gray-300"
                         : "font-medium text-gray-400"
                     )}>
                       {vibration.title}
@@ -693,7 +693,7 @@ export default function ActorProfilePage() {
                         
                         {/* Dynamic Description */}
                         <div className="bg-gray-50 rounded-lg p-3">
-                          <p className="text-xs text-gray-600" data-testid={`text-description-${vibration.number}`}>
+                          <p className="text-xs text-gray-600 dark:text-gray-400" data-testid={`text-description-${vibration.number}`}>
                             {getSelectedDescription(vibration.number, vibration.circuits)}
                           </p>
                         </div>
@@ -730,9 +730,9 @@ export default function ActorProfilePage() {
                      planet === 'moon' ? '☽' : planet === 'uranus' ? '♅' : planet === 'neptune' ? '♆' :
                      planet === 'pluto' ? '♇' : '●'}
                   </div>
-                  <h4 className="font-bold text-sm capitalize flex-1">{planet}</h4>
-                  <p className="text-sm font-medium flex-1">{getZodiacSign(planet)}</p>
-                  <p className="text-sm font-bold">{getPlanetDegree(planet)}</p>
+                  <h4 className="font-bold text-sm capitalize flex-1 dark:text-gray-300">{planet}</h4>
+                  <p className="text-sm font-medium flex-1 dark:text-gray-300">{getZodiacSign(planet)}</p>
+                  <p className="text-sm font-bold dark:text-gray-300">{getPlanetDegree(planet)}</p>
                 </div>
               </div>
             ))}
@@ -759,7 +759,7 @@ export default function ActorProfilePage() {
                         {houseNum}
                       </div>
                       <div className="flex items-center space-x-2">
-                        <h4 className="font-bold text-sm">{houseSign}</h4>
+                        <h4 className="font-bold text-sm dark:text-gray-300">{houseSign}</h4>
                         <span className="text-xs text-gray-400">•</span>
                         <p className="text-xs text-gray-500">{houseNames[houseNum - 1]}</p>
                       </div>
@@ -814,7 +814,7 @@ export default function ActorProfilePage() {
             {currentTransits.map((transit, index) => (
               <div key={index} className="border border-gray-200 rounded-lg p-4">
                 <div className="flex items-center justify-between mb-2">
-                  <h4 className="font-bold text-sm">{transit.transit}</h4>
+                  <h4 className="font-bold text-sm dark:text-gray-300">{transit.transit}</h4>
                   <span className={cn(
                     "px-2 py-1 rounded-full text-xs font-medium",
                     transit.intensity === 'high' && "bg-red-100 text-red-800",
@@ -824,7 +824,7 @@ export default function ActorProfilePage() {
                     {transit.intensity} intensity
                   </span>
                 </div>
-                <p className="text-sm text-gray-700 mb-2">{transit.effect}</p>
+                <p className="text-sm text-gray-700 dark:text-gray-300 mb-2">{transit.effect}</p>
                 <p className="text-xs text-gray-500">{transit.duration}</p>
               </div>
             ))}
@@ -851,7 +851,7 @@ export default function ActorProfilePage() {
           
           <div className="flex items-center">
             <span className="mr-2 text-lg">⭐</span>
-            <h1 className="text-lg font-bold dark:text-white">Celeb Profile</h1>
+            <h1 className="text-lg font-bold dark:text-gray-300">Celeb Profile</h1>
           </div>
           
           <div className="w-10 h-10"></div> {/* Spacer for center alignment */}
@@ -866,7 +866,7 @@ export default function ActorProfilePage() {
               {actor.name.charAt(0)}
             </div>
             <div className="flex-1">
-              <h2 className="text-lg font-bold mb-1">{actor.name}</h2>
+              <h2 className="text-lg font-bold mb-1 dark:text-gray-300">{actor.name}</h2>
               <div className="flex items-center text-sm text-gray-600">
                 <Star className="w-4 h-4 mr-1" />
                 {actor.category}
@@ -880,29 +880,29 @@ export default function ActorProfilePage() {
               <div className="w-8 h-8 bg-yellow-400 rounded-full flex items-center justify-center text-white font-bold text-sm mx-auto mb-1">
                 ☉
               </div>
-              <p className="text-xs text-gray-600">Sun</p>
-              <p className="font-bold text-xs">{actor.sunSign || 'Unknown'}</p>
+              <p className="text-xs text-gray-600 dark:text-gray-400">Sun</p>
+              <p className="font-bold text-xs dark:text-gray-300">{actor.sunSign || 'Unknown'}</p>
             </div>
             <div className="text-center">
               <div className="w-8 h-8 bg-blue-400 rounded-full flex items-center justify-center text-white font-bold text-sm mx-auto mb-1">
                 ☽
               </div>
-              <p className="text-xs text-gray-600">Moon</p>
-              <p className="font-bold text-xs">{actor.moonSign || 'Unknown'}</p>
+              <p className="text-xs text-gray-600 dark:text-gray-400">Moon</p>
+              <p className="font-bold text-xs dark:text-gray-300">{actor.moonSign || 'Unknown'}</p>
             </div>
             <div className="text-center">
               <div className="w-8 h-8 bg-green-400 rounded-full flex items-center justify-center text-white font-bold text-sm mx-auto mb-1">
                 ↗
               </div>
-              <p className="text-xs text-gray-600">Rising</p>
-              <p className="font-bold text-xs">{actor.risingSign || 'Unknown'}</p>
+              <p className="text-xs text-gray-600 dark:text-gray-400">Rising</p>
+              <p className="font-bold text-xs dark:text-gray-300">{actor.risingSign || 'Unknown'}</p>
             </div>
           </div>
         </div>
 
         {/* Tabs */}
         <div className="mb-4">
-          <div className="flex space-x-1 bg-gray-100 rounded-lg p-1">
+          <div className="flex space-x-1 bg-gray-100 dark:bg-gray-700 rounded-lg p-1">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
@@ -910,8 +910,8 @@ export default function ActorProfilePage() {
                 className={cn(
                   "flex-1 px-3 py-2 rounded-md text-xs font-medium transition-colors",
                   activeTab === tab.id
-                    ? "bg-white text-purple-600 shadow-sm"
-                    : "text-gray-600 hover:text-gray-900"
+                    ? "bg-white dark:bg-gray-600 text-purple-600 dark:text-gray-300 shadow-sm"
+                    : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-300"
                 )}
               >
                 {tab.label}

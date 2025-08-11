@@ -48,7 +48,7 @@ export default function ShipProfilePage() {
           <div className="space-y-6">
             {/* Ship Summary */}
             <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4">
-              <h4 className="font-bold text-sm mb-2 text-gray-900 dark:text-gray-100">
+              <h4 className="font-bold text-sm mb-2 text-gray-900 dark:text-gray-300">
                 About {mockShip.name}
               </h4>
               <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
@@ -61,24 +61,24 @@ export default function ShipProfilePage() {
 
             {/* Relationship Dynamics */}
             <div>
-              <h4 className="font-bold text-sm mb-3 text-gray-900 dark:text-gray-100">
+              <h4 className="font-bold text-sm mb-3 text-gray-900 dark:text-gray-300">
                 Relationship Dynamics
               </h4>
               <div className="space-y-3">
                 <div className="p-3 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg">
-                  <h5 className="font-medium text-sm text-gray-900 dark:text-gray-100 mb-1">
+                  <h5 className="font-medium text-sm text-gray-900 dark:text-gray-300 mb-1">
                     Compatibility Score
                   </h5>
                   <div className="flex items-center space-x-2">
                     <div className="flex-1 bg-gray-200 dark:bg-gray-600 rounded-full h-2">
                       <div className="bg-green-500 h-2 rounded-full" style={{ width: '85%' }}></div>
                     </div>
-                    <span className="text-sm font-bold text-gray-900 dark:text-gray-100">85%</span>
+                    <span className="text-sm font-bold text-gray-900 dark:text-gray-300">85%</span>
                   </div>
                 </div>
 
                 <div className="p-3 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg">
-                  <h5 className="font-medium text-sm text-gray-900 dark:text-gray-100 mb-1">
+                  <h5 className="font-medium text-sm text-gray-900 dark:text-gray-300 mb-1">
                     Relationship Status
                   </h5>
                   <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200">
@@ -110,12 +110,12 @@ export default function ShipProfilePage() {
             onClick={handleBack}
             className="flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
           >
-            <ArrowLeft className="w-5 h-5 text-gray-900 dark:text-gray-100" />
+            <ArrowLeft className="w-5 h-5 text-gray-900 dark:text-gray-300" />
           </button>
           
           <div className="flex items-center">
             <span className="mr-2 text-lg">💕</span>
-            <h1 className="text-lg font-bold text-gray-900 dark:text-gray-100">Ship Profile</h1>
+            <h1 className="text-lg font-bold text-gray-900 dark:text-gray-300">Ship Profile</h1>
           </div>
           
           <div className="w-10 h-10"></div>
