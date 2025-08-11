@@ -28,7 +28,7 @@ export default function TopNavigation({
   };
 
   return (
-    <div className="bg-primary text-white">
+    <div className="bg-primary dark:bg-gradient-to-r dark:from-violet-600 dark:to-slate-900 text-white">
       {showStatusBar && (
         <div className="status-bar">
           <span></span>

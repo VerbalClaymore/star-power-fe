@@ -13,7 +13,7 @@ export default function BottomNavigation() {
   ];
 
   return (
-    <div className="fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-[428px] bg-primary z-50">
+    <div className="fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-[428px] bg-primary dark:bg-gradient-to-r dark:from-violet-600 dark:to-slate-900 z-50">
       <div className="flex items-center justify-around py-3 px-4">
         {navItems.map(({ icon: Icon, label, path }) => (
           <button
