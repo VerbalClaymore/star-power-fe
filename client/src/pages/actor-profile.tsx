@@ -236,13 +236,13 @@ export default function ActorProfilePage() {
                 <div className="space-y-4">
                   {/* Celebrities */}
                   <div>
-                    <h5 className="text-sm font-medium text-gray-600 mb-2">Celebrities</h5>
+                    <h5 className="text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">Celebrities</h5>
                     <div className="space-y-2">
                       {relationships.slice(0, 2).map((relationship) => (
                         <button
                           key={relationship.id}
                           onClick={() => setLocation(`/actor/${relationship.id}`)}
-                          className="w-full p-3 bg-white border border-gray-200 rounded-lg hover:shadow-md transition-shadow text-left"
+                          className="w-full p-3 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg hover:shadow-md transition-shadow text-left"
                           data-testid={`button-celebrity-${relationship.id}`}
                         >
                           <div className="flex items-center space-x-3">
@@ -250,8 +250,8 @@ export default function ActorProfilePage() {
                               {relationship.name.charAt(0)}
                             </div>
                             <div className="flex-1">
-                              <p className="font-medium text-sm">{relationship.name}</p>
-                              <p className="text-xs text-gray-500">♈ {relationship.sunSign || 'Unknown'}</p>
+                              <p className="font-medium text-sm dark:text-gray-300">{relationship.name}</p>
+                              <p className="text-xs text-gray-500 dark:text-gray-400">♈ {relationship.sunSign || 'Unknown'}</p>
                             </div>
                           </div>
                         </button>
@@ -666,8 +666,8 @@ export default function ActorProfilePage() {
                                 className={cn(
                                   "p-3 rounded-lg border-2 transition-colors flex-shrink-0",
                                   isSelected 
-                                    ? "border-purple-500 bg-purple-50" 
-                                    : "border-gray-200 hover:border-gray-300 bg-white"
+                                    ? "border-purple-500 bg-purple-50 dark:bg-purple-900/30 dark:border-purple-400" 
+                                    : "border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500 bg-white dark:bg-gray-700"
                                 )}
                                 style={{ minWidth: `${cardWidth}px` }}
                                 data-testid={`button-circuit-${vibration.number}-${circuit.id}`}
@@ -692,7 +692,7 @@ export default function ActorProfilePage() {
                         </div>
                         
                         {/* Dynamic Description */}
-                        <div className="bg-gray-50 rounded-lg p-3">
+                        <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-3">
                           <p className="text-xs text-gray-600 dark:text-gray-400" data-testid={`text-description-${vibration.number}`}>
                             {getSelectedDescription(vibration.number, vibration.circuits)}
                           </p>
@@ -719,7 +719,7 @@ export default function ActorProfilePage() {
         return (
           <div className="space-y-2">
             {planets.map((planet) => (
-              <div key={planet} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+              <div key={planet} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
                 <div className="flex items-center space-x-3 flex-1">
                   <div
                     className="w-6 h-6 rounded-full flex items-center justify-center text-white font-bold text-xs"
@@ -752,7 +752,7 @@ export default function ActorProfilePage() {
               const housePlanets = getHousePlanets(houseNum);
               const houseSign = getHouseSign(houseNum);
               return (
-                <div key={houseNum} className="p-3 bg-gray-50 rounded-lg">
+                <div key={houseNum} className="p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-3">
                       <div className="w-6 h-6 bg-purple-500 text-white rounded-full flex items-center justify-center text-xs font-bold">
@@ -761,7 +761,7 @@ export default function ActorProfilePage() {
                       <div className="flex items-center space-x-2">
                         <h4 className="font-bold text-sm dark:text-gray-300">{houseSign}</h4>
                         <span className="text-xs text-gray-400">•</span>
-                        <p className="text-xs text-gray-500">{houseNames[houseNum - 1]}</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">{houseNames[houseNum - 1]}</p>
                       </div>
                     </div>
                     <div className="flex space-x-1">
@@ -777,7 +777,7 @@ export default function ActorProfilePage() {
                            planet === 'pluto' ? '♇' : '●'}
                         </div>
                       )) : (
-                        <span className="text-xs text-gray-400 px-1">Empty</span>
+                        <span className="text-xs text-gray-400 dark:text-gray-500 px-1">Empty</span>
                       )}
                     </div>
                   </div>
@@ -860,14 +860,14 @@ export default function ActorProfilePage() {
 
       {/* Compressed Profile Header */}
       <div className="p-4">
-        <div className="bg-purple-50 rounded-lg p-4 mb-4">
+        <div className="bg-purple-50 dark:bg-purple-900/20 rounded-lg p-4 mb-4">
           <div className="flex items-center space-x-4">
             <div className="w-16 h-16 bg-gradient-to-br from-purple-400 to-pink-400 rounded-full flex items-center justify-center text-white text-xl font-bold flex-shrink-0">
               {actor.name.charAt(0)}
             </div>
             <div className="flex-1">
               <h2 className="text-lg font-bold mb-1 dark:text-gray-300">{actor.name}</h2>
-              <div className="flex items-center text-sm text-gray-600">
+              <div className="flex items-center text-sm text-gray-600 dark:text-gray-400">
                 <Star className="w-4 h-4 mr-1" />
                 {actor.category}
               </div>

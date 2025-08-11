@@ -138,7 +138,7 @@ export default function ShipProfilePage() {
           </div>
           
           <div className="text-center">
-            <h2 className="text-xl font-bold mb-2 text-gray-900 dark:text-gray-100">
+            <h2 className="text-xl font-bold mb-2 text-gray-900 dark:text-gray-300">
               {mockShip.name}
             </h2>
             <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
@@ -153,7 +153,7 @@ export default function ShipProfilePage() {
 
         {/* Tabs */}
         <div className="mb-4">
-          <div className="flex space-x-1 bg-gray-100 dark:bg-gray-800 rounded-lg p-1">
+          <div className="flex space-x-1 bg-gray-100 dark:bg-gray-700 rounded-lg p-1">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
@@ -161,8 +161,8 @@ export default function ShipProfilePage() {
                 className={cn(
                   "flex-1 px-3 py-2 rounded-md text-xs font-medium transition-colors",
                   activeTab === tab.id
-                    ? "bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 shadow-sm"
-                    : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100"
+                    ? "bg-white dark:bg-gray-600 text-gray-900 dark:text-gray-300 shadow-sm"
+                    : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-300"
                 )}
                 data-testid={`tab-${tab.id}`}
               >

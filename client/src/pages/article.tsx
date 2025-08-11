@@ -229,13 +229,13 @@ export default function ArticlePage() {
                       <div className="w-8 h-8 bg-gradient-to-br from-purple-400 to-pink-400 rounded-full flex items-center justify-center text-xs font-bold text-white">
                         T
                       </div>
-                      <div className="w-8 h-8 bg-gradient-to-br from-blue-400 to-purple-400 rounded-full flex items-center justify-center text-xs font-bold text-white -ml-2 border-2 border-white">
+                      <div className="w-8 h-8 bg-gradient-to-br from-blue-400 to-purple-400 rounded-full flex items-center justify-center text-xs font-bold text-white -ml-2 border-2 border-white dark:border-gray-900">
                         K
                       </div>
                     </div>
                     <div className="flex-1">
                       <p className="font-medium text-sm text-gray-900 dark:text-gray-300">Tayvis</p>
-                      <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                      <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200">
                         confirmed
                       </span>
                     </div>
