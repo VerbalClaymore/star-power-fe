@@ -1,10 +1,11 @@
 import { useParams, useLocation } from "wouter";
 import { useQuery } from "@tanstack/react-query";
-import { ArrowLeft, Star, ChevronDown, ChevronUp } from "lucide-react";
+import { ArrowLeft, Star, ChevronDown, ChevronUp, Sun, Moon } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import BottomNavigation from "@/components/BottomNavigation";
 import HorizontalTimeline from "@/components/HorizontalTimeline";
+import { useTheme } from "@/contexts/ThemeContext";
 import type { Actor, ArticleWithDetails } from "@shared/schema";
 
 type TabOption = 'overview' | 'vibes' | 'stars' | 'houses' | 'transits';
@@ -13,6 +14,7 @@ export default function ActorProfilePage() {
   const { id, returnTo } = useParams();
   const [, setLocation] = useLocation();
   const [activeTab, setActiveTab] = useState<TabOption>('overview');
+  const { theme, toggleTheme } = useTheme();
   const [selectedRelationship, setSelectedRelationship] = useState<Actor | null>(null);
   const [expandedVibrations, setExpandedVibrations] = useState<Set<number>>(new Set());
   const [selectedCircuits, setSelectedCircuits] = useState<Map<number, number>>(new Map());
@@ -854,7 +856,17 @@ export default function ActorProfilePage() {
             <h1 className="text-lg font-bold dark:text-gray-300">Celeb Profile</h1>
           </div>
           
-          <div className="w-10 h-10"></div> {/* Spacer for center alignment */}
+          <button
+            onClick={toggleTheme}
+            className="flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+            data-testid="button-theme-toggle"
+          >
+            {theme === 'light' ? (
+              <Moon className="w-5 h-5 text-gray-700" />
+            ) : (
+              <Sun className="w-5 h-5 text-gray-300" />
+            )}
+          </button>
         </div>
       </div>
 
