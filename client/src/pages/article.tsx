@@ -149,7 +149,7 @@ export default function ArticlePage() {
       <div className="p-4 pb-8">
         {/* Title */}
         <h1 
-          className="text-2xl font-bold leading-tight mb-6 dark:text-white"
+          className="text-2xl font-bold leading-tight mb-6 dark:text-gray-300"
           dangerouslySetInnerHTML={{ __html: highlightCelebrityNames(article.title) }}
         />
 
@@ -168,7 +168,7 @@ export default function ArticlePage() {
 
         {/* News Summary */}
         <div className="mb-8">
-          <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-3">News Summary</h2>
+          <h2 className="text-lg font-bold text-gray-900 dark:text-gray-300 mb-3">News Summary</h2>
           <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
             {article.summary}
           </p>
@@ -176,7 +176,7 @@ export default function ArticlePage() {
 
         {/* Astro Analysis */}
         <div className="mb-8">
-          <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-3">Astro Analysis</h2>
+          <h2 className="text-lg font-bold text-gray-900 dark:text-gray-300 mb-3">Astro Analysis</h2>
           <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
             {article.astroAnalysis}
           </p>
@@ -185,7 +185,7 @@ export default function ArticlePage() {
         {/* Actors Section */}
         {article.actors.length > 0 && (
           <div className="mb-8">
-            <h3 className="text-base font-bold text-gray-900 dark:text-white mb-3">Featured</h3>
+            <h3 className="text-base font-bold text-gray-900 dark:text-gray-300 mb-3">Featured</h3>
             
             {/* Celebrities Section */}
             <div className="mb-4">
@@ -202,7 +202,7 @@ export default function ArticlePage() {
                       {actor.name.charAt(0)}
                     </div>
                     <div className="flex-1">
-                      <p className="font-medium text-sm text-gray-900 dark:text-white">{actor.name}</p>
+                      <p className="font-medium text-sm text-gray-900 dark:text-gray-300">{actor.name}</p>
                       {actor.sunSign && (
                         <p className="text-xs text-gray-500 dark:text-gray-400">
                           ♈ {actor.sunSign}
@@ -234,7 +234,7 @@ export default function ArticlePage() {
                       </div>
                     </div>
                     <div className="flex-1">
-                      <p className="font-medium text-sm text-gray-900 dark:text-white">Tayvis</p>
+                      <p className="font-medium text-sm text-gray-900 dark:text-gray-300">Tayvis</p>
                       <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
                         confirmed
                       </span>
@@ -249,7 +249,7 @@ export default function ArticlePage() {
         {/* Hashtags */}
         {article.hashtags.length > 0 && (
           <div className="mb-8">
-            <h3 className="text-base font-bold text-gray-900 dark:text-white mb-3">Related Topics</h3>
+            <h3 className="text-base font-bold text-gray-900 dark:text-gray-300 mb-3">Related Topics</h3>
             <div className="flex flex-wrap gap-2">
               {article.hashtags.map((tag, index) => (
                 <button
@@ -270,7 +270,7 @@ export default function ArticlePage() {
           <div className="flex items-center justify-center space-x-8">
             <div className="flex items-center space-x-2">
               <Heart className="w-5 h-5 text-gray-400 dark:text-gray-500" />
-              <span className="text-lg font-medium text-gray-900 dark:text-white">{article.likeCount}</span>
+              <span className="text-lg font-medium text-gray-900 dark:text-gray-300">{article.likeCount}</span>
               <span className="text-sm text-gray-500 dark:text-gray-400">likes</span>
             </div>
             <div className="flex items-center space-x-2">

@@ -72,6 +72,15 @@
   /* Star Power Brand Colors - Dark Mode */
   --star-purple: hsl(267, 45%, 60%);
   --surface-variant: hsl(240, 5%, 6%);
+  
+  /* Category Colors - Darker for Dark Mode */
+  --entertainment: 262 83% 40%; /* Darker Purple */
+  --celebrity: 329 86% 55%; /* Darker Pink/Rose */
+  --lifestyle: 158 64% 35%; /* Darker Green */
+  --world: 217 91% 45%; /* Darker Blue */
+  --tech: 24 95% 40%; /* Darker Orange */
+  --sports: 120 60% 30%; /* Darker Green */
+  --top: 45 93% 35%; /* Darker Gold/Yellow */
 }
 
 @layer base {

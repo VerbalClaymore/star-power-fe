@@ -22,8 +22,8 @@ export default function BottomNavigation() {
             className={cn(
               "flex flex-col items-center space-y-1 transition-opacity duration-200",
               location === path
-                ? "text-white"
-                : "text-purple-200 opacity-70 hover:opacity-100"
+                ? "text-white dark:text-gray-300"
+                : "text-purple-200 dark:text-gray-400 opacity-70 hover:opacity-100"
             )}
           >
             <Icon className="w-5 h-5" />

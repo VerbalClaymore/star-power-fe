@@ -143,7 +143,7 @@ export default function ArticleCard({ article }: ArticleCardProps) {
           
           <div className="flex-1">
             <h3 
-              className="font-bold text-base leading-tight mb-2 text-gray-900 dark:text-white"
+              className="font-bold text-base leading-tight mb-2 text-gray-900 dark:text-gray-300"
               dangerouslySetInnerHTML={{ __html: highlightCelebrityNames(article.title) }}
             />
             

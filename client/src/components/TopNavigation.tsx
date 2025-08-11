@@ -40,8 +40,8 @@ export default function TopNavigation({
       <div className="app-header relative">
         <div className="flex justify-between items-center">
           <div>
-            <h1 className="text-xl font-bold">Star Power</h1>
-            <p className="text-xs text-purple-200">Astrological News Reader</p>
+            <h1 className="text-xl font-bold text-white dark:text-gray-300">Star Power</h1>
+            <p className="text-xs text-purple-200 dark:text-gray-400">Astrological News Reader</p>
           </div>
           <ThemeToggle />
         </div>
@@ -56,8 +56,8 @@ export default function TopNavigation({
               className={cn(
                 "rounded-full px-4 py-2 whitespace-nowrap text-sm font-medium transition-all duration-200",
                 activeCategory === category.slug
-                  ? cn("text-white", getCategoryColorClass(category.slug))
-                  : "bg-white bg-opacity-10 opacity-70 hover:bg-opacity-20"
+                  ? cn("text-white dark:text-gray-300", getCategoryColorClass(category.slug))
+                  : "bg-white dark:bg-gray-700 bg-opacity-10 dark:bg-opacity-60 opacity-70 hover:bg-opacity-20 dark:hover:bg-opacity-80"
               )}
             >
               {category.name}
