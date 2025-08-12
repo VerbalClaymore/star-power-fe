@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import TopNavigation from "@/components/TopNavigation";
 import ArticleCard from "@/components/ArticleCard";
+import AdCard from "@/components/AdCard";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { Category, ArticleWithDetails } from "@shared/schema";
 
@@ -77,8 +78,12 @@ export default function Home() {
           </div>
         ) : (
           <div className="space-y-4 p-4">
-            {articles?.map((article) => (
-              <ArticleCard key={article.id} article={article} />
+            {articles?.map((article, index) => (
+              <div key={article.id}>
+                <ArticleCard article={article} />
+                {/* Insert ad after every 3rd article */}
+                {(index + 1) % 3 === 0 && <AdCard className="mt-4" />}
+              </div>
             ))}
             {articles?.length === 0 && (
               <div className="text-center py-8 text-gray-500">

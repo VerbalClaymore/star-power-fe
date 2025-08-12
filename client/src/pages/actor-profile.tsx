@@ -215,9 +215,11 @@ export default function ActorProfilePage() {
         return (
           <div className="space-y-6">
             {/* Summary Section */}
-            <div className="bg-gray-50 rounded-lg p-4">
-              <h4 className="font-bold text-sm mb-2">About {actor?.name}</h4>
-              <p className="text-sm text-gray-700 leading-relaxed">
+            <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4">
+              <h4 className="font-bold text-sm mb-2 text-gray-900 dark:text-gray-300">
+                About {actor?.name}
+              </h4>
+              <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
                 {actor?.name} is a prominent figure in {actor?.category?.toLowerCase() || 'entertainment'}, 
                 known for their significant influence in the industry. With their {actor?.sunSign} sun sign, 
                 {actor?.moonSign && ` ${actor.moonSign} moon,`} 
