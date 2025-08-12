@@ -370,17 +370,27 @@ export default function ActorProfilePage() {
                           <div className="w-12 h-12 rounded-lg overflow-hidden bg-gray-200 flex-shrink-0">
                             {(() => {
                               const actorAvatar = article.actors.length > 0 ? getAvatarById(article.actors[0].id) : null;
-                              if (article.actors.length > 0 && (article.actors[0].profileImage || actorAvatar)) {
+                              
+                              // Prioritize our avatars over placeholder URLs
+                              if (article.actors.length > 0 && actorAvatar) {
                                 return (
                                   <img 
-                                    src={article.actors[0].profileImage || actorAvatar!} 
+                                    src={actorAvatar} 
+                                    alt={article.actors[0].name}
+                                    className="w-full h-full object-cover"
+                                  />
+                                );
+                              } else if (article.actors.length > 0 && article.actors[0].profileImage && !article.actors[0].profileImage.includes('placeholder')) {
+                                return (
+                                  <img 
+                                    src={article.actors[0].profileImage} 
                                     alt={article.actors[0].name}
                                     className="w-full h-full object-cover"
                                   />
                                 );
                               } else {
                                 return (
-                                  <div className="w-full h-full flex items-center justify-center bg-gray-100 text-gray-400">
+                                  <div className="w-full h-full flex items-center justify-center bg-gray-100 dark:bg-gray-700 text-gray-400 dark:text-gray-500">
                                     <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                                       <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
                                     </svg>
