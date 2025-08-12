@@ -655,9 +655,9 @@ export default function ActorProfilePage() {
                 <button
                   onClick={() => vibration.circuits.length > 0 ? toggleVibration(vibration.number) : null}
                   className={cn(
-                    "w-full p-3 text-left flex items-center justify-between transition-opacity",
+                    "w-full p-3 text-left flex items-center justify-between transition-colors",
                     vibration.circuits.length > 0 
-                      ? "hover:bg-gray-50 cursor-pointer" 
+                      ? "hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer" 
                       : "opacity-50 cursor-not-allowed"
                   )}
                   data-testid={`button-vibration-${vibration.number}`}
@@ -706,7 +706,7 @@ export default function ActorProfilePage() {
                                   "p-3 rounded-lg border-2 transition-colors flex-shrink-0",
                                   isSelected 
                                     ? "border-purple-500 bg-purple-50 dark:bg-purple-900/30 dark:border-purple-400" 
-                                    : "border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500 bg-white dark:bg-gray-700"
+                                    : "border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
                                 )}
                                 style={{ minWidth: `${cardWidth}px` }}
                                 data-testid={`button-circuit-${vibration.number}-${circuit.id}`}
