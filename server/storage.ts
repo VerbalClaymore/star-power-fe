@@ -185,41 +185,8 @@ export class MemStorage implements IStorage {
         bookmarkCount: 92,
         isCelebrity: true,
       },
-      {
-        title: "Global Climate Summit Begins During Powerful Eclipse Season",
-        summary: "World leaders gather as lunar eclipse creates intense transformational energy for environmental policy...",
-        content: "Full article content would go here...",
-        categoryId: 5, // World
-        astroAnalysis: "The lunar eclipse in Scorpio brings intense transformational energy to global environmental discussions, highlighting the need for deep, systemic changes in how we approach climate policy.",
-        astroGlyphs: [
-          { planet: "moon", color: "hsl(210, 15%, 40%)", symbol: "!" },
-          { planet: "sun", color: "hsl(45, 100%, 60%)" },
-          { planet: "pluto", color: "hsl(260, 70%, 40%)" }
-        ],
-        hashtags: ["#eclipse", "#climate", "#transformation", "#globalchange"],
-        actorIds: [],
-        likeCount: 324,
-        shareCount: 143,
-        bookmarkCount: 78,
-        isCelebrity: false,
-      },
-      {
-        title: "Venus in Gemini Brings Social Renaissance to Dating Apps",
-        summary: "Astrologers report surge in romantic connections as Venus enters communicative Gemini, affecting social dynamics...",
-        content: "Full article content would go here...",
-        categoryId: 4, // Lifestyle
-        astroAnalysis: "Venus's transit through Gemini encourages communication, curiosity, and intellectual connection in relationships. This is an ideal time for meeting new people and exploring different forms of romantic expression.",
-        astroGlyphs: [
-          { planet: "venus", color: "hsl(325, 100%, 60%)" },
-          { planet: "mercury", color: "hsl(200, 100%, 50%)" }
-        ],
-        hashtags: ["#VenusInGemini", "#dating", "#relationships"],
-        actorIds: [],
-        likeCount: 156,
-        shareCount: 45,
-        bookmarkCount: 67,
-        isCelebrity: false,
-      },
+
+
       {
         title: "Taylor Swift and Travis Kelce Share Intimate Moment at Chiefs Game",
         summary: "The couple was spotted sharing a passionate kiss during halftime, with Mercury conjunct Venus creating perfect conditions for public displays of affection...",
@@ -256,23 +223,7 @@ export class MemStorage implements IStorage {
         bookmarkCount: 298,
         isCelebrity: true,
       },
-      {
-        title: "Kelce Brothers Dominate NFL Under Jupiter's Blessing",
-        summary: "Travis and Jason Kelce both have stellar performances this season, with Jupiter's transit supporting athletic achievement and brotherly bonds...",
-        content: "Full article content about the Kelce brothers would go here...",
-        categoryId: 7, // Sports
-        astroAnalysis: "Jupiter's current position creates favorable aspects for both brothers' natal charts, enhancing their natural athletic abilities and team leadership qualities. Their shared Libra placements promote cooperation and balance.",
-        astroGlyphs: [
-          { planet: "jupiter", color: "hsl(35, 100%, 50%)" },
-          { planet: "mars", color: "hsl(0, 100%, 50%)" }
-        ],
-        hashtags: ["#TravisKelce", "#NFL", "#brothers", "#success"],
-        actorIds: [3], // Travis Kelce
-        likeCount: 445,
-        shareCount: 123,
-        bookmarkCount: 89,
-        isCelebrity: true,
-      },
+
       
       // Historical articles for timeline testing
       {
