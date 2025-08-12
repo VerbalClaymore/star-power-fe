@@ -899,9 +899,9 @@ export default function ActorProfilePage() {
             data-testid="button-theme-toggle"
           >
             {theme === 'light' ? (
-              <Moon className="w-5 h-5 text-gray-700" />
+              <Sun className="w-5 h-5 text-gray-700" />
             ) : (
-              <Sun className="w-5 h-5 text-white" />
+              <Moon className="w-5 h-5 text-gray-300" />
             )}
           </button>
         </div>
