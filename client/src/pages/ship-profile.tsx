@@ -5,6 +5,7 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 import BottomNavigation from "@/components/BottomNavigation";
 import { useTheme } from "@/contexts/ThemeContext";
+import { getAvatarById } from "@/utils/avatars";
 import type { Actor } from "@shared/schema";
 
 type TabOption = 'overview' | 'vibes' | 'stars' | 'houses' | 'transits';
@@ -498,12 +499,40 @@ export default function ShipProfilePage() {
           <div className="flex items-center justify-center space-x-4 mb-4">
             {/* Overlapping avatars */}
             <div className="relative">
-              <div className="w-16 h-16 bg-gradient-to-br from-purple-400 to-pink-400 rounded-full flex items-center justify-center text-white text-xl font-bold">
-                {mockShip.celebrity1.name.charAt(0)}
-              </div>
-              <div className="absolute -right-6 top-0 w-16 h-16 bg-gradient-to-br from-blue-400 to-purple-400 rounded-full flex items-center justify-center text-white text-xl font-bold border-4 border-white dark:border-gray-900">
-                {mockShip.celebrity2.name.charAt(0)}
-              </div>
+              {(() => {
+                const taylorAvatar = getAvatarById(mockShip.celebrity1.id); // Taylor Swift
+                const travisAvatar = getAvatarById(mockShip.celebrity2.id); // Travis Kelce
+                return (
+                  <>
+                    <div className="w-16 h-16 rounded-full flex items-center justify-center overflow-hidden">
+                      {taylorAvatar ? (
+                        <img 
+                          src={taylorAvatar} 
+                          alt={mockShip.celebrity1.name}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-full h-full bg-gradient-to-br from-purple-400 to-pink-400 flex items-center justify-center text-white text-xl font-bold">
+                          {mockShip.celebrity1.name.charAt(0)}
+                        </div>
+                      )}
+                    </div>
+                    <div className="absolute -right-6 top-0 w-16 h-16 rounded-full flex items-center justify-center overflow-hidden border-4 border-white dark:border-gray-900">
+                      {travisAvatar ? (
+                        <img 
+                          src={travisAvatar} 
+                          alt={mockShip.celebrity2.name}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-full h-full bg-gradient-to-br from-blue-400 to-purple-400 flex items-center justify-center text-white text-xl font-bold">
+                          {mockShip.celebrity2.name.charAt(0)}
+                        </div>
+                      )}
+                    </div>
+                  </>
+                );
+              })()}
             </div>
           </div>
           

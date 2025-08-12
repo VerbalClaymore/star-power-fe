@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import BottomNavigation from "@/components/BottomNavigation";
 import HorizontalTimeline from "@/components/HorizontalTimeline";
 import { useTheme } from "@/contexts/ThemeContext";
+import { getAvatarById } from "@/utils/avatars";
 import type { Actor, ArticleWithDetails } from "@shared/schema";
 
 type TabOption = 'overview' | 'vibes' | 'stars' | 'houses' | 'transits';
@@ -250,8 +251,25 @@ export default function ActorProfilePage() {
                           data-testid={`button-celebrity-${relationship.id}`}
                         >
                           <div className="flex items-center space-x-3">
-                            <div className="w-8 h-8 bg-gradient-to-br from-purple-400 to-pink-400 rounded-full flex items-center justify-center text-white font-bold text-sm">
-                              {relationship.name.charAt(0)}
+                            <div className="w-8 h-8 rounded-full flex items-center justify-center overflow-hidden">
+                              {(() => {
+                                const avatar = getAvatarById(relationship.id);
+                                if (avatar) {
+                                  return (
+                                    <img 
+                                      src={avatar} 
+                                      alt={relationship.name}
+                                      className="w-full h-full object-cover"
+                                    />
+                                  );
+                                } else {
+                                  return (
+                                    <div className="w-full h-full bg-gradient-to-br from-purple-400 to-pink-400 flex items-center justify-center text-white font-bold text-sm">
+                                      {relationship.name.charAt(0)}
+                                    </div>
+                                  );
+                                }
+                              })()}
                             </div>
                             <div className="flex-1">
                               <p className="font-medium text-sm dark:text-gray-300">{relationship.name}</p>
@@ -350,19 +368,26 @@ export default function ActorProfilePage() {
                         <div className="flex items-start space-x-3">
                           {/* Actor Image - Smaller for timeline */}
                           <div className="w-12 h-12 rounded-lg overflow-hidden bg-gray-200 flex-shrink-0">
-                            {article.actors.length > 0 && article.actors[0].profileImage ? (
-                              <img 
-                                src={article.actors[0].profileImage} 
-                                alt={article.actors[0].name}
-                                className="w-full h-full object-cover"
-                              />
-                            ) : (
-                              <div className="w-full h-full flex items-center justify-center bg-gray-100 text-gray-400">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                                  <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-                                </svg>
-                              </div>
-                            )}
+                            {(() => {
+                              const actorAvatar = article.actors.length > 0 ? getAvatarById(article.actors[0].id) : null;
+                              if (article.actors.length > 0 && (article.actors[0].profileImage || actorAvatar)) {
+                                return (
+                                  <img 
+                                    src={article.actors[0].profileImage || actorAvatar!} 
+                                    alt={article.actors[0].name}
+                                    className="w-full h-full object-cover"
+                                  />
+                                );
+                              } else {
+                                return (
+                                  <div className="w-full h-full flex items-center justify-center bg-gray-100 text-gray-400">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                      <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                                    </svg>
+                                  </div>
+                                );
+                              }
+                            })()}
                           </div>
                           
                           <div className="flex-1 min-w-0">
@@ -876,8 +901,25 @@ export default function ActorProfilePage() {
       <div className="p-4">
         <div className="bg-purple-50 dark:bg-purple-900/20 rounded-lg p-4 mb-4">
           <div className="flex items-center space-x-4">
-            <div className="w-16 h-16 bg-gradient-to-br from-purple-400 to-pink-400 rounded-full flex items-center justify-center text-white text-xl font-bold flex-shrink-0">
-              {actor.name.charAt(0)}
+            <div className="w-16 h-16 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden">
+              {(() => {
+                const avatar = getAvatarById(actor.id);
+                if (avatar) {
+                  return (
+                    <img 
+                      src={avatar} 
+                      alt={actor.name}
+                      className="w-full h-full object-cover"
+                    />
+                  );
+                } else {
+                  return (
+                    <div className="w-full h-full bg-gradient-to-br from-purple-400 to-pink-400 flex items-center justify-center text-white text-xl font-bold">
+                      {actor.name.charAt(0)}
+                    </div>
+                  );
+                }
+              })()}
             </div>
             <div className="flex-1">
               <h2 className="text-lg font-bold mb-1 dark:text-gray-300">{actor.name}</h2>

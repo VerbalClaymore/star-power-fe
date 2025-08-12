@@ -5,6 +5,7 @@ import { PiShareNetworkBold } from "react-icons/pi";
 import { cn } from "@/lib/utils";
 import PlanetIcon from "@/components/PlanetIcon";
 import BottomNavigation from "@/components/BottomNavigation";
+import { getAvatarById } from "@/utils/avatars";
 import type { ArticleWithDetails } from "@shared/schema";
 
 export default function ArticlePage() {
@@ -198,8 +199,25 @@ export default function ArticlePage() {
                     className="flex items-center space-x-3 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-left"
                     data-testid={`button-celebrity-${actor.id}`}
                   >
-                    <div className="w-10 h-10 bg-gradient-to-br from-purple-400 to-pink-400 rounded-full flex items-center justify-center text-sm font-bold text-white">
-                      {actor.name.charAt(0)}
+                    <div className="w-10 h-10 rounded-full flex items-center justify-center overflow-hidden">
+                      {(() => {
+                        const avatar = getAvatarById(actor.id);
+                        if (avatar) {
+                          return (
+                            <img 
+                              src={avatar} 
+                              alt={actor.name}
+                              className="w-full h-full object-cover"
+                            />
+                          );
+                        } else {
+                          return (
+                            <div className="w-full h-full bg-gradient-to-br from-purple-400 to-pink-400 flex items-center justify-center text-sm font-bold text-white">
+                              {actor.name.charAt(0)}
+                            </div>
+                          );
+                        }
+                      })()}
                     </div>
                     <div className="flex-1">
                       <p className="font-medium text-sm text-gray-900 dark:text-gray-300">{actor.name}</p>
@@ -226,12 +244,40 @@ export default function ArticlePage() {
                   >
                     {/* Overlapping avatars */}
                     <div className="relative flex items-center">
-                      <div className="w-8 h-8 bg-gradient-to-br from-purple-400 to-pink-400 rounded-full flex items-center justify-center text-xs font-bold text-white">
-                        T
-                      </div>
-                      <div className="w-8 h-8 bg-gradient-to-br from-blue-400 to-purple-400 rounded-full flex items-center justify-center text-xs font-bold text-white -ml-2 border-2 border-white dark:border-gray-900">
-                        K
-                      </div>
+                      {(() => {
+                        const taylorAvatar = getAvatarById(1); // Taylor Swift
+                        const travisAvatar = getAvatarById(3); // Travis Kelce
+                        return (
+                          <>
+                            <div className="w-8 h-8 rounded-full flex items-center justify-center overflow-hidden">
+                              {taylorAvatar ? (
+                                <img 
+                                  src={taylorAvatar} 
+                                  alt="Taylor Swift"
+                                  className="w-full h-full object-cover"
+                                />
+                              ) : (
+                                <div className="w-full h-full bg-gradient-to-br from-purple-400 to-pink-400 flex items-center justify-center text-xs font-bold text-white">
+                                  T
+                                </div>
+                              )}
+                            </div>
+                            <div className="w-8 h-8 rounded-full flex items-center justify-center overflow-hidden -ml-2 border-2 border-white dark:border-gray-900">
+                              {travisAvatar ? (
+                                <img 
+                                  src={travisAvatar} 
+                                  alt="Travis Kelce"
+                                  className="w-full h-full object-cover"
+                                />
+                              ) : (
+                                <div className="w-full h-full bg-gradient-to-br from-blue-400 to-purple-400 flex items-center justify-center text-xs font-bold text-white">
+                                  K
+                                </div>
+                              )}
+                            </div>
+                          </>
+                        );
+                      })()}
                     </div>
                     <div className="flex-1">
                       <p className="font-medium text-sm text-gray-900 dark:text-gray-300">Tayvis</p>

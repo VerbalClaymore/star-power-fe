@@ -81,8 +81,8 @@ export default function Home() {
             {articles?.map((article, index) => (
               <div key={article.id}>
                 <ArticleCard article={article} />
-                {/* Insert ad after every 3rd article */}
-                {(index + 1) % 3 === 0 && <AdCard className="mt-4" />}
+                {/* Insert single ad after 2nd article */}
+                {index === 1 && <AdCard className="mt-4" />}
               </div>
             ))}
             {articles?.length === 0 && (
