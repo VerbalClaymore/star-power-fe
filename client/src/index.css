@@ -2,7 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
+:root, 
+.light {
   --background: hsl(0, 0%, 100%);
   --foreground: hsl(20, 14.3%, 4.1%);
   --muted: hsl(60, 4.8%, 95.9%);
@@ -87,9 +88,17 @@
   * {
     @apply border-border;
   }
+  
+  html {
+    /* Prevent white flash on page load */
+    background-color: hsl(var(--background));
+    transition: background-color 0.3s ease;
+  }
 
   body {
     @apply font-sans antialiased bg-background text-foreground;
+    /* Ensure smooth transitions between themes */
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
   
   /* Hide scrollbar for horizontal navigation */
@@ -154,9 +163,11 @@
 .mobile-container {
   max-width: 428px;
   margin: 0 auto;
-  background: white;
+  background: hsl(var(--background));
   min-height: 100vh;
   position: relative;
+  /* Smooth theme transitions */
+  transition: background-color 0.3s ease;
 }
 
 /* Status bar simulation */
