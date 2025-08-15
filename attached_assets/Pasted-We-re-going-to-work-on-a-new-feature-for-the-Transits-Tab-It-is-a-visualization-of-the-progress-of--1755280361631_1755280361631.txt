@@ -1,0 +1,34 @@
+We’re going to work on a new feature for the Transits Tab. It is a visualization of the progress of astrological transits. The goal is to visually display the intensity of transits over time in an aesthetically pleasing way. This will callout to the user when to expect future events related to the given celebrity or ship. I would also like to later incorporate it into historical timelines as a way to callout which transits were active when major events occurred. This is a major component of what both professional and casual astrologers do (celebrity transit reviews to confirm astrology systems), so including it in our app will be a huge unique value proposition. 
+
+Elegant 2D graph of transit intensity
+
+- x axis represents time
+- y axis represents tightness of orb / closeness of the aspect
+    - i.e. if a conjunction is 10 degrees apart on Aug 1st, and 5 degrees apart on Aug 5, the line will slope upward
+    - The “Height” of the graph is the height of the tightest alignment (this makes the graphs look optimally grand)
+
+Graph Appearance Data
+
+- There are no proper axes, this allows more flexibility in scale
+- The volume under the curve has a solid fill
+    - The color of the fill corresponds to the element of the sign. e.g.
+        - Aries=rust fill, Cancer=turquoise fill, Libra=canary yellow fill, Capricorn=emerald fill
+- When a graph displays two transits, the areas of overlap combine to increase opacity of the fill. Note that only one transit will display per graph; e.g. you will not have to blend emerald with rust. Only rust+rust, or emerald+emerald.
+
+Graph Deriving Data
+
+- At its core this is just a graph
+    - X is just timescale, and should adjustable by code
+    - Y is DegreeA-DegreeB
+    - We should be able to use the ephemeris to gather both
+- Note: Retrogrades need to be called out here, lest the user be confused why a transit is “paused”
+- The number of points & timescale of the graph should be something we figure out in backend code. Those variables should be commented and made accessible to the engine.
+
+Surfacing Graphs
+
+- These graphs should replace the current cards on the Transits Tab
+- The graphs rolldown/rollup like the vibrations do on click
+- The topmost graph should be  expanded by default
+- susbequent graphs should be  collapsed by default
+
+Feel free to ask any questions first. Following that, let’s make a checkpoint first called “Pre Transits”, and then begin.
