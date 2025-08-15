@@ -839,6 +839,20 @@ export default function ActorProfilePage() {
             element: 'fire' as const,
             maxOrb: 8,
             minOrb: 0.2,
+            keyframes: [
+              {
+                date: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000), // 10 days ago
+                label: 'Jupiter enters Aries',
+                glyph: '♃→♈',
+                type: 'bottom' as const
+              },
+              {
+                date: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000), // 2 days from now
+                label: 'Exact Trine',
+                glyph: '♃△☉',
+                type: 'peak' as const
+              }
+            ],
             points: Array.from({ length: 40 }, (_, i) => {
               const days = i - 20; // ±20 days from center
               // Create N-shaped curve: approach, exact, then separate
@@ -869,6 +883,20 @@ export default function ActorProfilePage() {
             element: 'earth' as const,
             maxOrb: 6,
             minOrb: 0.5,
+            keyframes: [
+              {
+                date: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000), // 5 days ago
+                label: 'Saturn slows down',
+                glyph: '♄ S',
+                type: 'bottom' as const
+              },
+              {
+                date: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000), // 1 day from now
+                label: 'Exact Square',
+                glyph: '♄□☽',
+                type: 'peak' as const
+              }
+            ],
             points: Array.from({ length: 30 }, (_, i) => {
               const days = i - 15; // ±15 days
               // Saturn square pattern - slower, more gradual
@@ -895,6 +923,14 @@ export default function ActorProfilePage() {
             element: 'air' as const,
             maxOrb: 4,
             minOrb: 0.1,
+            keyframes: [
+              {
+                date: new Date(Date.now()), // Today
+                label: 'Exact Conjunction',
+                glyph: '♀☌☿',
+                type: 'peak' as const
+              }
+            ],
             points: Array.from({ length: 25 }, (_, i) => {
               const days = i - 12; // ±12 days
               // Fast Venus conjunction - quick in and out
@@ -921,6 +957,26 @@ export default function ActorProfilePage() {
             element: 'water' as const,
             maxOrb: 5,
             minOrb: 0.3,
+            keyframes: [
+              {
+                date: new Date(Date.now() - 8 * 24 * 60 * 60 * 1000), // 8 days ago
+                label: 'Mars enters Scorpio',
+                glyph: '♂→♏',
+                type: 'bottom' as const
+              },
+              {
+                date: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000), // 5 days from now
+                label: 'Mars stations retrograde',
+                glyph: '♂℞',
+                type: 'bottom' as const
+              },
+              {
+                date: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000), // 3 days from now
+                label: 'Exact Opposition',
+                glyph: '♂☍♇',
+                type: 'peak' as const
+              }
+            ],
             points: Array.from({ length: 45 }, (_, i) => {
               const days = i - 22; // ±22 days
               // Mars opposition with retrograde - complex pattern

@@ -7,6 +7,13 @@ interface TransitPoint {
   isRetrograde?: boolean;
 }
 
+interface KeyframeEvent {
+  date: Date;
+  label: string;
+  glyph: string;
+  type: 'bottom' | 'peak'; // bottom axis or peak marker
+}
+
 interface TransitData {
   id: string;
   title: string;
@@ -14,6 +21,7 @@ interface TransitData {
   planets: string[];
   element: 'fire' | 'earth' | 'air' | 'water';
   points: TransitPoint[];
+  keyframes: KeyframeEvent[];
   maxOrb: number;
   minOrb: number;
 }
@@ -35,6 +43,8 @@ export default function TransitGraph({
 }: TransitGraphProps) {
   const [transform, setTransform] = useState({ x: 0, y: 0, scale: 1 });
   const [isDragging, setIsDragging] = useState(false);
+  const [scrubbing, setScrubbing] = useState(false);
+  const [scrubPosition, setScrubPosition] = useState<{ x: number; date: Date } | null>(null);
   const [lastTouch, setLastTouch] = useState<{ x: number; y: number; time: number } | null>(null);
   const svgRef = useRef<SVGSVGElement>(null);
 
@@ -91,12 +101,48 @@ export default function TransitGraph({
     return pathData;
   }, [data, width, height]);
 
+  // Get date from X coordinate
+  const getDateFromX = useCallback((x: number): Date => {
+    const padding = 20;
+    const graphWidth = width - (padding * 2);
+    const normalizedX = Math.max(0, Math.min(1, (x - padding) / graphWidth));
+    const totalDuration = data.points[data.points.length - 1].date.getTime() - data.points[0].date.getTime();
+    const targetTime = data.points[0].date.getTime() + (normalizedX * totalDuration);
+    return new Date(targetTime);
+  }, [data.points, width]);
+
+  // Format date for display
+  const formatDate = (date: Date): string => {
+    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  };
+
   // Handle pan and zoom
   const handleMouseDown = (e: React.MouseEvent) => {
-    setIsDragging(true);
+    if (e.shiftKey || e.ctrlKey) {
+      // Scrubbing mode
+      setScrubbing(true);
+      const rect = svgRef.current?.getBoundingClientRect();
+      if (rect) {
+        const x = e.clientX - rect.left;
+        const date = getDateFromX(x);
+        setScrubPosition({ x, date });
+      }
+    } else {
+      setIsDragging(true);
+    }
   };
 
   const handleMouseMove = (e: React.MouseEvent) => {
+    if (scrubbing) {
+      const rect = svgRef.current?.getBoundingClientRect();
+      if (rect) {
+        const x = e.clientX - rect.left;
+        const date = getDateFromX(x);
+        setScrubPosition({ x, date });
+      }
+      return;
+    }
+    
     if (!isDragging) return;
     
     setTransform(prev => ({
@@ -108,6 +154,8 @@ export default function TransitGraph({
 
   const handleMouseUp = () => {
     setIsDragging(false);
+    setScrubbing(false);
+    setScrubPosition(null);
   };
 
   const handleWheel = (e: React.WheelEvent) => {
@@ -119,10 +167,17 @@ export default function TransitGraph({
     }));
   };
 
-  // Touch handling for mobile zoom/pan
+  // Touch handling for mobile zoom/pan and scrubbing
   const handleTouchStart = (e: React.TouchEvent) => {
     if (e.touches.length === 1) {
       const touch = e.touches[0];
+      const rect = svgRef.current?.getBoundingClientRect();
+      if (rect) {
+        const x = touch.clientX - rect.left;
+        const date = getDateFromX(x);
+        setScrubbing(true);
+        setScrubPosition({ x, date });
+      }
       setLastTouch({ 
         x: touch.clientX, 
         y: touch.clientY, 
@@ -134,6 +189,14 @@ export default function TransitGraph({
   const handleTouchMove = (e: React.TouchEvent) => {
     if (e.touches.length === 1 && lastTouch) {
       const touch = e.touches[0];
+      const rect = svgRef.current?.getBoundingClientRect();
+      if (rect && scrubbing) {
+        const x = touch.clientX - rect.left;
+        const date = getDateFromX(x);
+        setScrubPosition({ x, date });
+        return;
+      }
+      
       const deltaX = touch.clientX - lastTouch.x;
       const deltaY = touch.clientY - lastTouch.y;
       
@@ -232,30 +295,82 @@ export default function TransitGraph({
                   className="transition-all duration-200"
                 />
                 
-                {/* Retrograde markers */}
-                {data.points.map((point, index) => {
-                  if (!point.isRetrograde) return null;
-                  
-                  const padding = 20;
-                  const graphWidth = width - (padding * 2);
-                  const graphHeight = height - (padding * 2);
-                  const x = padding + (index / (data.points.length - 1)) * graphWidth;
-                  const orbStrength = (data.maxOrb - point.orb) / (data.maxOrb - data.minOrb);
-                  const y = padding + (1 - orbStrength) * graphHeight;
+                {/* Keyframe markers on peaks */}
+                {data.keyframes.filter(kf => kf.type === 'peak').map((keyframe, index) => {
+                  const keyframePadding = 20;
+                  const keyframeGraphWidth = width - (keyframePadding * 2);
+                  const keyframeTime = keyframe.date.getTime();
+                  const startTime = data.points[0].date.getTime();
+                  const endTime = data.points[data.points.length - 1].date.getTime();
+                  const normalizedX = (keyframeTime - startTime) / (endTime - startTime);
+                  const x = keyframePadding + normalizedX * keyframeGraphWidth;
                   
                   return (
-                    <circle
-                      key={index}
-                      cx={x}
-                      cy={y}
-                      r="3"
-                      fill={color}
-                      stroke="white"
-                      strokeWidth="1"
-                      className="opacity-90"
-                    />
+                    <g key={`peak-${index}`}>
+                      <line
+                        x1={x}
+                        y1={keyframePadding}
+                        x2={x}
+                        y2={keyframePadding - 15}
+                        stroke={color}
+                        strokeWidth="2"
+                        className="opacity-80"
+                      />
+                      <rect
+                        x={x - 25}
+                        y={keyframePadding - 35}
+                        width="50"
+                        height="18"
+                        rx="9"
+                        fill="white"
+                        stroke={color}
+                        strokeWidth="1"
+                        className="drop-shadow-sm"
+                      />
+                      <text
+                        x={x}
+                        y={keyframePadding - 24}
+                        textAnchor="middle"
+                        className="text-xs font-medium fill-current"
+                        style={{ fill: color }}
+                      >
+                        {keyframe.glyph}
+                      </text>
+                    </g>
                   );
                 })}
+
+                {/* Scrub line and date indicator */}
+                {scrubPosition && (
+                  <g>
+                    <line
+                      x1={scrubPosition.x}
+                      y1={20}
+                      x2={scrubPosition.x}
+                      y2={height - 30}
+                      stroke="rgba(0,0,0,0.6)"
+                      strokeWidth="1"
+                      strokeDasharray="2,2"
+                    />
+                    <rect
+                      x={scrubPosition.x - 30}
+                      y={5}
+                      width="60"
+                      height="14"
+                      rx="7"
+                      fill="rgba(0,0,0,0.8)"
+                      className="drop-shadow-lg"
+                    />
+                    <text
+                      x={scrubPosition.x}
+                      y={14}
+                      textAnchor="middle"
+                      className="text-xs font-medium fill-white"
+                    >
+                      {formatDate(scrubPosition.date)}
+                    </text>
+                  </g>
+                )}
               </g>
               
               {/* Subtle grid lines */}
@@ -265,7 +380,86 @@ export default function TransitGraph({
                 </pattern>
               </defs>
               <rect width={width} height={height} fill={`url(#grid-${data.id})`} />
+              
+              {/* Bottom axis timeline labels */}
+              <g>
+                {/* Start date */}
+                <text
+                  x={20}
+                  y={height - 5}
+                  textAnchor="start"
+                  className="text-xs fill-gray-500 dark:fill-gray-400"
+                >
+                  {formatDate(data.points[0].date)}
+                </text>
+                
+                {/* End date */}
+                <text
+                  x={width - 20}
+                  y={height - 5}
+                  textAnchor="end"
+                  className="text-xs fill-gray-500 dark:fill-gray-400"
+                >
+                  {formatDate(data.points[data.points.length - 1].date)}
+                </text>
+
+                {/* Bottom axis keyframe markers */}
+                {data.keyframes.filter(kf => kf.type === 'bottom').map((keyframe, index) => {
+                  const keyframeTime = keyframe.date.getTime();
+                  const startTime = data.points[0].date.getTime();
+                  const endTime = data.points[data.points.length - 1].date.getTime();
+                  const normalizedX = (keyframeTime - startTime) / (endTime - startTime);
+                  const x = 20 + normalizedX * (width - 40);
+                  
+                  return (
+                    <g key={`bottom-${index}`}>
+                      <line
+                        x1={x}
+                        y1={height - 30}
+                        x2={x}
+                        y2={height - 20}
+                        stroke={color}
+                        strokeWidth="1"
+                        className="opacity-70"
+                      />
+                      <rect
+                        x={x - 35}
+                        y={height - 50}
+                        width="70"
+                        height="16"
+                        rx="8"
+                        fill="white"
+                        stroke={color}
+                        strokeWidth="1"
+                        className="drop-shadow-sm"
+                      />
+                      <text
+                        x={x}
+                        y={height - 40}
+                        textAnchor="middle"
+                        className="text-xs font-medium"
+                        style={{ fill: color }}
+                      >
+                        {keyframe.glyph}
+                      </text>
+                      <text
+                        x={x}
+                        y={height - 28}
+                        textAnchor="middle"
+                        className="text-xs fill-gray-600 dark:fill-gray-400"
+                      >
+                        {formatDate(keyframe.date)}
+                      </text>
+                    </g>
+                  );
+                })}
+              </g>
             </svg>
+            
+            {/* Mobile scrub instruction */}
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-2 text-center">
+              Tap and drag to scrub timeline
+            </p>
           </div>
         </div>
       )}
