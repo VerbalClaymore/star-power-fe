@@ -8,6 +8,8 @@ Star Power is a mobile-first news reader application that combines current event
 
 Preferred communication style: Simple, everyday language.
 
+**Development Approach**: Focus on UI/UX creation for engineering manipulation. Write minimal complex logic code - primarily visual and interactive features. Use placeholder/mock data for complex calculations (like ephemeris) as backend team will handle actual data integration later.
+
 ## System Architecture
 
 ### Frontend Architecture
@@ -51,6 +53,7 @@ The application uses a relational database structure with the following main ent
 6. **Mobile Navigation**: Bottom navigation bar with four main sections
 7. **Article Detail View**: Full article display with expanded content and metadata
 8. **Actor Profile Pages**: Comprehensive astrological profiles with vibrational circuits, traditional astrology houses, current transits, relationships section, and sortable story listings with collapsible sections and relationship filtering
+9. **Transit Visualization System**: Interactive 2D graphs showing transit intensity over time with element-based color coding, expandable/collapsible interface, and zoom/pan functionality
 
 ### API Endpoints
 - `GET /api/categories` - Retrieve all news categories

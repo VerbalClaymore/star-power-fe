@@ -5,6 +5,7 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 import BottomNavigation from "@/components/BottomNavigation";
 import HorizontalTimeline from "@/components/HorizontalTimeline";
+import TransitGraph from "@/components/TransitGraph";
 import { useTheme } from "@/contexts/ThemeContext";
 import { getAvatarById } from "@/utils/avatars";
 import type { Actor, ArticleWithDetails } from "@shared/schema";
@@ -827,45 +828,105 @@ export default function ActorProfilePage() {
         );
 
       case 'transits':
-        const currentTransits = [
+        // Mock transit data - will be replaced with real ephemeris data later
+        const mockTransits = [
           {
-            transit: "Jupiter trine Natal Sun",
-            effect: "Expansion of personal power and recognition",
-            duration: "Active through March 2025",
-            intensity: "high"
+            id: 'jupiter-sun-trine',
+            title: 'Jupiter ♃ △ Natal Sun ☉',
+            aspect: 'trine' as const,
+            planets: ['♃', '☉'],
+            element: 'fire' as const,
+            maxOrb: 8,
+            minOrb: 0.2,
+            points: Array.from({ length: 30 }, (_, i) => {
+              const days = i - 15; // ±15 days
+              const baseOrb = Math.abs(days * 0.3) + 0.5;
+              const noise = Math.sin(i * 0.5) * 0.3;
+              return {
+                date: new Date(Date.now() + days * 24 * 60 * 60 * 1000),
+                orb: Math.max(0.2, Math.min(8, baseOrb + noise)),
+                isRetrograde: i > 18 && i < 25 // Mark retrograde period
+              };
+            })
           },
           {
-            transit: "Saturn square Natal Moon", 
-            effect: "Emotional restructuring and growth",
-            duration: "Peak influence February 2025",
-            intensity: "medium"
+            id: 'saturn-moon-square',
+            title: 'Saturn ♄ □ Natal Moon ☽',
+            aspect: 'square' as const,
+            planets: ['♄', '☽'],
+            element: 'earth' as const,
+            maxOrb: 6,
+            minOrb: 0.5,
+            points: Array.from({ length: 25 }, (_, i) => {
+              const days = i - 12; // ±12 days  
+              const baseOrb = Math.abs(days * 0.4) + 0.8;
+              return {
+                date: new Date(Date.now() + days * 24 * 60 * 60 * 1000),
+                orb: Math.max(0.5, Math.min(6, baseOrb + Math.random() * 0.2))
+              };
+            })
           },
           {
-            transit: "Venus conjunct Natal Mercury",
-            effect: "Enhanced communication and charm",
-            duration: "Active this week",
-            intensity: "low"
+            id: 'venus-mercury-conjunction',
+            title: 'Venus ♀ ☌ Natal Mercury ☿',
+            aspect: 'conjunction' as const,
+            planets: ['♀', '☿'],
+            element: 'air' as const,
+            maxOrb: 4,
+            minOrb: 0.1,
+            points: Array.from({ length: 20 }, (_, i) => {
+              const days = i - 10; // ±10 days
+              const baseOrb = Math.abs(days * 0.2) + 0.3;
+              return {
+                date: new Date(Date.now() + days * 24 * 60 * 60 * 1000),
+                orb: Math.max(0.1, Math.min(4, baseOrb))
+              };
+            })
+          },
+          {
+            id: 'mars-pluto-opposition',
+            title: 'Mars ♂ ☍ Natal Pluto ♇',
+            aspect: 'opposition' as const,
+            planets: ['♂', '♇'],
+            element: 'water' as const,
+            maxOrb: 5,
+            minOrb: 0.3,
+            points: Array.from({ length: 35 }, (_, i) => {
+              const days = i - 17; // ±17 days
+              const baseOrb = Math.abs(days * 0.25) + 0.5;
+              return {
+                date: new Date(Date.now() + days * 24 * 60 * 60 * 1000),
+                orb: Math.max(0.3, Math.min(5, baseOrb + Math.sin(i * 0.3) * 0.4))
+              };
+            })
           }
         ];
 
+        const [expandedTransits, setExpandedTransits] = useState<Set<string>>(new Set(['jupiter-sun-trine']));
+
+        const toggleTransit = (id: string) => {
+          setExpandedTransits(prev => {
+            const newSet = new Set(prev);
+            if (newSet.has(id)) {
+              newSet.delete(id);
+            } else {
+              newSet.add(id);
+            }
+            return newSet;
+          });
+        };
+
         return (
-          <div className="space-y-3">
-            {currentTransits.map((transit, index) => (
-              <div key={index} className="border border-gray-200 rounded-lg p-4">
-                <div className="flex items-center justify-between mb-2">
-                  <h4 className="font-bold text-sm dark:text-gray-300">{transit.transit}</h4>
-                  <span className={cn(
-                    "px-2 py-1 rounded-full text-xs font-medium",
-                    transit.intensity === 'high' && "bg-red-100 text-red-800",
-                    transit.intensity === 'medium' && "bg-yellow-100 text-yellow-800", 
-                    transit.intensity === 'low' && "bg-green-100 text-green-800"
-                  )}>
-                    {transit.intensity} intensity
-                  </span>
-                </div>
-                <p className="text-sm text-gray-700 dark:text-gray-300 mb-2">{transit.effect}</p>
-                <p className="text-xs text-gray-500">{transit.duration}</p>
-              </div>
+          <div className="space-y-2">
+            {mockTransits.map((transit) => (
+              <TransitGraph
+                key={transit.id}
+                data={transit}
+                isExpanded={expandedTransits.has(transit.id)}
+                onToggle={() => toggleTransit(transit.id)}
+                width={300}
+                height={140}
+              />
             ))}
           </div>
         );
