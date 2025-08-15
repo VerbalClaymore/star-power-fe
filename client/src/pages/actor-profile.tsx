@@ -1024,7 +1024,7 @@ export default function ActorProfilePage() {
                 isExpanded={expandedTransits.has(transit.id)}
                 onToggle={() => toggleTransit(transit.id)}
                 width={300}
-                height={140}
+                height={160}
               />
             ))}
           </div>

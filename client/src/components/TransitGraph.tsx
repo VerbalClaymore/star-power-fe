@@ -37,7 +37,7 @@ interface TransitGraphProps {
 export default function TransitGraph({ 
   data, 
   width = 320, 
-  height = 120, 
+  height = 140, 
   isExpanded = false,
   onToggle 
 }: TransitGraphProps) {
@@ -160,11 +160,27 @@ export default function TransitGraph({
 
   const handleWheel = (e: React.WheelEvent) => {
     e.preventDefault();
+    const rect = svgRef.current?.getBoundingClientRect();
+    if (!rect) return;
+    
     const scaleChange = e.deltaY > 0 ? 0.9 : 1.1;
-    setTransform(prev => ({
-      ...prev,
-      scale: Math.max(0.5, Math.min(3, prev.scale * scaleChange))
-    }));
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+    
+    setTransform(prev => {
+      const newScale = Math.max(0.5, Math.min(3, prev.scale * scaleChange));
+      const scaleRatio = newScale / prev.scale;
+      
+      // Zoom towards mouse position
+      const newX = mouseX - (mouseX - prev.x) * scaleRatio;
+      const newY = mouseY - (mouseY - prev.y) * scaleRatio;
+      
+      return {
+        x: newX,
+        y: newY,
+        scale: newScale
+      };
+    });
   };
 
   // Touch handling for mobile zoom/pan and scrubbing
@@ -285,93 +301,99 @@ export default function TransitGraph({
                 </linearGradient>
               </defs>
               
+              {/* Transit curve area - zoomable content */}
               <g transform={`translate(${transform.x}, ${transform.y}) scale(${transform.scale})`}>
-                {/* Transit curve area */}
                 <path
                   d={generatePath()}
                   fill={`url(#gradient-${data.id})`}
                   stroke={color}
-                  strokeWidth="2"
+                  strokeWidth={2 / transform.scale} // Maintain stroke width
                   className="transition-all duration-200"
                 />
-                
-                {/* Keyframe markers on peaks */}
-                {data.keyframes.filter(kf => kf.type === 'peak').map((keyframe, index) => {
-                  const keyframePadding = 20;
-                  const keyframeGraphWidth = width - (keyframePadding * 2);
-                  const keyframeTime = keyframe.date.getTime();
-                  const startTime = data.points[0].date.getTime();
-                  const endTime = data.points[data.points.length - 1].date.getTime();
-                  const normalizedX = (keyframeTime - startTime) / (endTime - startTime);
-                  const x = keyframePadding + normalizedX * keyframeGraphWidth;
-                  
-                  return (
-                    <g key={`peak-${index}`}>
-                      <line
-                        x1={x}
-                        y1={keyframePadding}
-                        x2={x}
-                        y2={keyframePadding - 15}
-                        stroke={color}
-                        strokeWidth="2"
-                        className="opacity-80"
-                      />
-                      <rect
-                        x={x - 25}
-                        y={keyframePadding - 35}
-                        width="50"
-                        height="18"
-                        rx="9"
-                        fill="white"
-                        stroke={color}
-                        strokeWidth="1"
-                        className="drop-shadow-sm"
-                      />
-                      <text
-                        x={x}
-                        y={keyframePadding - 24}
-                        textAnchor="middle"
-                        className="text-xs font-medium fill-current"
-                        style={{ fill: color }}
-                      >
-                        {keyframe.glyph}
-                      </text>
-                    </g>
-                  );
-                })}
+              </g>
 
-                {/* Scrub line and date indicator */}
-                {scrubPosition && (
-                  <g>
+              {/* Peak markers - fixed position, size-limited */}
+              {data.keyframes.filter(kf => kf.type === 'peak').map((keyframe, index) => {
+                const keyframePadding = 20;
+                const keyframeGraphWidth = width - (keyframePadding * 2);
+                const keyframeTime = keyframe.date.getTime();
+                const startTime = data.points[0].date.getTime();
+                const endTime = data.points[data.points.length - 1].date.getTime();
+                const normalizedX = (keyframeTime - startTime) / (endTime - startTime);
+                const x = keyframePadding + normalizedX * keyframeGraphWidth;
+                
+                // Constrain font size based on scale
+                const fontSize = Math.max(10, Math.min(14, 12 / Math.max(0.8, transform.scale)));
+                
+                return (
+                  <g key={`peak-${index}`}>
                     <line
-                      x1={scrubPosition.x}
-                      y1={20}
-                      x2={scrubPosition.x}
-                      y2={height - 30}
-                      stroke="rgba(0,0,0,0.6)"
-                      strokeWidth="1"
-                      strokeDasharray="2,2"
+                      x1={x}
+                      y1={40} // Moved down to be visible at default zoom
+                      x2={x}
+                      y2={25}
+                      stroke={color}
+                      strokeWidth="2"
+                      className="opacity-80"
                     />
                     <rect
-                      x={scrubPosition.x - 30}
+                      x={x - 25}
                       y={5}
-                      width="60"
-                      height="14"
-                      rx="7"
-                      fill="rgba(0,0,0,0.8)"
-                      className="drop-shadow-lg"
+                      width="50"
+                      height="18"
+                      rx="9"
+                      fill="white"
+                      stroke={color}
+                      strokeWidth="1"
+                      className="drop-shadow-sm"
                     />
                     <text
-                      x={scrubPosition.x}
-                      y={14}
+                      x={x}
+                      y={16}
                       textAnchor="middle"
-                      className="text-xs font-medium fill-white"
+                      className="font-medium fill-current"
+                      style={{ 
+                        fill: color,
+                        fontSize: `${fontSize}px`
+                      }}
                     >
-                      {formatDate(scrubPosition.date)}
+                      {keyframe.glyph}
                     </text>
                   </g>
-                )}
-              </g>
+                );
+              })}
+
+              {/* Scrub line and date indicator - fixed position */}
+              {scrubPosition && (
+                <g>
+                  <line
+                    x1={scrubPosition.x}
+                    y1={25}
+                    x2={scrubPosition.x}
+                    y2={height - 30}
+                    stroke="rgba(0,0,0,0.6)"
+                    strokeWidth="1"
+                    strokeDasharray="2,2"
+                  />
+                  <rect
+                    x={scrubPosition.x - 30}
+                    y={5}
+                    width="60"
+                    height="14"
+                    rx="7"
+                    fill="rgba(0,0,0,0.8)"
+                    className="drop-shadow-lg"
+                  />
+                  <text
+                    x={scrubPosition.x}
+                    y={14}
+                    textAnchor="middle"
+                    className="text-xs font-medium fill-white"
+                  >
+                    {formatDate(scrubPosition.date)}
+                  </text>
+                </g>
+              )}
               
               {/* Subtle grid lines */}
               <defs>
@@ -403,13 +425,16 @@ export default function TransitGraph({
                   {formatDate(data.points[data.points.length - 1].date)}
                 </text>
 
-                {/* Bottom axis keyframe markers */}
+                {/* Bottom axis keyframe markers - fixed size */}
                 {data.keyframes.filter(kf => kf.type === 'bottom').map((keyframe, index) => {
                   const keyframeTime = keyframe.date.getTime();
                   const startTime = data.points[0].date.getTime();
                   const endTime = data.points[data.points.length - 1].date.getTime();
                   const normalizedX = (keyframeTime - startTime) / (endTime - startTime);
                   const x = 20 + normalizedX * (width - 40);
+                  
+                  // Constrain font size
+                  const fontSize = Math.max(10, Math.min(12, 11 / Math.max(0.8, transform.scale)));
                   
                   return (
                     <g key={`bottom-${index}`}>
@@ -437,8 +462,11 @@ export default function TransitGraph({
                         x={x}
                         y={height - 40}
                         textAnchor="middle"
-                        className="text-xs font-medium"
-                        style={{ fill: color }}
+                        className="font-medium"
+                        style={{ 
+                          fill: color,
+                          fontSize: `${fontSize}px`
+                        }}
                       >
                         {keyframe.glyph}
                       </text>
@@ -446,7 +474,8 @@ export default function TransitGraph({
                         x={x}
                         y={height - 28}
                         textAnchor="middle"
-                        className="text-xs fill-gray-600 dark:fill-gray-400"
+                        className="fill-gray-600 dark:fill-gray-400"
+                        style={{ fontSize: `${Math.max(9, fontSize - 1)}px` }}
                       >
                         {formatDate(keyframe.date)}
                       </text>
