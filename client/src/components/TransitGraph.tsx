@@ -60,9 +60,10 @@ export default function TransitGraph({
     // Create smooth curve through points
     const points = data.points.map((point, index) => {
       const x = padding + (index / (data.points.length - 1)) * graphWidth;
-      // Invert Y so tighter orbs (smaller numbers) appear higher
-      const y = padding + ((data.maxOrb - point.orb) / (data.maxOrb - data.minOrb)) * graphHeight;
-      return { x, y, orb: point.orb, isRetrograde: point.isRetrograde };
+      // Calculate orb strength - smaller orbs = higher peaks (stronger aspect)
+      const orbStrength = (data.maxOrb - point.orb) / (data.maxOrb - data.minOrb);
+      const y = padding + (1 - orbStrength) * graphHeight; // Invert so peaks go up
+      return { x, y, orb: point.orb, orbStrength, isRetrograde: point.isRetrograde };
     });
 
     // Create path with area fill
@@ -198,16 +199,12 @@ export default function TransitGraph({
       {/* Graph Content */}
       {isExpanded && (
         <div className="p-4 border-t border-gray-100 dark:border-gray-700">
-          <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-3 mb-3">
-            <p className="text-xs text-gray-600 dark:text-gray-400 mb-2">
-              Transit Intensity • Tap and drag to pan • Scroll or pinch to zoom • Double-tap to reset
-            </p>
-            
+          <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-3">
             <svg
               ref={svgRef}
               width={width}
               height={height}
-              className="border border-gray-200 dark:border-gray-600 rounded cursor-grab active:cursor-grabbing"
+              className="rounded cursor-grab active:cursor-grabbing"
               onMouseDown={handleMouseDown}
               onMouseMove={handleMouseMove}
               onMouseUp={handleMouseUp}
@@ -243,7 +240,8 @@ export default function TransitGraph({
                   const graphWidth = width - (padding * 2);
                   const graphHeight = height - (padding * 2);
                   const x = padding + (index / (data.points.length - 1)) * graphWidth;
-                  const y = padding + ((data.maxOrb - point.orb) / (data.maxOrb - data.minOrb)) * graphHeight;
+                  const orbStrength = (data.maxOrb - point.orb) / (data.maxOrb - data.minOrb);
+                  const y = padding + (1 - orbStrength) * graphHeight;
                   
                   return (
                     <circle
@@ -268,12 +266,6 @@ export default function TransitGraph({
               </defs>
               <rect width={width} height={height} fill={`url(#grid-${data.id})`} />
             </svg>
-          </div>
-          
-          {/* Legend */}
-          <div className="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
-            <span>Looser Aspect</span>
-            <span>Tighter Aspect</span>
           </div>
         </div>
       )}

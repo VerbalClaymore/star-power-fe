@@ -839,14 +839,25 @@ export default function ActorProfilePage() {
             element: 'fire' as const,
             maxOrb: 8,
             minOrb: 0.2,
-            points: Array.from({ length: 30 }, (_, i) => {
-              const days = i - 15; // ±15 days
-              const baseOrb = Math.abs(days * 0.3) + 0.5;
-              const noise = Math.sin(i * 0.5) * 0.3;
+            points: Array.from({ length: 40 }, (_, i) => {
+              const days = i - 20; // ±20 days from center
+              // Create N-shaped curve: approach, exact, then separate
+              let orb;
+              if (i < 15) {
+                // Approaching phase - getting tighter
+                orb = 6 - (i / 15) * 5.5;
+              } else if (i >= 15 && i <= 25) {
+                // Exact phase - very tight orb
+                orb = 0.5 + Math.sin((i - 20) * 0.8) * 0.3;
+              } else {
+                // Separating phase - getting looser
+                orb = 0.8 + ((i - 25) / 15) * 5.2;
+              }
+              
               return {
                 date: new Date(Date.now() + days * 24 * 60 * 60 * 1000),
-                orb: Math.max(0.2, Math.min(8, baseOrb + noise)),
-                isRetrograde: i > 18 && i < 25 // Mark retrograde period
+                orb: Math.max(0.2, Math.min(8, orb)),
+                isRetrograde: i > 28 && i < 35 // Retrograde during separation
               };
             })
           },
@@ -858,12 +869,21 @@ export default function ActorProfilePage() {
             element: 'earth' as const,
             maxOrb: 6,
             minOrb: 0.5,
-            points: Array.from({ length: 25 }, (_, i) => {
-              const days = i - 12; // ±12 days  
-              const baseOrb = Math.abs(days * 0.4) + 0.8;
+            points: Array.from({ length: 30 }, (_, i) => {
+              const days = i - 15; // ±15 days
+              // Saturn square pattern - slower, more gradual
+              let orb;
+              if (i < 10) {
+                orb = 5 - (i / 10) * 4;
+              } else if (i >= 10 && i <= 20) {
+                orb = 1 + Math.sin((i - 15) * 0.6) * 0.5;
+              } else {
+                orb = 1.5 + ((i - 20) / 10) * 3.5;
+              }
+              
               return {
                 date: new Date(Date.now() + days * 24 * 60 * 60 * 1000),
-                orb: Math.max(0.5, Math.min(6, baseOrb + Math.random() * 0.2))
+                orb: Math.max(0.5, Math.min(6, orb))
               };
             })
           },
@@ -875,12 +895,21 @@ export default function ActorProfilePage() {
             element: 'air' as const,
             maxOrb: 4,
             minOrb: 0.1,
-            points: Array.from({ length: 20 }, (_, i) => {
-              const days = i - 10; // ±10 days
-              const baseOrb = Math.abs(days * 0.2) + 0.3;
+            points: Array.from({ length: 25 }, (_, i) => {
+              const days = i - 12; // ±12 days
+              // Fast Venus conjunction - quick in and out
+              let orb;
+              if (i < 8) {
+                orb = 3.5 - (i / 8) * 3.4;
+              } else if (i >= 8 && i <= 16) {
+                orb = 0.1 + Math.abs(Math.sin((i - 12) * 1.2)) * 0.2;
+              } else {
+                orb = 0.3 + ((i - 16) / 9) * 3.2;
+              }
+              
               return {
                 date: new Date(Date.now() + days * 24 * 60 * 60 * 1000),
-                orb: Math.max(0.1, Math.min(4, baseOrb))
+                orb: Math.max(0.1, Math.min(4, orb))
               };
             })
           },
@@ -892,12 +921,27 @@ export default function ActorProfilePage() {
             element: 'water' as const,
             maxOrb: 5,
             minOrb: 0.3,
-            points: Array.from({ length: 35 }, (_, i) => {
-              const days = i - 17; // ±17 days
-              const baseOrb = Math.abs(days * 0.25) + 0.5;
+            points: Array.from({ length: 45 }, (_, i) => {
+              const days = i - 22; // ±22 days
+              // Mars opposition with retrograde - complex pattern
+              let orb;
+              if (i < 12) {
+                orb = 4.5 - (i / 12) * 4;
+              } else if (i >= 12 && i <= 18) {
+                orb = 0.5 + Math.sin((i - 15) * 1.1) * 0.2;
+              } else if (i > 18 && i < 28) {
+                // Retrograde - loosens then tightens again
+                orb = 0.7 + Math.abs((i - 23) * 0.15);
+              } else if (i >= 28 && i <= 34) {
+                orb = 0.4 + Math.sin((i - 31) * 0.9) * 0.3;
+              } else {
+                orb = 0.7 + ((i - 34) / 11) * 4.3;
+              }
+              
               return {
                 date: new Date(Date.now() + days * 24 * 60 * 60 * 1000),
-                orb: Math.max(0.3, Math.min(5, baseOrb + Math.sin(i * 0.3) * 0.4))
+                orb: Math.max(0.3, Math.min(5, orb)),
+                isRetrograde: i > 18 && i < 28
               };
             })
           }
