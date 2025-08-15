@@ -21,6 +21,7 @@ export default function ActorProfilePage() {
   const [expandedVibrations, setExpandedVibrations] = useState<Set<number>>(new Set());
   const [selectedCircuits, setSelectedCircuits] = useState<Map<number, number>>(new Map());
   const [selectedYear, setSelectedYear] = useState<number>(new Date().getFullYear());
+  const [expandedTransits, setExpandedTransits] = useState<Set<string>>(new Set(['jupiter-sun-trine']));
 
   const { data: actor, isLoading: actorLoading } = useQuery<Actor>({
     queryKey: [`/api/actors/${id}`],
@@ -901,8 +902,6 @@ export default function ActorProfilePage() {
             })
           }
         ];
-
-        const [expandedTransits, setExpandedTransits] = useState<Set<string>>(new Set(['jupiter-sun-trine']));
 
         const toggleTransit = (id: string) => {
           setExpandedTransits(prev => {
